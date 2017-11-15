@@ -1,0 +1,24 @@
+{
+  "name": "travlendar",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "dependencies": {},
+  "devDependencies": {
+    "workbox-cli": "^2.1.1"
+  },
+  "scripts": {
+    "test": "test",
+    "build": "workbox generate:sw"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/uino95/SinicoTaglia.git"
+  },
+  "author": "AndreaTaglia MatteoSinico",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/uino95/SinicoTaglia/issues"
+  },
+  "homepage": "https://github.com/uino95/SinicoTaglia#readme"
+}
