@@ -5,6 +5,7 @@ module.exports = {
   ],
   "swDest": "public/sw.js",
   "globIgnores": [
-    "../workbox-cli-config.js"
+    "../workbox-cli-config.js",
+    "public/404.html"
   ]
 };

@@ -17,6 +17,10 @@
     "tests"
   ],
   "dependencies": {
-    "platinum-sw": "PolymerElements/platinum-sw#^2.0.0"
+    "platinum-sw": "PolymerElements/platinum-sw#^2.0.0",
+    "app-route": "PolymerElements/app-route#^2.0.3",
+    "paper-tabs": "PolymerElements/paper-tabs#^2.0.0",
+    "neon-animation": "PolymerElements/neon-animated-pages#^2.0.2",
+    "paper-item": "^2.0.0"
   }
 }
