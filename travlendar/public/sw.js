@@ -819,10 +819,6 @@ const fileManifest = [
     "revision": "3ee51cb9ea98bd9ef3ed9e42fc5d21c5"
   },
   {
-    "url": "bower_components/note-app-elements/manifest.json",
-    "revision": "79fc7127e75bd3cb61434649da095832"
-  },
-  {
     "url": "bower_components/note-app-elements/na-behavior.html",
     "revision": "faea1f1deebb8cc753dac1ca78ed55ff"
   },
@@ -2104,7 +2100,7 @@ const fileManifest = [
   },
   {
     "url": "manifest.json",
-    "revision": "6f7bd027f050a4c7d0cb41e6a5395995"
+    "revision": "bf6d24489f3f12506bf744afbfc47c08"
   },
   {
     "url": "note-app.html",
