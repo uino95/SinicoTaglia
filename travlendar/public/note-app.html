@@ -1,10 +1,12 @@
 <link rel="import" href="bower_components/note-app-elements/na-elements.html">
 <link rel="import" href="bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
 <link rel="import" href="bower_components/polymerfire/polymerfire.html">
-<link rel="import" href="bower_components/neon-animation/neon-animated-pages.html">
 <link rel="import" href="bower_components/app-route/app-route.html">
+<link rel="import" href="bower_components/app-route/app-location.html">
 <link rel="import" href="bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="bower_components/paper-item/paper-item.html">
+<link rel="import" href="bower_components/paper-button/paper-button.html">
+<link rel="import" href="bower_components/iron-pages/iron-pages.html">
 
 <dom-module id="note-app">
     <template>
@@ -41,26 +43,74 @@
             </template>
         </div>
 
-        <app-route route="{{route}}" pattern="/tabs/:tabName" data="{{data}}">
+        <app-route route="{{route}}" pattern="/tabs" active="{{active}}">
         </app-route>
 
-        <paper-tabs selected='{{data.tabName}}' attr-for-selected='key'>
+        <paper-tabs selected='{{route.path}}' attr-for-selected='key'>
             <paper-tab key='foo'>Foo</paper-tab>
             <paper-tab key='bar'>Bar</paper-tab>
             <paper-tab key='baz'>Baz!</paper-tab>
         </paper-tabs>
 
-        <neon-animated-pages selected='{{data.tabName}}' attr-for-selected='key' entry-animation='slide-from-left-animation' exit-animation='slide-right-animation'>
-            <neon-animatable key='foo'>Foo Page Here</neon-animatable>
-            <neon-animatable key='bar'>Bar Page Goes Here</neon-animatable>
-            <neon-animatable key='baz'>Baz Page, the Best One of the Three</neon-animatable>
-        </neon-animated-pages>
+        <br>
+        <br>
+        <br>
 
-        <paper-menu>
-            <paper-item>Item 1</paper-item>
-            <paper-item>Item 2</paper-item>
-            <paper-item>Item 3</paper-item>
-        </paper-menu>
+        <iron-pages selected="[[route.path]]" attr-for-selected="page-name" fallback-selection="fallback">
+            <div page-name="foo">
+                <paper-button>Ciao</paper-button>
+                One
+            </div>
+            <paper-item page-name="bar">mbareee</paper-item>
+            <div page-name="baz">Three</div>
+            <div page-name="fallback">
+                Change pages by typing 'page-1', 'page-2', or 'page-3' in the input above.
+            </div>
+        </iron-pages>
+
+        <app-location route="{{route}}" use-hash-as-path></app-location>
+
+        <div>
+            <br>
+            <br>
+            <br>
+            <br>Route: [[route.path]] </div>
+
+        <iron-pages selected="[[route.path]]" attr-for-selected="menu-name" fallback-selection="home">
+            <paper-menu menu-name="foo">
+                <a href="#foo">
+                    <paper-item key='ciao'>Item 1</paper-item>
+                </a>
+                <a href="#bar">
+                    <paper-item key='ciaoww'>Item 2</paper-item>
+                </a>
+                <a href="#baz">
+                    <paper-item key='ciaoww'>Item 3</paper-item>
+                </a>
+            </paper-menu>
+            <paper-menu menu-name="bar">
+                <a href="#foo">
+                    <paper-item key='ciao'>Item 5</paper-item>
+                </a>
+                <a href="#bar">
+                    <paper-item key='ciaoww'>Item 6</paper-item>
+                </a>
+                <a href="#baz">
+                    <paper-item key='ciaoww'>Item 7</paper-item>
+                </a>
+            </paper-menu>
+            <paper-menu menu-name="home">
+                <a href="#foo">
+                    <paper-item key='ciao'>aaaaaa</paper-item>
+                </a>
+                <a href="#bar">
+                    <paper-item key='ciaoww'>bbbbb</paper-item>
+                </a>
+                <a href="#baz">
+                    <paper-item key='ciaoww'>cccc</paper-item>
+                </a>
+            </paper-menu>
+        </iron-pages>
 
     </template>
     <script>
