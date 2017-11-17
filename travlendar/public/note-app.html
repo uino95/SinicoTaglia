@@ -7,10 +7,21 @@
 <link rel="import" href="bower_components/paper-item/paper-item.html">
 <link rel="import" href="bower_components/paper-button/paper-button.html">
 <link rel="import" href="bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 
 <dom-module id="note-app">
     <template>
         <style include="note-app-shared-styles"></style>
+        <style>
+        .container {
+            @apply(--layout-vertical);
+            height: 90vh;
+        }
+
+        .flexchild {
+            @apply(--layout-flex);
+        }
+        </style>
 
         <na-toolbar signed-in="[[signedIn]]" on-sign-out="signOut">
         </na-toolbar>
@@ -20,9 +31,6 @@
 
         <firebase-auth id="auth" app-name="travlendar" provider="google" signed-in="{{signedIn}}" user="{{user}}">
         </firebase-auth>
-
-        <paper-fab icon="add" on-tap="create" disabled="[[!online]]" aria-label="Add note">
-        </paper-fab>
 
         <na-editor id="editor" note="{{editableNote}}" on-close="commitChange">
         </na-editor>
@@ -36,81 +44,96 @@
         <app-indexeddb-mirror session="[[user.uid]]" key="notes" data="{{notes}}" persisted-data="{{persistedNotes}}">
         </app-indexeddb-mirror>
 
-        <div class="notes">
+        <!-- <div class="notes">
             <template is="dom-repeat" items="[[persistedNotes]]" as="note">
                 <na-note id$="[[note.$key]]" title="[[note.title]]" body="[[note.body]]" on-tap="edit">
                 </na-note>
             </template>
-        </div>
-
-        <app-route route="{{route}}" pattern="/tabs" active="{{active}}">
-        </app-route>
-
-        <paper-tabs selected='{{route.path}}' attr-for-selected='key'>
-            <paper-tab key='foo'>Foo</paper-tab>
-            <paper-tab key='bar'>Bar</paper-tab>
-            <paper-tab key='baz'>Baz!</paper-tab>
-        </paper-tabs>
-
-        <br>
-        <br>
-        <br>
-
-        <iron-pages selected="[[route.path]]" attr-for-selected="page-name" fallback-selection="fallback">
-            <div page-name="foo">
-                <paper-button>Ciao</paper-button>
-                One
-            </div>
-            <paper-item page-name="bar">mbareee</paper-item>
-            <div page-name="baz">Three</div>
-            <div page-name="fallback">
-                Change pages by typing 'page-1', 'page-2', or 'page-3' in the input above.
-            </div>
-        </iron-pages>
+        </div> -->
 
         <app-location route="{{route}}" use-hash-as-path></app-location>
 
-        <div>
-            <br>
-            <br>
-            <br>
-            <br>Route: [[route.path]] </div>
+        <app-route route="{{route}}" pattern="/tabs" data="{{data}}">
+        </app-route>
 
-        <iron-pages selected="[[route.path]]" attr-for-selected="menu-name" fallback-selection="home">
-            <paper-menu menu-name="foo">
-                <a href="#foo">
-                    <paper-item key='ciao'>Item 1</paper-item>
-                </a>
-                <a href="#bar">
-                    <paper-item key='ciaoww'>Item 2</paper-item>
-                </a>
-                <a href="#baz">
-                    <paper-item key='ciaoww'>Item 3</paper-item>
-                </a>
-            </paper-menu>
-            <paper-menu menu-name="bar">
-                <a href="#foo">
-                    <paper-item key='ciao'>Item 5</paper-item>
-                </a>
-                <a href="#bar">
-                    <paper-item key='ciaoww'>Item 6</paper-item>
-                </a>
-                <a href="#baz">
-                    <paper-item key='ciaoww'>Item 7</paper-item>
-                </a>
-            </paper-menu>
-            <paper-menu menu-name="home">
-                <a href="#foo">
-                    <paper-item key='ciao'>aaaaaa</paper-item>
-                </a>
-                <a href="#bar">
-                    <paper-item key='ciaoww'>bbbbb</paper-item>
-                </a>
-                <a href="#baz">
-                    <paper-item key='ciaoww'>cccc</paper-item>
-                </a>
-            </paper-menu>
-        </iron-pages>
+        <!--Main vertical layout-->
+        <div class="container">
+            <div class="flexchild">
+                <!--Output Panel-->
+                <iron-pages selected="[[route.path]]" attr-for-selected="page-name" fallback-selection="fallback">
+                    <div page-name="foo">
+                        <h2>Output Panel 1 - ad esmpio ci può andare</h2>
+                    </div>
+                    <div page-name="bar">
+                        <h2>Output Panel 2!!</h2>
+                    </div>
+                    <div page-name="baz">
+                        <h2>Output Panel 3</h2>
+                    </div>
+                    <div page-name="fallback">
+                        Fallback page -> nothing matches significa. Sarebbe ma home da mettere
+                    </div>
+                </iron-pages>
+            </div>
+
+            <div>
+                <!--Text Panel-->
+                <div>
+                    <h3>Text Panel here</h3>
+                    <br>
+                    <br>
+                    <br>Route (which can be used as breadcrumbs also with tabs): [[route.path]] </div>
+
+                <paper-tabs selected='{{route.path}}' attr-for-selected='key'>
+                    <paper-tab key='foo'>Foo</paper-tab>
+                    <paper-tab key='bar'>Bar</paper-tab>
+                    <paper-tab key='baz'>Baz!</paper-tab>
+                </paper-tabs>
+            </div>
+
+            <div>
+                <!--Input Panel-->
+
+                <iron-pages selected="[[route.path]]" attr-for-selected="menu-name" fallback-selection="home">
+                    <paper-menu menu-name="foo">
+                        <a href="#foo">
+                            <paper-item>foo 1</paper-item>
+                        </a>
+                        <a href="#bar">
+                            <paper-item>bar 1</paper-item>
+                        </a>
+                        <a href="#baz">
+                            <paper-item>baz 1</paper-item>
+                        </a>
+                    </paper-menu>
+                    <paper-menu menu-name="bar">
+                        <a href="#foo">
+                            <paper-item>Item 5</paper-item>
+                        </a>
+                        <a href="#bar">
+                            <paper-item>Item 6</paper-item>
+                        </a>
+                        <a href="#baz">
+                            <paper-item>Item 7</paper-item>
+                        </a>
+                    </paper-menu>
+                    <paper-menu menu-name="home">
+                        <a href="#foo">
+                            <paper-item>aaaaaa</paper-item>
+                        </a>
+                        <a href="#bar">
+                            <paper-item>bbbbb</paper-item>
+                        </a>
+                        <a href="#baz">
+                            <paper-item>cccc</paper-item>
+                        </a>
+                    </paper-menu>
+                </iron-pages>
+
+                <!-- <paper-fab icon="add" on-tap="create" disabled="[[!online]]" aria-label="Add note">
+                </paper-fab> -->
+            </div>
+        </div>
 
     </template>
     <script>

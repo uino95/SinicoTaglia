@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Travlendar+</title>
@@ -11,28 +12,27 @@
     <link rel="icon" sizes="192x192" href="bower_components/note-app-elements/images/icon-4x.png">
 
     <style media="screen">
-      body {
+    body {
         margin: 0;
-      }
+        height: 100vh;
+    }
     </style>
-    
+
     <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
     <script src="bower_components/web-animations-js/web-animations.min.js"></script>
     <script>
-        //navigator.serviceWorker.register('sw.js');
+    //navigator.serviceWorker.register('sw.js');
     </script>
     <link rel="import" href="bower_components/polymerfire/firebase-app.html">
     <link rel="import" href="note-app.html">
-  </head>
-  <body>
-    
-    <firebase-app
-        name="travlendar"
-        api-key="AIzaSyAGE8FPaxm-C1Qzu40SAEpp0_CZrKknp5o"
-        auth-domain="travlendar-plus.firebaseapp.com"
-        database-url="https://travlendar-plus.firebaseio.com" >
+</head>
+
+<body>
+
+    <firebase-app name="travlendar" api-key="AIzaSyAGE8FPaxm-C1Qzu40SAEpp0_CZrKknp5o" auth-domain="travlendar-plus.firebaseapp.com" database-url="https://travlendar-plus.firebaseio.com">
     </firebase-app>
-    
+
     <note-app></note-app>
-  </body>
+</body>
+
 </html>
