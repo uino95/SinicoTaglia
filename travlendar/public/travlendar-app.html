@@ -1,15 +1,15 @@
 <link rel="import" href="bower_components/note-app-elements/na-elements.html">
 <link rel="import" href="bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
 <link rel="import" href="bower_components/polymerfire/polymerfire.html">
-<link rel="import" href="bower_components/app-route/app-route.html">
 <link rel="import" href="bower_components/app-route/app-location.html">
 <link rel="import" href="bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="bower_components/paper-item/paper-item.html">
 <link rel="import" href="bower_components/paper-button/paper-button.html">
 <link rel="import" href="bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="components/home-view-element.html">
 
-<dom-module id="note-app">
+<dom-module id="travlendar-app">
     <template>
         <style include="note-app-shared-styles"></style>
         <style>
@@ -53,31 +53,35 @@
 
         <app-location route="{{route}}" use-hash-as-path></app-location>
 
-        <app-route route="{{route}}" pattern="/tabs" data="{{data}}">
-        </app-route>
+        <home-view-element></home-view-element>
 
         <!--Main vertical layout-->
         <div class="container">
             <div class="flexchild">
                 <!--Output Panel-->
-                <iron-pages selected="[[route.path]]" attr-for-selected="page-name" fallback-selection="fallback">
-                    <div page-name="foo">
+                <!--Here we should have the Views components to show. Routing is centralized-->
+                <iron-pages selected="[[route.path]]" attr-for-selected="key" fallback-selection="fallback">
+                    <div key="foo">
                         <h2>Output Panel 1 - ad esmpio ci può andare</h2>
                     </div>
-                    <div page-name="bar">
+                    <div key="bar">
                         <h2>Output Panel 2!!</h2>
                     </div>
-                    <div page-name="baz">
+                    <div key="baz">
                         <h2>Output Panel 3</h2>
                     </div>
-                    <div page-name="fallback">
-                        Fallback page -> nothing matches significa. Sarebbe ma home da mettere
+                    <div key="baz/sub">
+                        <h2>this is a sub view</h2>
+                    </div>
+                    <div key="fallback">
+                        Fallback page -> nothing matches significa. Sarebbe na home da mettere
                     </div>
                 </iron-pages>
             </div>
 
             <div>
                 <!--Text Panel-->
+                <!--text here should should get the text from a view property-->
                 <div>
                     <h3>Text Panel here</h3>
                     <br>
@@ -94,8 +98,9 @@
             <div>
                 <!--Input Panel-->
 
-                <iron-pages selected="[[route.path]]" attr-for-selected="menu-name" fallback-selection="home">
-                    <paper-menu menu-name="foo">
+                <!-- the menu items depend on the view we're at. again theese data should be an array of data where data.link gives the link and data.name gives the name to display -->
+                <iron-pages selected="[[route.path]]" attr-for-selected="key" fallback-selection="fallback">
+                    <paper-menu key="foo">
                         <a href="#foo">
                             <paper-item>foo 1</paper-item>
                         </a>
@@ -106,7 +111,7 @@
                             <paper-item>baz 1</paper-item>
                         </a>
                     </paper-menu>
-                    <paper-menu menu-name="bar">
+                    <paper-menu key="bar">
                         <a href="#foo">
                             <paper-item>Item 5</paper-item>
                         </a>
@@ -117,7 +122,7 @@
                             <paper-item>Item 7</paper-item>
                         </a>
                     </paper-menu>
-                    <paper-menu menu-name="home">
+                    <paper-menu key="fallback">
                         <a href="#foo">
                             <paper-item>aaaaaa</paper-item>
                         </a>
@@ -138,7 +143,7 @@
     </template>
     <script>
     Polymer({
-        is: 'note-app',
+        is: 'travlendar-app',
         behaviors: [Polymer.NoteAppBehavior],
         signIn: function() {
             this.$.auth.signInWithPopup();

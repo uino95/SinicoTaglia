@@ -1,0 +1,18 @@
+<link rel="import" href="view-element.html">
+
+<script>
+class HomeViewElement extends ViewElement {
+    static get is() { return 'home-view-element'; }
+    static get properties() {
+    	
+    }
+    constructor() {
+        super();
+    }
+    ready() {
+        super.ready();
+        console.log('and i am the home one!');
+    }
+}
+customElements.define(HomeViewElement.is, HomeViewElement);
+</script>

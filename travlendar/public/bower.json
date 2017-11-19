@@ -25,9 +25,12 @@
     "paper-tabs": "PolymerElements/paper-tabs#^2.0.0",
     "polymerfire": "firebase/polymerfire#^2.2.1",
     "shadycss": "webcomponents/shadycss#^v1.0.0",
-    "iron-flex-layout": "PolymerElements/iron-flex-layout#^2.0.1"
+    "iron-flex-layout": "PolymerElements/iron-flex-layout#^2.0.1",
+    "polymer": "Polymer/polymer#^2.0.0"
   },
   "resolutions": {
-    "iron-flex-layout": "1 - 2"
+    "iron-flex-layout": "1 - 2",
+    "polymer": "^2.0.0",
+    "webcomponentsjs": "^v1.0.2"
   }
 }

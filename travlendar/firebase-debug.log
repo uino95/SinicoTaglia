@@ -1,108 +1,72 @@
-[debug] [2017-11-16T00:45:31.032Z] ----------------------------------------------------------------------
-[debug] [2017-11-16T00:45:31.034Z] Command:       /usr/bin/node /usr/local/bin/firebase serve
-[debug] [2017-11-16T00:45:31.035Z] CLI Version:   3.15.0
-[debug] [2017-11-16T00:45:31.035Z] Platform:      linux
-[debug] [2017-11-16T00:45:31.035Z] Node Version:  v6.11.4
-[debug] [2017-11-16T00:45:31.035Z] Time:          Thu Nov 16 2017 01:45:31 GMT+0100 (CET)
-[debug] [2017-11-16T00:45:31.035Z] ----------------------------------------------------------------------
+[debug] [2017-11-19T11:08:30.537Z] ----------------------------------------------------------------------
+[debug] [2017-11-19T11:08:30.540Z] Command:       /usr/bin/node /usr/local/bin/firebase serve
+[debug] [2017-11-19T11:08:30.540Z] CLI Version:   3.15.0
+[debug] [2017-11-19T11:08:30.540Z] Platform:      linux
+[debug] [2017-11-19T11:08:30.540Z] Node Version:  v6.11.4
+[debug] [2017-11-19T11:08:30.541Z] Time:          Sun Nov 19 2017 12:08:30 GMT+0100 (CET)
+[debug] [2017-11-19T11:08:30.541Z] ----------------------------------------------------------------------
 [debug] 
-[debug] [2017-11-16T00:45:31.050Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
-[debug] [2017-11-16T00:45:31.050Z] > authorizing via signed-in user
-[debug] [2017-11-16T00:45:31.052Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
-[debug] [2017-11-16T00:45:31.053Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token { refresh_token: '1/ybgKSvvL_RzVUlzJggtDe7IEuu3i5gKgNfWX1kENndg',
+[debug] [2017-11-19T11:08:30.554Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2017-11-19T11:08:30.554Z] > authorizing via signed-in user
+[debug] [2017-11-19T11:08:30.556Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2017-11-19T11:08:30.556Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token { refresh_token: '1/ybgKSvvL_RzVUlzJggtDe7IEuu3i5gKgNfWX1kENndg',
   client_id: '563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com',
   client_secret: 'j9iVZfS8kkCEFUPaAeJV0sAi',
   grant_type: 'refresh_token',
   scope: 'email https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/firebase openid' } 
- Thu Nov 16 2017 01:45:31 GMT+0100 (CET)
-[debug] [2017-11-16T00:45:31.218Z] <<< HTTP RESPONSE 200
-[debug] [2017-11-16T00:45:31.226Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/travlendar-plus  
- Thu Nov 16 2017 01:45:31 GMT+0100 (CET)
-[debug] [2017-11-16T00:45:32.091Z] <<< HTTP RESPONSE 200
-[debug] [2017-11-16T00:45:32.092Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/travlendar-plus/tokens  
- Thu Nov 16 2017 01:45:32 GMT+0100 (CET)
-[debug] [2017-11-16T00:45:32.978Z] <<< HTTP RESPONSE 200
+ Sun Nov 19 2017 12:08:30 GMT+0100 (CET)
+[debug] [2017-11-19T11:08:31.023Z] <<< HTTP RESPONSE 200
+[debug] [2017-11-19T11:08:31.032Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/travlendar-plus  
+ Sun Nov 19 2017 12:08:31 GMT+0100 (CET)
+[debug] [2017-11-19T11:08:31.997Z] <<< HTTP RESPONSE 200
+[debug] [2017-11-19T11:08:32.000Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/travlendar-plus/tokens  
+ Sun Nov 19 2017 12:08:32 GMT+0100 (CET)
+[debug] [2017-11-19T11:08:32.716Z] <<< HTTP RESPONSE 200
 [info] 
-[info] === Serving from '/home/spranga/Desktop/Dev/SinicoTaglia/travlendar'...
+[info] === Serving from '/home/spranga/Dev/SinicoTaglia/travlendar'...
 [info] 
-[debug] [2017-11-16T00:45:32.980Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/travlendar-plus  
- Thu Nov 16 2017 01:45:32 GMT+0100 (CET)
-[debug] [2017-11-16T00:45:33.900Z] <<< HTTP RESPONSE 200
-[debug] [2017-11-16T00:45:33.901Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/33867474922/clients/_:getWebAppConfig  
- Thu Nov 16 2017 01:45:33 GMT+0100 (CET)
-[debug] [2017-11-16T00:45:35.131Z] <<< HTTP RESPONSE 200
+[debug] [2017-11-19T11:08:32.723Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/travlendar-plus  
+ Sun Nov 19 2017 12:08:32 GMT+0100 (CET)
+[debug] [2017-11-19T11:08:33.583Z] <<< HTTP RESPONSE 200
+[debug] [2017-11-19T11:08:33.584Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/33867474922/clients/_:getWebAppConfig  
+ Sun Nov 19 2017 12:08:33 GMT+0100 (CET)
+[debug] [2017-11-19T11:08:34.196Z] <<< HTTP RESPONSE 200
 [info] i  hosting: Serving hosting files from: public
 [info] ✔  hosting: Local server: http://localhost:5000
 
-[debug] [2017-11-17T15:53:32.847Z] ----------------------------------------------------------------------
-[debug] [2017-11-17T15:53:32.850Z] Command:       /usr/bin/node /usr/local/bin/firebase serve
-[debug] [2017-11-17T15:53:32.850Z] CLI Version:   3.15.0
-[debug] [2017-11-17T15:53:32.850Z] Platform:      linux
-[debug] [2017-11-17T15:53:32.850Z] Node Version:  v6.11.4
-[debug] [2017-11-17T15:53:32.850Z] Time:          Fri Nov 17 2017 16:53:32 GMT+0100 (CET)
-[debug] [2017-11-17T15:53:32.850Z] ----------------------------------------------------------------------
+[debug] [2017-11-19T14:24:04.483Z] ----------------------------------------------------------------------
+[debug] [2017-11-19T14:24:04.486Z] Command:       /usr/bin/node /usr/local/bin/firebase serve
+[debug] [2017-11-19T14:24:04.486Z] CLI Version:   3.15.0
+[debug] [2017-11-19T14:24:04.486Z] Platform:      linux
+[debug] [2017-11-19T14:24:04.486Z] Node Version:  v6.11.4
+[debug] [2017-11-19T14:24:04.486Z] Time:          Sun Nov 19 2017 15:24:04 GMT+0100 (CET)
+[debug] [2017-11-19T14:24:04.487Z] ----------------------------------------------------------------------
 [debug] 
-[debug] [2017-11-17T15:53:32.863Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
-[debug] [2017-11-17T15:53:32.864Z] > authorizing via signed-in user
-[debug] [2017-11-17T15:53:32.866Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
-[debug] [2017-11-17T15:53:32.866Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token { refresh_token: '1/ybgKSvvL_RzVUlzJggtDe7IEuu3i5gKgNfWX1kENndg',
+[debug] [2017-11-19T14:24:04.497Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2017-11-19T14:24:04.498Z] > authorizing via signed-in user
+[debug] [2017-11-19T14:24:04.500Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2017-11-19T14:24:04.500Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token { refresh_token: '1/ybgKSvvL_RzVUlzJggtDe7IEuu3i5gKgNfWX1kENndg',
   client_id: '563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com',
   client_secret: 'j9iVZfS8kkCEFUPaAeJV0sAi',
   grant_type: 'refresh_token',
   scope: 'email https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/firebase openid' } 
- Fri Nov 17 2017 16:53:32 GMT+0100 (CET)
-[debug] [2017-11-17T15:53:32.991Z] <<< HTTP RESPONSE 200
-[debug] [2017-11-17T15:53:32.997Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/travlendar-plus  
- Fri Nov 17 2017 16:53:32 GMT+0100 (CET)
-[debug] [2017-11-17T15:53:33.689Z] <<< HTTP RESPONSE 200
-[debug] [2017-11-17T15:53:33.691Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/travlendar-plus/tokens  
- Fri Nov 17 2017 16:53:33 GMT+0100 (CET)
-[debug] [2017-11-17T15:53:34.371Z] <<< HTTP RESPONSE 200
+ Sun Nov 19 2017 15:24:04 GMT+0100 (CET)
+[debug] [2017-11-19T14:24:04.654Z] <<< HTTP RESPONSE 200
+[debug] [2017-11-19T14:24:04.661Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/travlendar-plus  
+ Sun Nov 19 2017 15:24:04 GMT+0100 (CET)
+[debug] [2017-11-19T14:24:06.028Z] <<< HTTP RESPONSE 200
+[debug] [2017-11-19T14:24:06.029Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/travlendar-plus/tokens  
+ Sun Nov 19 2017 15:24:06 GMT+0100 (CET)
+[debug] [2017-11-19T14:24:07.252Z] <<< HTTP RESPONSE 200
 [info] 
-[info] === Serving from '/home/spranga/Desktop/Dev/SinicoTaglia/travlendar'...
+[info] === Serving from '/home/spranga/Dev/SinicoTaglia/travlendar'...
 [info] 
-[debug] [2017-11-17T15:53:34.377Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/travlendar-plus  
- Fri Nov 17 2017 16:53:34 GMT+0100 (CET)
-[debug] [2017-11-17T15:53:36.839Z] <<< HTTP RESPONSE 200
-[debug] [2017-11-17T15:53:36.840Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/33867474922/clients/_:getWebAppConfig  
- Fri Nov 17 2017 16:53:36 GMT+0100 (CET)
-[debug] [2017-11-17T15:53:38.106Z] <<< HTTP RESPONSE 200
-[info] i  hosting: Serving hosting files from: public
-[info] ✔  hosting: Local server: http://localhost:5000
-
-[debug] [2017-11-17T20:55:15.184Z] ----------------------------------------------------------------------
-[debug] [2017-11-17T20:55:15.187Z] Command:       /usr/bin/node /usr/local/bin/firebase serve
-[debug] [2017-11-17T20:55:15.187Z] CLI Version:   3.15.0
-[debug] [2017-11-17T20:55:15.187Z] Platform:      linux
-[debug] [2017-11-17T20:55:15.187Z] Node Version:  v6.11.4
-[debug] [2017-11-17T20:55:15.187Z] Time:          Fri Nov 17 2017 21:55:15 GMT+0100 (CET)
-[debug] [2017-11-17T20:55:15.187Z] ----------------------------------------------------------------------
-[debug] 
-[debug] [2017-11-17T20:55:15.198Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
-[debug] [2017-11-17T20:55:15.198Z] > authorizing via signed-in user
-[debug] [2017-11-17T20:55:15.200Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
-[debug] [2017-11-17T20:55:15.201Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token { refresh_token: '1/ybgKSvvL_RzVUlzJggtDe7IEuu3i5gKgNfWX1kENndg',
-  client_id: '563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com',
-  client_secret: 'j9iVZfS8kkCEFUPaAeJV0sAi',
-  grant_type: 'refresh_token',
-  scope: 'email https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/firebase openid' } 
- Fri Nov 17 2017 21:55:15 GMT+0100 (CET)
-[debug] [2017-11-17T20:55:15.352Z] <<< HTTP RESPONSE 200
-[debug] [2017-11-17T20:55:15.362Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/travlendar-plus  
- Fri Nov 17 2017 21:55:15 GMT+0100 (CET)
-[debug] [2017-11-17T20:55:16.320Z] <<< HTTP RESPONSE 200
-[debug] [2017-11-17T20:55:16.321Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/travlendar-plus/tokens  
- Fri Nov 17 2017 21:55:16 GMT+0100 (CET)
-[debug] [2017-11-17T20:55:17.120Z] <<< HTTP RESPONSE 200
-[info] 
-[info] === Serving from '/home/spranga/Desktop/Dev/SinicoTaglia/travlendar'...
-[info] 
-[debug] [2017-11-17T20:55:17.125Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/travlendar-plus  
- Fri Nov 17 2017 21:55:17 GMT+0100 (CET)
-[debug] [2017-11-17T20:55:17.956Z] <<< HTTP RESPONSE 200
-[debug] [2017-11-17T20:55:17.957Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/33867474922/clients/_:getWebAppConfig  
- Fri Nov 17 2017 21:55:17 GMT+0100 (CET)
-[debug] [2017-11-17T20:55:18.399Z] <<< HTTP RESPONSE 200
+[debug] [2017-11-19T14:24:07.259Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/travlendar-plus  
+ Sun Nov 19 2017 15:24:07 GMT+0100 (CET)
+[debug] [2017-11-19T14:24:08.174Z] <<< HTTP RESPONSE 200
+[debug] [2017-11-19T14:24:08.175Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/33867474922/clients/_:getWebAppConfig  
+ Sun Nov 19 2017 15:24:08 GMT+0100 (CET)
+[debug] [2017-11-19T14:24:08.789Z] <<< HTTP RESPONSE 200
 [info] i  hosting: Serving hosting files from: public
 [info] ✔  hosting: Local server: http://localhost:5000
 
