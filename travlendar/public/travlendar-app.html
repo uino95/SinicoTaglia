@@ -54,8 +54,6 @@
 
         <app-location route="{{route}}" use-hash-as-path></app-location>
 
-        <home-view-element></home-view-element>
-
         <!--Main vertical layout-->
         <div class="container">
             <div class="flexchild">
@@ -69,9 +67,9 @@
                     <div key="bar">
                         <h2>Output Panel 2!!</h2>
                     </div>
-                    <div key="baz">
-                        <h2>Output Panel 3</h2>
-                    </div>
+                    <home-view-element key="baz" text-panel="eccolo qui il testo">
+                        ciao
+                    </home-view-element>
                     <div key="baz/sub">
                         <h2>this is a sub view</h2>
                     </div>

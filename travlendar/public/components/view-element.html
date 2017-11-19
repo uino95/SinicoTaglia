@@ -1,18 +1,25 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 
-<script>
-class ViewElement extends Polymer.Element {
-	static get is() { return 'view-element'; }
-    static get properties() {
-    	
+<dom-module id="view-element">
+    <script>
+    class ViewElement extends Polymer.Element {
+        static get is() { return 'view-element'; }
+        static get properties() {
+            return {
+                textPanel: {
+                    type: String,
+                    value: "default value"
+                }
+            }
+        }
+        constructor() {
+            super();
+        }
+        ready() {
+            super.ready();
+            console.log('I m a custom element! view element');
+        }
     }
-    constructor() {
-        super();
-    }
-    ready() {
-        super.ready();
-        console.log('I m a custom element! view element');
-    }
-}
-customElements.define('view-element', ViewElement);
-</script>
+    customElements.define('view-element', ViewElement);
+    </script>
+</dom-module>

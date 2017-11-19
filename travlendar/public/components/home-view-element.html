@@ -1,18 +1,23 @@
 <link rel="import" href="view-element.html">
 
-<script>
-class HomeViewElement extends ViewElement {
-    static get is() { return 'home-view-element'; }
-    static get properties() {
-    	
+<dom-module id="home-view-element">
+    <template>
+        I will have the the next Event of the day element here.
+        <br>Anyway the input text is >> [[textPanel]].
+    </template>
+
+    <script>
+    class HomeViewElement extends ViewElement {
+        static get is() { return 'home-view-element'; }
+        static get properties() {}
+        constructor() {
+            super();
+        }
+        ready() {
+            super.ready();
+            console.log('and i am the home one!');
+        }
     }
-    constructor() {
-        super();
-    }
-    ready() {
-        super.ready();
-        console.log('and i am the home one!');
-    }
-}
-customElements.define(HomeViewElement.is, HomeViewElement);
-</script>
+    customElements.define(HomeViewElement.is, HomeViewElement);
+    </script>
+</dom-module>
