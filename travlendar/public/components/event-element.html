@@ -1,0 +1,43 @@
+<dom-module id="event-element">
+    <template>
+
+        <div id="title"> {{title.value}} </div>
+        <div id="location"> [[location.value]] </div>
+        <div id="date"> [[date.value]] </div>
+
+    </template>
+    <link rel="import" href="../bower_components/polymer/polymer-element.html">
+    <script>
+    class eventElement extends Polymer.Element {
+        static get is() { return 'event-element'; }
+        static get properties() {
+
+            title: {
+                type: String;
+                notify: true;
+                value: 'ciao'
+            }
+
+            location: {
+                type: String;
+                notify: true;
+                value: 'mbare'
+            }
+
+            date: {
+                type: String;
+                notify: true;
+                value:'dsas'
+            }
+        }
+        constructor() {
+            super();
+        }
+        ready() {
+            super.ready();
+            console.log('I m a custom element! event element');
+        }
+    }
+    customElements.define('event-element', eventElement);
+    </script>
+</dom-module>

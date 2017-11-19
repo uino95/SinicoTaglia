@@ -8,6 +8,7 @@
 <link rel="import" href="bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="components/home-view-element.html">
+<link rel="import" href="components/event-element.html">
 
 <dom-module id="travlendar-app">
     <template>
@@ -62,7 +63,8 @@
                 <!--Here we should have the Views components to show. Routing is centralized-->
                 <iron-pages selected="[[route.path]]" attr-for-selected="key" fallback-selection="fallback">
                     <div key="foo">
-                        <h2>Output Panel 1 - ad esmpio ci può andare</h2>
+                        <event-element></event-element>
+                        <!--<h2>Output Panel 1 - ad esmpio ci può andare</h2>-->
                     </div>
                     <div key="bar">
                         <h2>Output Panel 2!!</h2>
