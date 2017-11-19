@@ -1,27 +1,21 @@
-<dom-module id="event-element">
+<dom-module id="travel-piece-element">
     <link rel="import" href="../bower_components/polymer/polymer-element.html">
     <link rel="import" href="../bower_components/paper-card/paper-card.html">
     <template>
-        <paper-card heading=[[title]]>
-            <div class="card-content"> Location: [[location]] </div>
-            <div class="card-content"> From: [[from]] - To: [[to]] </div>
+        <paper-card >
+            <div class="card-content"> By: [[by]] </div>
+            <div class="card-content"> From: [[from]] </div>
+            <div class="card-content"> At: [[at]] </div>
         </paper-card>
     </template>
     <script>
-    class eventElement extends Polymer.Element {
-        static get is() { return 'event-element'; }
+    class travelPieceElement extends Polymer.Element {
+        static get is() { return 'travel-piece-element'; }
         static get properties() {
             return {
-                title: {
+                by: {
                     type: String,
                     notify: true,
-                    value: 'undefined'
-                },
-
-                location: {
-                    type: String,
-                    notify: true,
-                    reflectToAttribute: true,
                     value: 'undefined'
                 },
 
@@ -31,7 +25,7 @@
                     value: 'undefined'
                 },
 
-                to: {
+                at: {
                     type: String,
                     notify: true,
                     value: 'undefined'
@@ -44,9 +38,9 @@
         }
         ready() {
             super.ready();
-            console.log('I m an event element');
+            console.log('I m an travel-piece element');
         }
     }
-    customElements.define('event-element', eventElement);
+    customElements.define('travel-piece-element', travelPieceElement);
     </script>
 </dom-module>

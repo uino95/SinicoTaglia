@@ -9,6 +9,7 @@
 <link rel="import" href="bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="components/home-view-element.html">
 <link rel="import" href="components/event-element.html">
+<link rel="import" href="components/travel-piece-element.html">
 
 <dom-module id="travlendar-app">
     <template>
@@ -61,7 +62,9 @@
                 <!--Here we should have the Views components to show. Routing is centralized-->
                 <iron-pages selected="[[route.path]]" attr-for-selected="key" fallback-selection="fallback">
                     <div key="foo">
-                        <event-element title="Meeting"></event-element>
+                        <event-element id=event1 title="Meeting with mbare" location="polimi" from="9:30" to="10.30"></event-element>
+                        <travel-piece-element by="Car" from="[[getLocation(event1)]]" at=10:45></travel-piece-element>
+                        <event-element id=event2 title="Football match" location="Giuriati" from="11:00" to="12:00"></event-element>
                         <!--<h2>Output Panel 1 - ad esmpio ci può andare</h2>-->
                     </div>
                     <div key="bar">
@@ -156,6 +159,10 @@
         },
         get isEditable() {
             return this.online;
+        },
+
+        getLocation(id){
+            return this.$.id.location;
         }
     });
     </script>
