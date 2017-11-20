@@ -6,9 +6,8 @@
         static get is() { return 'view-element'; }
         static get properties() {
             return {
-                textPanel: {
-                    type: String,
-                    value: "default value"
+                user: {
+                    type: String
                 }
             }
         }
@@ -17,7 +16,6 @@
         }
         ready() {
             super.ready();
-            console.log('I m a custom element! view element');
         }
     }
     customElements.define('view-element', ViewElement);

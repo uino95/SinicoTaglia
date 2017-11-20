@@ -1,9 +1,40 @@
 <link rel="import" href="view-element.html">
+<link rel="import" href="travlendar-styles.html">
 
 <dom-module id="home-view-element">
     <template>
-        I will have the the next Event of the day element here.
-        <br>Anyway the input text is >> [[textPanel]].
+        <style include="travlendar-styles"></style>
+
+        <!--Output Panel-->
+        <div class="outputPanel">
+            <event-element id="event1" title="Meeting with mbare" location="polimi" from="9:30" to="10:30">
+            </event-element>
+            <travel-piece-element by="Car" from="via caduti in missione, 19" at="10:45"></travel-piece-element>
+            <event-element id="event2" title="Football match" location="Giuriati" from="11:00" to="12:00">
+            </event-element>
+        </div>
+
+
+        <!--Input Panel-->
+        <div class="inputPanel">
+        	<!--Text Panel-->
+            <div class="textPanel">
+                text panel here ahah
+                <br>
+                ciao grazie
+            </div>
+            <paper-menu key="bar">
+                <a href="#foo">
+                    <paper-item>Item 5</paper-item>
+                </a>
+                <a href="#bar">
+                    <paper-item>Item 6</paper-item>
+                </a>
+                <a href="#baz">
+                    <paper-item>Item 7</paper-item>
+                </a>
+            </paper-menu>
+        </div>
     </template>
 
     <script>

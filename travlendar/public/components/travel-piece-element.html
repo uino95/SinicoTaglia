@@ -1,8 +1,8 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
 <dom-module id="travel-piece-element">
-    <link rel="import" href="../bower_components/polymer/polymer-element.html">
-    <link rel="import" href="../bower_components/paper-card/paper-card.html">
     <template>
-        <paper-card >
+        <paper-card>
             <div class="card-content"> By: [[by]] </div>
             <div class="card-content"> From: [[from]] </div>
             <div class="card-content"> At: [[at]] </div>
@@ -18,20 +18,17 @@
                     notify: true,
                     value: 'undefined'
                 },
-
                 from: {
                     type: String,
                     notify: true,
                     value: 'undefined'
                 },
-
                 at: {
                     type: String,
                     notify: true,
                     value: 'undefined'
                 }
             }
-
         }
         constructor() {
             super();
