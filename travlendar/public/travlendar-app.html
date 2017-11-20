@@ -9,6 +9,7 @@
 <link rel="import" href="components/home-view-element.html">
 <link rel="import" href="components/event-element.html">
 <link rel="import" href="components/travel-piece-element.html">
+<link rel="import" href="components/travel-proposal-element.html">
 
 <dom-module id="travlendar-app">
     <template>
@@ -55,7 +56,6 @@
 
         <app-location route="{{route}}" use-hash-as-path></app-location>
 
-        <!--Main vertical layout-->
         <!--Output Panel-->
         <!--Here we have the Views components to show. Routing is centralized-->
         <iron-pages class="wrapper" selected="[[route.path]]" attr-for-selected="key" fallback-selection="fallback">

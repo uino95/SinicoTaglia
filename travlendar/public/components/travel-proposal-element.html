@@ -1,0 +1,78 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../components/event-element.html">
+<link rel="import" href="../components/travel-piece-element.html">
+<link rel="import" href="../bower_components/iron-input/iron-input.html">
+
+<dom-module id="travel-proposal-element">
+    <template>
+        <firebase-query id="query" app-name="travlendar" path="/travelP/[[user]]" data="{{obj}}">
+        </firebase-query>
+        <firebase-document id="document" app-name="travlendar" path="/travelP/[[user]]/event1" data="{{objects}}">
+        </firebase-document>
+        <div class="proposals">
+            <template is="dom-repeat" items="[[obj]]">
+                <event-element hidden="[[item.isTravelProposal]]" title="[[item.title]]" location="[[item.location]]" from="[[item.from]]" to="[[item.to]]">
+                </event-element>
+                <travel-piece-element hidden="[[!item.isTravelProposal]]" by="[[item.by]]" from="[[item.from]]" at="[[item.at]]"> </travel-piece-element>
+            </template>
+        </div>
+        <h1> [[objects.title]]</h1>
+        <iron-input bind-value="{{objects.title}}">
+            <input value="{{value::input}}">
+        </iron-input>
+
+
+        <button on-click="handleClick">destroy it</button>
+    </template>
+    <script>
+    class TravelProposalElement extends Polymer.Element {
+        static get is() { return 'travel-proposal-element'; }
+        static get properties() {
+            return {
+                user: {
+                    type: String
+                }
+            }
+        }
+        constructor() {
+            super();
+        }
+
+        handleClick(){
+            this.$.document.destroy().then(function(){
+                window.location.href = '/#foo';
+            });
+        }
+
+        ready() {
+            super.ready();
+
+            //console.log(this.$.auth.user);
+            /*this.travelP = [
+                {
+                    istravelProposal: false,
+                    title: "meeting",
+                    location: "polymer",
+                    from: "23:00",
+                    to: "24:00"
+                },
+                {
+                    isTravelProposal: true,
+                    by: "foot",
+                    from: "polymer",
+                    at: "1:00"
+                },
+                {
+                    isTravelProposal: false,
+                    title: "dsfg",
+                    location: "polymer",
+                    from: "12:00",
+                    to: "24:00"
+                }
+            ]*/
+            console.log('I m a travel-proposal element');
+        }
+    }
+    customElements.define('travel-proposal-element', TravelProposalElement);
+    </script>
+</dom-module>
