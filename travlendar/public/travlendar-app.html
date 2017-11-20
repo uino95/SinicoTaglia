@@ -7,6 +7,8 @@
 <link rel="import" href="bower_components/paper-button/paper-button.html">
 <link rel="import" href="bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="components/home-view-element.html">
+<link rel="import" href="components/edit-calendar-view-element.html">
+<link rel="import" href="components/add-calendar-view-element.html">
 <link rel="import" href="components/event-element.html">
 <link rel="import" href="components/travel-piece-element.html">
 <link rel="import" href="components/show-travel-view-element.html">
@@ -59,25 +61,11 @@
 
         <!--Output Panel-->
         <!--Here we have the Views components to show. Routing is centralized-->
-        <iron-pages class="wrapper" selected="[[route.path]]" attr-for-selected="key" fallback-selection="HomeView">
-            <home-view-element key="HomeView"></home-view-element>
+        <iron-pages class="wrapper" selected="[[route.path]]" attr-for-selected="key" fallback-selection="homeView">
+            <home-view-element user="[[user]]" key="homeView"></home-view-element>
             <show-travel-view-element user="[[user]]" key="ShowTravelView"></show-travel-view-element>
-            <div key="foo">
-                <event-element id='event1' title="Meeting with mbare" location="polimi" from="9:30" to="10:30">
-                </event-element>
-                <travel-piece-element by="Car" from="[[getLocation(event1)]]" at=10:45></travel-piece-element>
-                <event-element id='event2' title="Football match" location="Giuriati" from="11:00" to="12:00">
-                </event-element>
-            </div>
-            <div key="bar">
-                <h2>Output Panel 2!!</h2>
-            </div>
-            <div key="baz/sub">
-                <h2>this is a sub view</h2>
-            </div>
-            <div key="fallback">
-                Fallback page -> nothing matches significa. homeeee a mettere ahaha
-            </div>
+            <edit-calendar-view-element user="[[user]]" key="editCalendarView"></edit-calendar-view-element>
+            <add-calendar-view-element user="[[user]]" key="editCalendarView/addCalendarView"></add-calendar-view-element>
         </iron-pages>
 
     </template>

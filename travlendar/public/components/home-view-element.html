@@ -25,13 +25,16 @@
             </div>
             <paper-menu>
                 <a href="#ShowTravelView">
-                    <paper-item>Show Travel</paper-item>
+                    <paper-item>Show Travel Proposal</paper-item>
                 </a>
                 <a href="#bar">
-                    <paper-item>Item 6</paper-item>
+                    <paper-item>Compute Travel</paper-item>
                 </a>
-                <a href="#baz">
-                    <paper-item>Item 7</paper-item>
+                <a href="#editCalendarView">
+                    <paper-item>Edit Calendar</paper-item>
+                </a>
+                <a href="#bb">
+                    <paper-item>Edit Preferences</paper-item>
                 </a>
             </paper-menu>
         </div>
@@ -46,7 +49,6 @@
         }
         ready() {
             super.ready();
-            console.log('and i am the home one!');
         }
     }
     customElements.define(HomeViewElement.is, HomeViewElement);

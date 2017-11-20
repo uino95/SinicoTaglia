@@ -1,0 +1,53 @@
+<link rel="import" href="view-element.html">
+<link rel="import" href="travlendar-styles.html">
+
+<dom-module id="edit-calendar-view-element">
+    <template>
+        <style include="travlendar-styles"></style>
+
+        <firebase-query id="query" app-name="travlendar" path="/events/[[user.uid]]" data="{{events}}">
+        </firebase-query>
+
+        <!--Output Panel-->
+        <div class="outputPanel">
+            <template is="dom-repeat" items="[[events]]">
+                <event-element title="[[item.title]]" location="[[item.location]]" from="[[item.from]]" to="[[item.to]]">
+                </event-element>
+            </template>
+        </div>
+
+        <!--Input Panel-->
+        <div class="inputPanel">
+            <!--Text Panel-->
+            <div class="textPanel">
+                Edit your calenda events here
+                <br> ciao grazie
+            </div>
+            <paper-menu>
+                <a href="#editCalendarView/addCalendarView">
+                    <paper-item>Add Event</paper-item>
+                </a>
+                <a href="#editCalendarView/deleteCalendarView">
+                    <paper-item>Delete Event</paper-item>
+                </a>
+                <a href="#homeView">
+                    <paper-item>Go Back</paper-item>
+                </a>
+            </paper-menu>
+        </div>
+    </template>
+
+    <script>
+    class EditCalendarViewElement extends ViewElement {
+        static get is() { return 'edit-calendar-view-element'; }
+        static get properties() {}
+        constructor() {
+            super();
+        }
+        ready() {
+            super.ready();
+        }
+    }
+    customElements.define(EditCalendarViewElement.is, EditCalendarViewElement);
+    </script>
+</dom-module>
