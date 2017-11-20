@@ -1,0 +1,42 @@
+<link rel="import" href="view-element.html">
+<link rel="import" href="travlendar-styles.html">
+<link rel="import" href="travel-proposal-element.html">
+
+<dom-module id="show-travel-view-element">
+    <template>
+        <style include="travlendar-styles"></style>
+        <firebase-query id="query" app-name="travlendar" path="/currentProposal/[[user.uid]]" data="{{proposal}}">
+        </firebase-query>
+        <!--Output Panel-->
+        <div class="outputPanel">
+            <travel-proposal-element current-proposal="[[proposal]]"></travel-proposal-element>
+        </div>
+
+        <!--Input Panel-->
+        <div class="inputPanel">
+        	<!--Text Panel-->
+            <div class="textPanel">
+                Here is you're current day travel proposal computed for you
+            </div>
+            <paper-menu>
+                <a href="#HomeView">
+                    <paper-item>Go Back</paper-item>
+                </a>
+            </paper-menu>
+        </div>
+    </template>
+
+    <script>
+    class ShowTravelViewElement extends ViewElement {
+        static get is() { return 'show-travel-view-element'; }
+        static get properties() {}
+        constructor() {
+            super();
+        }
+        ready() {
+            super.ready();
+        }
+    }
+    customElements.define(ShowTravelViewElement.is, ShowTravelViewElement);
+    </script>
+</dom-module>
