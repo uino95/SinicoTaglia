@@ -10,6 +10,7 @@
 <link rel="import" href="components/home-view-element.html">
 <link rel="import" href="components/event-element.html">
 <link rel="import" href="components/travel-piece-element.html">
+<link rel="import" href="components/travel-proposal-element.html">
 
 <dom-module id="travlendar-app">
     <template>
@@ -68,7 +69,7 @@
                         <!--<h2>Output Panel 1 - ad esmpio ci può andare</h2>-->
                     </div>
                     <div key="bar">
-                        <h2>Output Panel 2!!</h2>
+                        <travel-proposal-element user="[[user.uid]]"></travel-proposal-element>
                     </div>
                     <home-view-element key="baz" text-panel="eccolo qui il testo">
                         ciao
@@ -106,6 +107,7 @@
                     <paper-menu key="foo">
                         <a href="#foo">
                             <paper-item>foo 1</paper-item>
+
                         </a>
                         <a href="#bar">
                             <paper-item>bar 1</paper-item>
