@@ -1,27 +1,42 @@
 <link rel="import" href="view-element.html">
 <link rel="import" href="travlendar-styles.html">
+<link rel="import" href="event-element.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
 
-<dom-module id="add-calendar-view-element">
+<dom-module id="delete-calendar-view-element">
     <template>
-        <style include="travlendar-styles"></style>
+        <style include="travlendar-styles">
+        .item {
+            cursor: pointer;
+            border-bottom: 1px solid #DDD;
+        }
 
-        <firebase-document id="document" app-name="travlendar" path="/events/[[user.uid]]/" data="{{newEvent}}">
+        .item:focus,
+        .item.selected {
+            outline: 0;
+            background-color: red;
+        }
+
+        .no-selection {
+            color: #999;
+            margin-left: 10px;
+            line-height: 50px;
+        }
+        </style>
+
+        <firebase-query id="query" app-name="travlendar" path="/events/[[user.uid]]" data="{{events}}">
+        </firebase-query>
+
+        <firebase-document id="document" app-name="travlendar" path="/events/[[user.uid]]/[[selectedItems.$key]]">
         </firebase-document>
 
         <!--Output Panel-->
         <div class="outputPanel">
-            <iron-input bind-value="{{newEvent.title}}">
-                <input value="{{value::input}}">
-            </iron-input>
-            <iron-input bind-value="{{newEvent.location}}">
-                <input value2="{{value2::input}}">
-            </iron-input>
-            <iron-input bind-value="{{newEvent.from}}">
-                <input value3="{{value3::input}}">
-            </iron-input>
-            <iron-input bind-value="{{newEvent.at}}">
-                <input value4="{{value4::input}}">
-            </iron-input>
+            <iron-list items="[[events]]" selection-enabled selected-items="{{selectedItems}}">
+                <template>
+                	<event-element title="[[item.title]]" class$="[[computedClass(selected)]]"></event-element>                  
+                </template>
+            </iron-list>
         </div>
 
         <!--Input Panel-->
@@ -32,7 +47,7 @@
                 <br> ciao grazie
             </div>
             <paper-menu>
-                <paper-item on-click="saveEvent">Save Event</paper-item>
+                <paper-item on-click="deleteEvent">Delete Event</paper-item>
                 <a href="#editCalendarView">
                     <paper-item>Cancel</paper-item>
                 </a>
@@ -41,8 +56,8 @@
     </template>
 
     <script>
-    class AddCalendarViewElement extends ViewElement {
-        static get is() { return 'add-calendar-view-element'; }
+    class DeleteCalendarViewElement extends ViewElement {
+        static get is() { return 'delete-calendar-view-element'; }
         static get properties() {}
         constructor() {
             super();
@@ -50,14 +65,22 @@
         ready() {
             super.ready();
         }
-        saveEvent() {
-            this.$.document.saveValue('/events/' + this.user.uid);
+        deleteEvent() {
+            this.$.document.destroy();
             //TODO empty input text
             this.$.document.reset().then(function() {
                 window.location.href = '/#editCalendarView';
             });
         }
+        computedClass(isSelected) {
+        	console.log("property isSelected is now : " + isSelected);
+            var classes = 'item';
+            if (isSelected) {
+              classes += ' selected';
+            }
+            return classes;
+          }
     }
-    customElements.define(AddCalendarViewElement.is, AddCalendarViewElement);
+    customElements.define(DeleteCalendarViewElement.is, DeleteCalendarViewElement);
     </script>
 </dom-module>

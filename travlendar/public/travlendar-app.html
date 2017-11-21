@@ -6,12 +6,12 @@
 <link rel="import" href="bower_components/paper-item/paper-item.html">
 <link rel="import" href="bower_components/paper-button/paper-button.html">
 <link rel="import" href="bower_components/iron-pages/iron-pages.html">
+<!--Views Import-->
 <link rel="import" href="components/home-view-element.html">
+<link rel="import" href="components/show-travel-view-element.html">
 <link rel="import" href="components/edit-calendar-view-element.html">
 <link rel="import" href="components/add-calendar-view-element.html">
-<link rel="import" href="components/event-element.html">
-<link rel="import" href="components/travel-piece-element.html">
-<link rel="import" href="components/show-travel-view-element.html">
+<link rel="import" href="components/delete-calendar-view-element.html">
 
 <dom-module id="travlendar-app">
     <template>
@@ -66,6 +66,7 @@
             <show-travel-view-element user="[[user]]" key="ShowTravelView"></show-travel-view-element>
             <edit-calendar-view-element user="[[user]]" key="editCalendarView"></edit-calendar-view-element>
             <add-calendar-view-element user="[[user]]" key="editCalendarView/addCalendarView"></add-calendar-view-element>
+            <delete-calendar-view-element user="[[user]]" key="editCalendarView/deleteCalendarView"></delete-calendar-view-element>
         </iron-pages>
 
     </template>
