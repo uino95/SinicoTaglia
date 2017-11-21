@@ -2,13 +2,11 @@
 <link rel="import" href="bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
 <link rel="import" href="bower_components/polymerfire/polymerfire.html">
 <link rel="import" href="bower_components/app-route/app-location.html">
-<link rel="import" href="bower_components/paper-tabs/paper-tabs.html">
-<link rel="import" href="bower_components/paper-item/paper-item.html">
-<link rel="import" href="bower_components/paper-button/paper-button.html">
 <link rel="import" href="bower_components/iron-pages/iron-pages.html">
 <!--Views Import-->
 <link rel="import" href="components/home-view-element.html">
 <link rel="import" href="components/show-travel-view-element.html">
+<link rel="import" href="components/compute-travel-view-element.html">
 <link rel="import" href="components/edit-calendar-view-element.html">
 <link rel="import" href="components/add-calendar-view-element.html">
 <link rel="import" href="components/delete-calendar-view-element.html">
@@ -18,18 +16,17 @@
 
 <dom-module id="travlendar-app">
     <template>
-        <style include="note-app-shared-styles"></style>
-        <style>
+        <style include="generic-shared-styles">
         .wrapper {
             height: 90%;
             margin: 0;
             display: flex;
             flex-direction: column;
         }
-        iron-pages > home-view-element {
+
+        iron-pages>home-view-element {
             height: 100%;
         }
-
         </style>
 
         <na-toolbar signed-in="[[signedIn]]" on-sign-out="signOut">
@@ -47,18 +44,8 @@
         <firebase-document id="document" app-name="travlendar" path="[[editableNoteId]]" data="{{editableNote}}">
         </firebase-document>
 
-        <na-editor id="editor" note="{{editableNote}}" on-close="commitChange">
-        </na-editor>
-
         <app-indexeddb-mirror session="[[user.uid]]" key="notes" data="{{notes}}" persisted-data="{{persistedNotes}}">
         </app-indexeddb-mirror>
-
-        <!-- <div class="notes">
-            <template is="dom-repeat" items="[[persistedNotes]]" as="note">
-                <na-note id$="[[note.$key]]" title="[[note.title]]" body="[[note.body]]" on-tap="edit">
-                </na-note>
-            </template>
-        </div> -->
 
         <app-location route="{{route}}" use-hash-as-path></app-location>
 
@@ -66,12 +53,14 @@
         <!--Here we have the Views components to show. Routing is centralized-->
         <iron-pages class="wrapper" selected="[[route.path]]" attr-for-selected="key" fallback-selection="homeView">
             <home-view-element user="[[user]]" key="homeView"></home-view-element>
-            <show-travel-view-element user="[[user]]" key="ShowTravelView"></show-travel-view-element>
+            <show-travel-view-element user="[[user]]" key="showTravelView"></show-travel-view-element>
+            <compute-travel-view-element user="[[user]]" key="computeTravelView"></compute-travel-view-element>
             <edit-calendar-view-element user="[[user]]" key="editCalendarView"></edit-calendar-view-element>
             <add-calendar-view-element user="[[user]]" key="editCalendarView/addCalendarView"></add-calendar-view-element>
             <delete-calendar-view-element user="[[user]]" key="editCalendarView/deleteCalendarView"></delete-calendar-view-element>
             <edit-preferences-view-element user="[[user]]" key="editPreferencesView"></edit-preferences-view-element>
-            <edit-breaktimepref-view-element user="[[user]]" key="editPreferencesView/editBreakTimePrefView"></edit-breaktimepref-view-element>
+            <edit-breaktimepref-view-element user="[[user]]" key="editPreferencesView/editBreakTimePrefView">
+            </edit-breaktimepref-view-element>
             <edit-travelpref-view-element user="[[user]]" key="editPreferencesView/editTravelPrefView"></edit-travelpref-view-element>
         </iron-pages>
 
@@ -82,18 +71,6 @@
         behaviors: [Polymer.NoteAppBehavior],
         signIn: function() {
             this.$.auth.signInWithPopup();
-        },
-        get notesPath() {
-            return '/notes/' + this.user.uid;
-        },
-        toEditableId: function(noteId) {
-            return this.notesPath + '/' + noteId;
-        },
-        get isEditable() {
-            return this.online;
-        },
-        getLocation(id) {
-            return this.$.id.location;
         }
     });
     </script>

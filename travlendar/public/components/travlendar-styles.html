@@ -1,20 +1,28 @@
 <dom-module id="travlendar-styles">
     <template>
         <style>
-        .outputPanel {
-            height: 80%;
+         :host {
+            height: 100%;
+        }
+
+        section {
+            width: 100%;
+            height: 100%;
+            @apply --layout-vertical;
+        }
+
+        section paper-dialog-scrollable {
+            @apply --layout-flex;
         }
 
         .textPanel {
-            height: 20%;
             width: 100%;
+            background-color: var(--paper-blue-50);
         }
 
         .inputPanel {
-            height: 40%;
             width: 100%;
-            position: absolute;
-            bottom: 0;
+            background-color: var(--paper-blue-500);
         }
         </style>
     </template>
