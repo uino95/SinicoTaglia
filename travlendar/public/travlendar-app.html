@@ -11,7 +11,7 @@
 <link rel="import" href="components/add-calendar-view-element.html">
 <link rel="import" href="components/event-element.html">
 <link rel="import" href="components/travel-piece-element.html">
-<link rel="import" href="components/travel-proposal-element.html">
+<link rel="import" href="components/show-travel-view-element.html">
 
 <dom-module id="travlendar-app">
     <template>
@@ -26,6 +26,7 @@
         iron-pages > home-view-element {
             height: 100%;
         }
+
         </style>
 
         <na-toolbar signed-in="[[signedIn]]" on-sign-out="signOut">
@@ -62,6 +63,7 @@
         <!--Here we have the Views components to show. Routing is centralized-->
         <iron-pages class="wrapper" selected="[[route.path]]" attr-for-selected="key" fallback-selection="homeView">
             <home-view-element user="[[user]]" key="homeView"></home-view-element>
+            <show-travel-view-element user="[[user]]" key="ShowTravelView"></show-travel-view-element>
             <edit-calendar-view-element user="[[user]]" key="editCalendarView"></edit-calendar-view-element>
             <add-calendar-view-element user="[[user]]" key="editCalendarView/addCalendarView"></add-calendar-view-element>
         </iron-pages>
