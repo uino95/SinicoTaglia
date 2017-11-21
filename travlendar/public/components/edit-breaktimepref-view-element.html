@@ -1,0 +1,64 @@
+<link rel="import" href="view-element.html">
+<link rel="import" href="travlendar-styles.html">
+<link rel="import" href="../bower_components/iron-input/iron-input.html">
+
+<dom-module id="edit-breaktimepref-view-element">
+    <template>
+        <style include="travlendar-styles"></style>
+
+        <firebase-document id="document" app-name="travlendar" path="/preferences/[[user.uid]]/break" data="{{breakPref}}">
+        </firebase-document>
+
+        <!--Output Panel-->
+        <div class="outputPanel">
+            <p>
+                MinTime: 
+                <iron-input bind-value="{{breakPref.minTime}}">
+                    <input value="{{value::input}}">
+                </iron-input>
+            </p>
+            <p>
+                LowerBound: 
+                <iron-input bind-value="{{breakPref.lowerBound}}">
+                    <input value2="{{value2::input}}">
+                </iron-input>
+            </p>
+            <p>
+                UpperBound: 
+                <iron-input bind-value="{{breakPref.upperBound}}">
+                    <input value3="{{value3::input}}">
+                </iron-input>
+            </p>
+        </div>
+
+        <!--Input Panel-->
+        <div class="inputPanel">
+            <!--Text Panel-->
+            <div class="textPanel">
+                Here you can edit your Break Time Preferences. Everything you type gets immediately saved! So no need to save!
+            </div>
+            <paper-menu>
+                <a href="#editPreferencesView/editTravelPrefView">
+                    <paper-item>Edit Travel Pref</paper-item>
+                </a>
+                <a href="#editPreferencesView">
+                    <paper-item>Go Back</paper-item>
+                </a>
+            </paper-menu>
+        </div>
+    </template>
+
+    <script>
+    class EditBreakTimePrefViewElement extends ViewElement {
+        static get is() { return 'edit-breaktimepref-view-element'; }
+        static get properties() {}
+        constructor() {
+            super();
+        }
+        ready() {
+            super.ready();
+        }
+    }
+    customElements.define(EditBreakTimePrefViewElement.is, EditBreakTimePrefViewElement);
+    </script>
+</dom-module>

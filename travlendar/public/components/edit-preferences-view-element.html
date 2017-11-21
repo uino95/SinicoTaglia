@@ -1,0 +1,65 @@
+<link rel="import" href="view-element.html">
+<link rel="import" href="travlendar-styles.html">
+
+<dom-module id="edit-preferences-view-element">
+    <template>
+        <style include="travlendar-styles"></style>
+
+        <firebase-query id="query" app-name="travlendar" path="/preferences/[[user.uid]]/break" data="{{breakPref}}">
+        </firebase-query>
+        <firebase-query id="query2" app-name="travlendar" path="/preferences/[[user.uid]]/travel" data="{{travelPref}}">
+        </firebase-query>
+
+        <!--Output Panel-->
+        <div class="outputPanel">
+            <h3>Break Time Prefs</h3>
+            <ul>
+                <template is="dom-repeat" items="{{breakPref}}">
+                    <li>[[item.$key]]: [[item.$val]]</li>
+                </template>
+            </ul>
+            <h3>Travel Prefs</h3>
+            <ul>
+                <template is="dom-repeat" items="{{travelPref}}">
+                    <li>[[item.$key]]: [[item.$val]]</li>
+                </template>
+            </ul>
+        </div>
+
+        <!--Input Panel-->
+        <div class="inputPanel">
+            <!--Text Panel-->
+            <div class="textPanel">
+                Here you can edit your preferences
+            </div>
+            <paper-menu>
+                <a href="#editPreferencesView/editBreakTimePrefView">
+                    <paper-item>Edit Break Time Pref</paper-item>
+                </a>
+                <a href="#editPreferencesView/editTravelPrefView">
+                    <paper-item>Edit Travel Pref</paper-item>
+                </a>
+                <a href="#homeView">
+                    <paper-item>Go Back</paper-item>
+                </a>
+            </paper-menu>
+        </div>
+    </template>
+
+    <script>
+    class EditPreferencesViewElement extends ViewElement {
+        static get is() { return 'edit-preferences-view-element'; }
+        static get properties() {}
+        constructor() {
+            super();
+        }
+        ready() {
+            super.ready();
+        }
+        clickMe() {
+            console.log(this.breakPref);
+        }
+    }
+    customElements.define(EditPreferencesViewElement.is, EditPreferencesViewElement);
+    </script>
+</dom-module>

@@ -12,6 +12,9 @@
 <link rel="import" href="components/edit-calendar-view-element.html">
 <link rel="import" href="components/add-calendar-view-element.html">
 <link rel="import" href="components/delete-calendar-view-element.html">
+<link rel="import" href="components/edit-preferences-view-element.html">
+<link rel="import" href="components/edit-breaktimepref-view-element.html">
+<link rel="import" href="components/edit-travelpref-view-element.html">
 
 <dom-module id="travlendar-app">
     <template>
@@ -67,6 +70,9 @@
             <edit-calendar-view-element user="[[user]]" key="editCalendarView"></edit-calendar-view-element>
             <add-calendar-view-element user="[[user]]" key="editCalendarView/addCalendarView"></add-calendar-view-element>
             <delete-calendar-view-element user="[[user]]" key="editCalendarView/deleteCalendarView"></delete-calendar-view-element>
+            <edit-preferences-view-element user="[[user]]" key="editPreferencesView"></edit-preferences-view-element>
+            <edit-breaktimepref-view-element user="[[user]]" key="editPreferencesView/editBreakTimePrefView"></edit-breaktimepref-view-element>
+            <edit-travelpref-view-element user="[[user]]" key="editPreferencesView/editTravelPrefView"></edit-travelpref-view-element>
         </iron-pages>
 
     </template>

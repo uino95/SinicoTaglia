@@ -28,7 +28,8 @@
     "iron-flex-layout": "PolymerElements/iron-flex-layout#^2.0.1",
     "polymer": "Polymer/polymer#^2.0.0",
     "paper-card": "PolymerElements/paper-card#^2.0.0",
-    "iron-list": "PolymerElements/iron-list#^2.0.11"
+    "iron-list": "PolymerElements/iron-list#^2.0.11",
+    "paper-toggle-button": "PolymerElements/paper-toggle-button#^2.0.0"
   },
   "resolutions": {
     "iron-flex-layout": "1 - 2",

@@ -1,0 +1,54 @@
+<link rel="import" href="view-element.html">
+<link rel="import" href="travlendar-styles.html">
+<link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
+
+<dom-module id="edit-travelpref-view-element">
+    <template>
+        <style include="travlendar-styles"></style>
+
+        <firebase-document id="document" app-name="travlendar" path="/preferences/[[user.uid]]/travel" data="{{travelPref}}">
+        </firebase-document>
+
+        <!--Output Panel-->
+        <div class="outputPanel">
+            <p>
+                Own Car: 
+                <paper-toggle-button checked="{{travelPref.own_car}}"></paper-toggle-button>
+            </p>
+            <p>
+                Allow Bike: 
+                <paper-toggle-button checked="{{travelPref.allow_bike}}"></paper-toggle-button>
+            </p>
+        </div>
+
+        <!--Input Panel-->
+        <div class="inputPanel">
+            <!--Text Panel-->
+            <div class="textPanel">
+                Here you can edit your Travel Preferences. Everything you change gets immediately saved! So no need to save!
+            </div>
+            <paper-menu>
+                <a href="#editPreferencesView/editBreakTimePrefView">
+                    <paper-item>Edit Break Time Pref</paper-item>
+                </a>
+                <a href="#editPreferencesView">
+                    <paper-item>Go Back</paper-item>
+                </a>
+            </paper-menu>
+        </div>
+    </template>
+
+    <script>
+    class EditTravelPrefViewElement extends ViewElement {
+        static get is() { return 'edit-travelpref-view-element'; }
+        static get properties() {}
+        constructor() {
+            super();
+        }
+        ready() {
+            super.ready();
+        }
+    }
+    customElements.define(EditTravelPrefViewElement.is, EditTravelPrefViewElement);
+    </script>
+</dom-module>
