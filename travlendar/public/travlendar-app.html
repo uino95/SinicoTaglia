@@ -3,6 +3,7 @@
 <link rel="import" href="bower_components/polymerfire/polymerfire.html">
 <link rel="import" href="bower_components/app-route/app-location.html">
 <link rel="import" href="bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="bower_components/iron-resizable-behavior/iron-resizable-behavior.html">
 <!--Views Import-->
 <link rel="import" href="components/home-view-element.html">
 <link rel="import" href="components/show-travel-view-element.html">
@@ -16,21 +17,18 @@
 
 <dom-module id="travlendar-app">
     <template>
-        <style include="generic-shared-styles">
-        .wrapper {
-            height: 90%;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
+        <style>
+        html {
+            display: block;
+            background-color: var(--paper-indigo-50);
+            @apply --paper-font-common-base;
+            --paper-fab-background: var(--paper-teal-500);
         }
 
-        iron-pages>home-view-element {
-            height: 100%;
+        #wrapper {
+            margin: 0;
         }
         </style>
-
-        <na-toolbar signed-in="[[signedIn]]" on-sign-out="signOut">
-        </na-toolbar>
 
         <na-login on-sign-in="signIn" signed-in="[[signedIn]]" disabled="[[!online]]">
         </na-login>
@@ -49,9 +47,12 @@
 
         <app-location route="{{route}}" use-hash-as-path></app-location>
 
+        <na-toolbar id="toolbar" signed-in="[[signedIn]]" on-sign-out="signOut">
+        </na-toolbar>
+
         <!--Output Panel-->
         <!--Here we have the Views components to show. Routing is centralized-->
-        <iron-pages class="wrapper" selected="[[route.path]]" attr-for-selected="key" fallback-selection="homeView">
+        <iron-pages id="wrapper" selected="[[route.path]]" attr-for-selected="key" fallback-selection="homeView">
             <home-view-element user="[[user]]" key="homeView"></home-view-element>
             <show-travel-view-element user="[[user]]" key="showTravelView"></show-travel-view-element>
             <compute-travel-view-element user="[[user]]" key="computeTravelView"></compute-travel-view-element>
@@ -68,10 +69,19 @@
     <script>
     Polymer({
         is: 'travlendar-app',
-        behaviors: [Polymer.NoteAppBehavior],
+        behaviors: [Polymer.NoteAppBehavior, Polymer.IronResizableBehavior],
         signIn: function() {
             this.$.auth.signInWithPopup();
-        }
+        },
+        onHeightChange: function() {
+            var computedH = window.innerHeight - this.$.toolbar.clientHeight;
+            this.$.wrapper.style.height = (computedH + 'px');
+            console.log("new size computed: " + computedH + ' -screen=' + window.innerHeight + ' -toolbar=' + this.$.toolbar.clientHeight);
+        },
+        ready: function() {
+            this.onHeightChange();
+        },
+        listeners: { "iron-resize": "onHeightChange" }
     });
     </script>
 </dom-module>

@@ -1,12 +1,10 @@
 <link rel="import" href="view-element.html">
+<link rel="import" href="template-view.html">
 <link rel="import" href="travlendar-styles.html">
-<link rel="import" href="../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
 
 <dom-module id="home-view-element">
     <template>
-        <style include="travlendar-styles">
-        
-        </style>
+        <style include="travlendar-styles"></style>
 
         <!--Output Panel-->
         <!-- <div class="outputPanel">
@@ -16,7 +14,45 @@
             <event-element id="event2" title="Football match" location="Giuriati" from="11:00" to="12:00">
             </event-element>
         </div> -->
-        <section>
+        <template-view>
+            <span slot="outputPanel">
+                <p>Alice was beginning to get very tired of sitting by her sister on the bank, and of having nothing to do: once or twice she had peeped into the book her sister was reading, but it had no pictures or conversations in it, 'and what is the use of a book,' thought Alice 'without pictures or conversation?'</p>
+                <event-element id="event1" title="Meeting with mbare" location="polimi" from="9:30" to="10:30">
+                </event-element>
+                <travel-piece-element by="Car" from="via caduti in missione, 19" at="10:45"></travel-piece-element>
+                <event-element id="event2" title="Football match" location="Giuriati" from="11:00" to="12:00">
+                </event-element>
+                <event-element id="event2" title="Football match" location="Giuriati" from="11:00" to="12:00">
+                </event-element>
+                <event-element id="event2" title="Football match" location="Giuriati" from="11:00" to="12:00">
+                </event-element>
+                <p>Alice was beginning to get very tired of sitting by her sister on the bank, and of having nothing to do: once or twice she had peeped into the book her sister was reading, but it had no pictures or conversations in it, 'and what is the use of a book,' thought Alice 'without pictures or conversation?'</p>
+                <p>Alice was beginning to get very tired of sitting by her sister on the bank, and of having nothing to do: once or twice she had peeped into the book her sister was reading, but it had no pictures or conversations in it, 'and what is the use of a book,' thought Alice 'without pictures or conversation?'</p>
+                <p>Alice was beginning to get very tired of sitting by her sister on the bank, and of having nothing to do: once or twice she had peeped into the book her sister was reading, but it had no pictures or conversations in it, 'and what is the use of a book,' thought Alice 'without pictures or conversation?'</p>
+            </span>
+
+            <span slot="textPanel">
+                Welcome back <b>[[user.displayName]]</b>! 
+                <br>It’s [[currentDate]] and above you can find your next event of the day!
+            </span>
+
+            <span slot="inputPanel">
+                <paper-icon-item class="menu-item" onclick="window.location.href = '#showTravelView'">
+                    <iron-icon icon="visibility" slot="item-icon"></iron-icon>Show Travel Proposal
+                </paper-icon-item>
+                <paper-icon-item class="menu-item" onclick="window.location.href = '#computeTravelView'">
+                    <iron-icon icon="card-travel" slot="item-icon"></iron-icon>Compute Travel
+                </paper-icon-item>
+                <paper-icon-item class="menu-item" onclick="window.location.href = '#editCalendarView'">
+                    <iron-icon icon="today" slot="item-icon"></iron-icon>Edit Calendar
+                </paper-icon-item>
+                <paper-icon-item class="menu-item" onclick="window.location.href = '#editPreferencesView'">
+                    <iron-icon icon="settings" slot="item-icon"></iron-icon>Edit Preferences
+                </paper-icon-item>
+            </span>
+
+        </template-view>
+        <!-- <section>
             <paper-dialog-scrollable>
                 <p>Alice was beginning to get very tired of sitting by her sister on the bank, and of having nothing to do: once or twice she had peeped into the book her sister was reading, but it had no pictures or conversations in it, 'and what is the use of a book,' thought Alice 'without pictures or conversation?'</p>
                 <event-element id="event1" title="Meeting with mbare" location="polimi" from="9:30" to="10:30">
@@ -34,9 +70,9 @@
             </paper-dialog-scrollable>
 
             <!--Input Panel-->
-            <div class="inputPanel">
+        <!-- <div class="inputPanel">
                 <!--Text Panel-->
-                <div class="textPanel">
+        <!-- <div class="textPanel">
                     text panel here ahah
                     <br> ciao grazie
                 </div>
@@ -55,19 +91,40 @@
                     </a>
                 </paper-menu>
             </div>
-        </section>
+        </section> -->
 
     </template>
 
     <script>
     class HomeViewElement extends ViewElement {
         static get is() { return 'home-view-element'; }
-        static get properties() {}
+        static get properties() {
+            return {
+                currentDate: {
+                    type: String,
+                    computed: 'getCurrentDay()'
+                }
+            }
+        }
         constructor() {
             super();
         }
         ready() {
             super.ready();
+        }
+        getCurrentDay() {
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1; //January is 0!
+            var yyyy = today.getFullYear();
+            if (dd < 10) {
+                dd = '0' + dd;
+            }
+            if (mm < 10) {
+                mm = '0' + mm;
+            }
+            var today = dd + '/' + mm + '/' + yyyy;
+            return today;
         }
     }
     customElements.define(HomeViewElement.is, HomeViewElement);
