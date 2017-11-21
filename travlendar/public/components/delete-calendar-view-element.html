@@ -1,0 +1,63 @@
+<link rel="import" href="view-element.html">
+<link rel="import" href="travlendar-styles.html">
+
+<dom-module id="add-calendar-view-element">
+    <template>
+        <style include="travlendar-styles"></style>
+
+        <firebase-document id="document" app-name="travlendar" path="/events/[[user.uid]]/" data="{{newEvent}}">
+        </firebase-document>
+
+        <!--Output Panel-->
+        <div class="outputPanel">
+            <iron-input bind-value="{{newEvent.title}}">
+                <input value="{{value::input}}">
+            </iron-input>
+            <iron-input bind-value="{{newEvent.location}}">
+                <input value2="{{value2::input}}">
+            </iron-input>
+            <iron-input bind-value="{{newEvent.from}}">
+                <input value3="{{value3::input}}">
+            </iron-input>
+            <iron-input bind-value="{{newEvent.at}}">
+                <input value4="{{value4::input}}">
+            </iron-input>
+        </div>
+
+        <!--Input Panel-->
+        <div class="inputPanel">
+            <!--Text Panel-->
+            <div class="textPanel">
+                Edit your calenda events here
+                <br> ciao grazie
+            </div>
+            <paper-menu>
+                <paper-item on-click="saveEvent">Save Event</paper-item>
+                <a href="#editCalendarView">
+                    <paper-item>Cancel</paper-item>
+                </a>
+            </paper-menu>
+        </div>
+    </template>
+
+    <script>
+    class AddCalendarViewElement extends ViewElement {
+        static get is() { return 'add-calendar-view-element'; }
+        static get properties() {}
+        constructor() {
+            super();
+        }
+        ready() {
+            super.ready();
+        }
+        saveEvent() {
+            this.$.document.saveValue('/events/' + this.user.uid);
+            //TODO empty input text
+            this.$.document.reset().then(function() {
+                window.location.href = '/#editCalendarView';
+            });
+        }
+    }
+    customElements.define(AddCalendarViewElement.is, AddCalendarViewElement);
+    </script>
+</dom-module>
