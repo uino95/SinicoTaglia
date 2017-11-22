@@ -1,6 +1,5 @@
 <link rel="import" href="view-element.html">
 <link rel="import" href="travlendar-styles.html">
-<link rel="import" href="../bower_components/iron-input/iron-input.html">
 
 <dom-module id="edit-breaktimepref-view-element">
     <template>
@@ -9,43 +8,41 @@
         <firebase-document id="document" app-name="travlendar" path="/preferences/[[user.uid]]/break" data="{{breakPref}}">
         </firebase-document>
 
-        <!--Output Panel-->
-        <div class="outputPanel">
-            <p>
+        <template-view>
+            <span slot="outputPanel">
+                <p>
                 MinTime: 
                 <iron-input bind-value="{{breakPref.minTime}}">
                     <input value="{{value::input}}">
                 </iron-input>
-            </p>
-            <p>
-                LowerBound: 
-                <iron-input bind-value="{{breakPref.lowerBound}}">
-                    <input value2="{{value2::input}}">
-                </iron-input>
-            </p>
-            <p>
-                UpperBound: 
-                <iron-input bind-value="{{breakPref.upperBound}}">
-                    <input value3="{{value3::input}}">
-                </iron-input>
-            </p>
-        </div>
+                </p>
+                <p>
+                    LowerBound: 
+                    <iron-input bind-value="{{breakPref.lowerBound}}">
+                        <input value2="{{value2::input}}">
+                    </iron-input>
+                </p>
+                <p>
+                    UpperBound: 
+                    <iron-input bind-value="{{breakPref.upperBound}}">
+                        <input value3="{{value3::input}}">
+                    </iron-input>
+                </p>
+            </span>
 
-        <!--Input Panel-->
-        <div class="inputPanel">
-            <!--Text Panel-->
-            <div class="textPanel">
+            <span slot="textPanel">
                 Here you can edit your Break Time Preferences. Everything you type gets immediately saved! So no need to save!
-            </div>
-            <paper-menu>
-                <a href="#editPreferencesView/editTravelPrefView">
-                    <paper-item>Edit Travel Pref</paper-item>
-                </a>
-                <a href="#editPreferencesView">
-                    <paper-item>Go Back</paper-item>
-                </a>
-            </paper-menu>
-        </div>
+            </span>
+
+            <span slot="inputPanel">
+                <paper-icon-item class="menu-item" onclick="window.location.href = '#editPreferencesView/editTravelPrefView'">
+                    <iron-icon icon="myicons:directions-bus" slot="item-icon"></iron-icon>Edit Travel Preferences
+                </paper-icon-item>
+                <paper-icon-item class="menu-item" onclick="window.location.href = '#editPreferencesView'">
+                    <iron-icon icon="myicons:arrow-back" slot="item-icon"></iron-icon>Go Back
+                </paper-icon-item>
+            </span>
+        </template-view>
     </template>
 
     <script>

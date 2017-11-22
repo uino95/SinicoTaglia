@@ -9,33 +9,31 @@
         <firebase-document id="document" app-name="travlendar" path="/preferences/[[user.uid]]/travel" data="{{travelPref}}">
         </firebase-document>
 
-        <!--Output Panel-->
-        <div class="outputPanel">
-            <p>
+        <template-view>
+            <span slot="outputPanel">
+                <p>
                 Own Car: 
                 <paper-toggle-button checked="{{travelPref.own_car}}"></paper-toggle-button>
-            </p>
-            <p>
-                Allow Bike: 
-                <paper-toggle-button checked="{{travelPref.allow_bike}}"></paper-toggle-button>
-            </p>
-        </div>
+                </p>
+                <p>
+                    Allow Bike: 
+                    <paper-toggle-button checked="{{travelPref.allow_bike}}"></paper-toggle-button>
+                </p>
+            </span>
 
-        <!--Input Panel-->
-        <div class="inputPanel">
-            <!--Text Panel-->
-            <div class="textPanel">
+            <span slot="textPanel">
                 Here you can edit your Travel Preferences. Everything you change gets immediately saved! So no need to save!
-            </div>
-            <paper-menu>
-                <a href="#editPreferencesView/editBreakTimePrefView">
-                    <paper-item>Edit Break Time Pref</paper-item>
-                </a>
-                <a href="#editPreferencesView">
-                    <paper-item>Go Back</paper-item>
-                </a>
-            </paper-menu>
-        </div>
+            </span>
+
+            <span slot="inputPanel">
+                <paper-icon-item class="menu-item" onclick="window.location.href = '#editPreferencesView/editBreakTimePrefView'">
+                    <iron-icon icon="myicons:restaurant-menu" slot="item-icon"></iron-icon>Edit Break Time Preferences
+                </paper-icon-item>
+                <paper-icon-item class="menu-item" onclick="window.location.href = '#editPreferencesView'">
+                    <iron-icon icon="myicons:arrow-back" slot="item-icon"></iron-icon>Go Back
+                </paper-icon-item>
+            </span>
+        </template-view>
     </template>
 
     <script>

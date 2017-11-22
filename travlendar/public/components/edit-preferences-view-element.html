@@ -10,40 +10,38 @@
         <firebase-query id="query2" app-name="travlendar" path="/preferences/[[user.uid]]/travel" data="{{travelPref}}">
         </firebase-query>
 
-        <!--Output Panel-->
-        <div class="outputPanel">
-            <h3>Break Time Prefs</h3>
-            <ul>
-                <template is="dom-repeat" items="{{breakPref}}">
-                    <li>[[item.$key]]: [[item.$val]]</li>
-                </template>
-            </ul>
-            <h3>Travel Prefs</h3>
-            <ul>
-                <template is="dom-repeat" items="{{travelPref}}">
-                    <li>[[item.$key]]: [[item.$val]]</li>
-                </template>
-            </ul>
-        </div>
+        <template-view>
+            <span slot="outputPanel">
+                <h3>Break Time Prefs</h3>
+                <ul>
+                    <template is="dom-repeat" items="{{breakPref}}">
+                        <li>[[item.$key]]: [[item.$val]]</li>
+                    </template>
+                </ul>
+                <h3>Travel Prefs</h3>
+                <ul>
+                    <template is="dom-repeat" items="{{travelPref}}">
+                        <li>[[item.$key]]: [[item.$val]]</li>
+                    </template>
+                </ul>
+            </span>
 
-        <!--Input Panel-->
-        <div class="inputPanel">
-            <!--Text Panel-->
-            <div class="textPanel">
-                Here you can edit your preferences
-            </div>
-            <paper-menu>
-                <a href="#editPreferencesView/editBreakTimePrefView">
-                    <paper-item>Edit Break Time Pref</paper-item>
-                </a>
-                <a href="#editPreferencesView/editTravelPrefView">
-                    <paper-item>Edit Travel Pref</paper-item>
-                </a>
-                <a href="#homeView">
-                    <paper-item>Go Back</paper-item>
-                </a>
-            </paper-menu>
-        </div>
+            <span slot="textPanel">
+                Here you can edit your Preferences
+            </span>
+
+            <span slot="inputPanel">
+                <paper-icon-item class="menu-item" onclick="window.location.href = '#editPreferencesView/editBreakTimePrefView'">
+                    <iron-icon icon="myicons:restaurant-menu" slot="item-icon"></iron-icon>Edit Break Time Preference
+                </paper-icon-item>
+                <paper-icon-item class="menu-item" onclick="window.location.href = '#editPreferencesView/editTravelPrefView'">
+                    <iron-icon icon="myicons:directions-bus" slot="item-icon"></iron-icon>Edit Travel Preference
+                </paper-icon-item>
+                <paper-icon-item class="menu-item" onclick="window.location.href = '#homeView'">
+                    <iron-icon icon="icons:arrow-back" slot="item-icon"></iron-icon>Go Back
+                </paper-icon-item>
+            </span>
+        </template-view>
     </template>
 
     <script>

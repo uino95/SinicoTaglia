@@ -7,42 +7,40 @@
         </firebase-document>
         <firebase-query id="query" app-name="travlendar" path="/events/[[user.uid]]" data="{{events}}">
         </firebase-query>
-        <!--Output Panel-->
-        <div class="outputPanel">
-            <iron-input bind-value="{{newEvent.title}}">
+        <template-view>
+            <span slot="outputPanel">
+                <iron-input bind-value="{{newEvent.title}}">
                 Title:
                 <input value="{{value::input}}">
-            </iron-input>
-            <iron-input bind-value="{{newEvent.location}}">
-                Location:
-                <input value2="{{value2::input}}">
-            </iron-input>
-            <iron-input bind-value="{{newEvent.date}}">
-                Date:
-                <input value3="{{value3::input}}">
-            </iron-input>
-            <iron-input bind-value="{{newEvent.from}}">
-                From:
-                <input value4="{{value4::input}}">
-            </iron-input>
-            <iron-input bind-value="{{newEvent.to}}">
-                To:
-                <input value5="{{value5::input}}">
-            </iron-input>
-        </div>
-        <!--Input Panel-->
-        <div class="inputPanel">
-            <!--Text Panel-->
-            <div class="textPanel">
-                Edit your calenda events here
-            </div>
-            <paper-menu>
-                <paper-item on-click="checkEvent">Save Event</paper-item>
-                <a href="#editCalendarView">
-                    <paper-item>Cancel</paper-item>
-                </a>
-            </paper-menu>
-        </div>
+                </iron-input>
+                <iron-input bind-value="{{newEvent.location}}">
+                    Location:
+                    <input value2="{{value2::input}}">
+                </iron-input>
+                <iron-input bind-value="{{newEvent.date}}">
+                    Date:
+                    <input value3="{{value3::input}}">
+                </iron-input>
+                <iron-input bind-value="{{newEvent.from}}">
+                    From:
+                    <input value4="{{value4::input}}">
+                </iron-input>
+                <iron-input bind-value="{{newEvent.to}}">
+                    To:<input value5="{{value5::input}}">
+                </iron-input>
+            </span>
+            <span slot="textPanel">
+                Choose data and press save
+            </span>
+            <span slot="inputPanel">
+                <paper-icon-item class="menu-item" on-tap="checkEvent">
+                    <iron-icon icon="add" slot="item-icon"></iron-icon>Save New Event
+                </paper-icon-item>
+                <paper-icon-item class="menu-item" onclick="window.location.href = '#editCalendarView'">
+                    <iron-icon icon="myicons:arrow-back" slot="item-icon"></iron-icon>Cancel
+                </paper-icon-item>
+            </span>
+        </template-view>
     </template>
     <script>
     class AddCalendarViewElement extends ViewElement {
@@ -53,70 +51,55 @@
         }
         ready() {
             super.ready();
-        }
-
-        saveEvent() {
-            this.$.document.saveValue('/events/' + this.user.uid);
-            //TODO empty input text
-            this.$.document.reset().then(function() {
-                window.location.href = '/#editCalendarView';
-            });
+            window.addEventListener('route-computed', () => this.saveEvent());
         }
 
         checkEvent() {
-
             var feasible = false;
             var newEvent = this.$.document.data;
             var events = this.$.query.data;
             var currentDay = new Date(parseInt(newEvent.date));
-            var currentEvents = [];
-            for (var i = 0; i < events.length; i++) { //filter for the current day of the event added
-                var d = new Date(parseInt(events[i].date));
-                if (d.getDate() == currentDay.getDate()) {
-                    currentEvents.push(events[i]);
-                }
-            }
-
-            currentEvents.push(newEvent);
-            currentEvents.sort(function(a, b) { return a.from - b.from }); //sort it.
-            var position = currentEvents.indexOf(newEvent);
-            var prev = currentEvents[position - 1]
-            var curr = currentEvents[position];
-            var next = currentEvents[position + 1];
-
-            if (currentEvents.length > 1) {
-                if (position == 0) { //inserted event has no predecessor
-                    if (parseInt(curr.to) < parseInt(next.from)) {
-                        feasible = this.computeDefaultRoute(curr, next)
-                    } else {
-                        alert("events overlapping"); 
+            var today = new Date();
+            if (currentDay.getDate() < today.getDate()) {
+                alert("day not exist");
+            } else {
+                var currentEvents = [];
+                for (var i = 0; i < events.length; i++) { //filter for the current day of the event added
+                    var d = new Date(parseInt(events[i].date));
+                    if (d.getDate() == currentDay.getDate()) {
+                        currentEvents.push(events[i]);
                     }
-                } else {
-                    if (position == currentEvents.length - 1) { //inserted event has no successor
-                        if (parseInt(prev.to) < parseInt(curr.from)) {
-                            feasible = this.computeDefaultRoute(prev, curr)
-                        } else {
-                            alert("events overlapping");
-                        }
-                    } else { //inserted event is in the middle of two event
-                        if ((parseInt(prev.to) < parseInt(curr.from)) && (parseInt(curr.to) < parseInt(next))) {
-                            feasible = this.computeDefaultRoute(prev, curr);
+                }
+                currentEvents.push(newEvent);
+                currentEvents.sort(function(a, b) { return a.from - b.from }); //sort it.
+                var position = currentEvents.indexOf(newEvent);
+                var prev = currentEvents[position - 1]
+                var curr = currentEvents[position];
+                var next = currentEvents[position + 1];
+                if (currentEvents.length > 1) {
+                    if (position == 0) { //inserted event has no predecessor
+                        if (parseInt(curr.to) < parseInt(next.from)) {
                             feasible = this.computeDefaultRoute(curr, next);
                         } else {
                             alert("events overlapping");
                         }
+                    } else {
+                        if (position == currentEvents.length - 1) { //inserted event has no successor
+                            if (parseInt(prev.to) < parseInt(curr.from)) {
+                                feasible = this.computeDefaultRoute(prev, curr);
+                            } else {
+                                alert("events overlapping");
+                            }
+                        } else { //inserted event is in the middle of two event
+                            if ((parseInt(prev.to) < parseInt(curr.from)) && (parseInt(curr.to) < parseInt(next))) {
+                                feasible = this.computeDefaultRoute(prev, curr);
+                                feasible = this.computeDefaultRoute(curr, next);
+                            } else {
+                                alert("events overlapping");
+                            }
+                        }
                     }
                 }
-            }
-
-            //check for break preferences.
-            
-            if (feasible) {
-                this.saveEvent();
-            } else {
-                this.$.document.reset().then(function() {
-                    window.location.href = '/#editCalendarView';
-                });
             }
         }
 
@@ -134,19 +117,25 @@
                 if (status == 'OK') { // we have always one route and one leg in this case
                     var duration = response.routes[0].legs[0].duration.value / 60;
                     if (start.to + duration < end.from) {
-                        return true;
+                        alert("event feasible");
+                        window.dispatchEvent(new CustomEvent('route-computed'));
                     } else {
                         alert("event NOT feasible");
-                        return false;
                     }
                 } else {
                     alert(status);
-                    return false;
                 }
+            })
+        }
+
+        saveEvent() {
+            this.$.document.saveValue('/events/' + this.user.uid);
+            //TODO empty input text
+            this.$.document.reset().then(function() {
+                window.location.href = '#editCalendarView';
             });
         }
     }
-
     customElements.define(AddCalendarViewElement.is, AddCalendarViewElement);
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoZU1vQtj2p_QUMsE1J5kWURi0G7U8Txw" async defer></script>
