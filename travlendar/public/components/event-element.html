@@ -5,7 +5,8 @@
     <template>
         <paper-card heading=[[title]]>
             <div class="card-content"> Location: [[location]] </div>
-            <div class="card-content"> From: [[from]] - To: [[to]] </div>
+            <div class="card-content"> Day: [[dayInString]] </div>
+            <div class="card-content"> From: [[fromInString]] - To: [[toInString]] </div>
         </paper-card>
     </template>
     <script>
@@ -15,26 +16,41 @@
             return {
                 title: {
                     type: String,
-                    notify: true,
                     value: 'undefined'
                 },
 
                 location: {
                     type: String,
-                    notify: true,
-                    reflectToAttribute: true,
                     value: 'undefined'
+                },
+
+                dayInString:{
+                    type: String,
+                    computed: "dayToString(date)"
+                },
+
+                date:{
+                    type: Number,
+                    value: 100000
+                },
+
+                fromInString:{
+                    type: String,
+                    computed: "toHour(from)"
                 },
 
                 from: {
-                    type: String,
-                    notify: true,
+                    type: Number,
                     value: 'undefined'
                 },
 
-                to: {
+                toInString:{
                     type: String,
-                    notify: true,
+                    computed: "toHour(to)"
+                },
+
+                to: {
+                    type: Number,
                     value: 'undefined'
                 }
             }
@@ -47,6 +63,20 @@
             super.ready();
             console.log('I m an event element');
         }
+
+        dayToString(day){
+            var d = new Date(parseInt(day));
+            return d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear();
+        }
+
+        toMinutes(hours){
+            return hours*60;
+        }
+
+        toHour(minutes){
+            return minutes/60;
+        }
+
     }
     customElements.define('event-element', eventElement);
     </script>
