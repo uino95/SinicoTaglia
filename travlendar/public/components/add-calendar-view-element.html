@@ -1,5 +1,8 @@
 <link rel="import" href="view-element.html">
 <link rel="import" href="travlendar-styles.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../bower_components/paper-input-place/paper-input-place.html" />
+
 <dom-module id="add-calendar-view-element">
     <template>
         <style include="travlendar-styles"></style>
@@ -7,25 +10,35 @@
         </firebase-document>
         <template-view>
             <span slot="outputPanel">
-                <iron-input bind-value="{{newEvent.title}}">
-                Title:
-                <input value="{{value::input}}">
-                </iron-input>
-                <iron-input bind-value="{{newEvent.location}}">
-                    Location:
-                    <input value2="{{value2::input}}">
-                </iron-input>
-                <iron-input bind-value="{{newEvent.date}}">
-                    Date:
-                    <input value3="{{value3::input}}">
-                </iron-input>
-                <iron-input bind-value="{{newEvent.from}}">
-                    From:
-                    <input value4="{{value4::input}}">
-                </iron-input>
-                <iron-input bind-value="{{newEvent.to}}">
-                    To:<input value5="{{value5::input}}">
-                </iron-input>
+                <iron-form id="eventForm">
+                    <form method="get" action="/addEvent">
+                        <paper-input-place value="{{val}}" hide-error place="{{place}}" 
+                        api-key="[[mapsApiKey]]" label="Pick a place, any place">
+                        </paper-input-place>
+                        <paper-input required bind-value="{{newEvent.title}}">
+                        Title:
+                        <input value="{{value::input}}">
+                        </paper-input>
+                        <paper-input-place value="{{val}}" hide-error place="{{place}}" 
+                        api-key="[[mapsApiKey]]" label="Pick a place, any place">
+                        </paper-input-place>
+                        <paper-input bind-value="{{newEvent.location}}">
+                            Location:
+                            <input value2="{{value2::input}}">
+                        </paper-input>
+                        <paper-input bind-value="{{newEvent.date}}">
+                            Date:
+                            <input value3="{{value3::input}}">
+                        </paper-input>
+                        <paper-input bind-value="{{newEvent.from}}">
+                            From:
+                            <input value4="{{value4::input}}">
+                        </paper-input>
+                        <paper-input bind-value="{{newEvent.to}}">
+                            To:<input value5="{{value5::input}}">
+                        </paper-input>
+                    </form>
+                </iron-form>
             </span>
 
             <span slot="textPanel">
@@ -45,7 +58,15 @@
     <script>
     class AddCalendarViewElement extends ViewElement {
         static get is() { return 'add-calendar-view-element'; }
-        static get properties() {}
+        static get properties() {
+            return{
+                mapsApiKey:{
+                    type: String,
+                    value: "AIzaSyAoZU1vQtj2p_QUMsE1J5kWURi0G7U8Txw",
+                    readOnly: true
+                }
+            }
+        }
         constructor() {
             super();
         }
@@ -53,7 +74,8 @@
             super.ready();
         }
         saveEvent() {
-            this.checkEvent()
+            this.$.eventForm.validate();
+            this.checkEvent();
             this.$.document.saveValue('/events/' + this.user.uid);
             //TODO empty input text
             this.$.document.reset().then(function() {
@@ -100,7 +122,8 @@
             for (var i = 0; i < currentEvents.length; i++) {
                 console.log(currentEvents[i].title + currentEvents[i].date);
             }
-            //TODO check if is feasible
+            //TODO check
+            //if is feasible
         }
         computeDefaultRoute(start, end) {
             var directionsService = new google.maps.DirectionsService();
@@ -129,6 +152,6 @@
     customElements.define(AddCalendarViewElement.is, AddCalendarViewElement);
     </script>
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoZU1vQtj2p_QUMsE1J5kWURi0G7U8Txw" async defer></script>
+    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoZU1vQtj2p_QUMsE1J5kWURi0G7U8Txw" async defer></script> -->
 
 </dom-module>
