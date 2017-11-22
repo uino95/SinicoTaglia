@@ -9,7 +9,8 @@
   },
   "scripts": {
     "test": "test",
-    "build": "workbox generate:sw"
+    "build": "workbox generate:sw",
+    "browser-sync": "browser-sync start --server --files 'public/*.html, public/components/*.html'"
   },
   "repository": {
     "type": "git",

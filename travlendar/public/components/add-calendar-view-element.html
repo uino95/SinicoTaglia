@@ -8,39 +8,39 @@
         <firebase-document id="document" app-name="travlendar" path="/events/[[user.uid]]/" data="{{newEvent}}">
         </firebase-document>
 
-        <!--Output Panel-->
-        <div class="outputPanel">
-            <iron-input bind-value="{{newEvent.title}}">
+        <template-view>
+            <span slot="outputPanel">
+                <iron-input bind-value="{{newEvent.title}}">
                 <input value="{{value::input}}">
-            </iron-input>
-            <iron-input bind-value="{{newEvent.location}}">
-                <input value2="{{value2::input}}">
-            </iron-input>
-            <iron-input bind-value="{{newEvent.from}}">
-                <input value3="{{value3::input}}">
-            </iron-input>
-            <iron-input bind-value="{{newEvent.at}}">
-                <input value4="{{value4::input}}">
-            </iron-input>
-            day:
-            <iron-input bind-value="{{newEvent.day}}">
-                <input value5="{{value5::input}}">
-            </iron-input>
-        </div>
+                </iron-input>
+                <iron-input bind-value="{{newEvent.location}}">
+                    <input value2="{{value2::input}}">
+                </iron-input>
+                <iron-input bind-value="{{newEvent.from}}">
+                    <input value3="{{value3::input}}">
+                </iron-input>
+                <iron-input bind-value="{{newEvent.at}}">
+                    <input value4="{{value4::input}}">
+                </iron-input>
+                day:
+                <iron-input bind-value="{{newEvent.day}}">
+                    <input value5="{{value5::input}}">
+                </iron-input>
+            </span>
 
-        <!--Input Panel-->
-        <div class="inputPanel">
-            <!--Text Panel-->
-            <div class="textPanel">
-                Edit your calenda events here
-            </div>
-            <paper-menu>
-                <paper-item on-click="saveEvent">Save Event</paper-item>
-                <a href="#editCalendarView">
-                    <paper-item>Cancel</paper-item>
-                </a>
-            </paper-menu>
-        </div>
+            <span slot="textPanel">
+                Choose data and press save
+            </span>
+
+            <span slot="inputPanel">
+                <paper-icon-item class="menu-item" on-tap="saveEvent">
+                    <iron-icon icon="add" slot="item-icon"></iron-icon>Save New Event
+                </paper-icon-item>
+                <paper-icon-item class="menu-item" onclick="window.location.href = '#editCalendarView'">
+                    <iron-icon icon="myicons:arrow-back" slot="item-icon"></iron-icon>Cancel
+                </paper-icon-item>
+            </span>
+        </template-view>
     </template>
 
     <script>
@@ -57,7 +57,7 @@
             this.$.document.saveValue('/events/' + this.user.uid);
             //TODO empty input text
             this.$.document.reset().then(function() {
-                window.location.href = '/#editCalendarView';
+                window.location.href = '#editCalendarView';
             });
         }
     }

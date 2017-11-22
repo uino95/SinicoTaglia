@@ -8,33 +8,31 @@
         <firebase-query id="query" app-name="travlendar" path="/events/[[user.uid]]" data="{{events}}">
         </firebase-query>
 
-        <!--Output Panel-->
-        <div class="outputPanel">
-            <template is="dom-repeat" items="[[events]]">
+        <template-view>
+            <span slot="outputPanel">
+               <template is="dom-repeat" items="[[events]]">
                 <event-element title="[[item.title]]" location="[[item.location]]" from="[[item.from]]" to="[[item.to]]">
                 </event-element>
             </template>
-        </div>
+            </span>
 
-        <!--Input Panel-->
-        <div class="inputPanel">
-            <!--Text Panel-->
-            <div class="textPanel">
-                Edit your calenda events here
-                <br> ciao grazie
-            </div>
-            <paper-menu>
-                <a href="#editCalendarView/addCalendarView">
-                    <paper-item>Add Event</paper-item>
-                </a>
-                <a href="#editCalendarView/deleteCalendarView">
-                    <paper-item>Delete Event</paper-item>
-                </a>
-                <a href="#homeView">
-                    <paper-item>Go Back</paper-item>
-                </a>
-            </paper-menu>
-        </div>
+            <span slot="textPanel">
+                Here you can edit your Calendar
+            </span>
+
+            <span slot="inputPanel">
+                <paper-icon-item class="menu-item" onclick="window.location.href = '#editCalendarView/addCalendarView'">
+                    <iron-icon icon="add" slot="item-icon"></iron-icon>Add Event
+                </paper-icon-item>
+                <paper-icon-item class="menu-item" onclick="window.location.href = '#editCalendarView/deleteCalendarView'">
+                    <iron-icon icon="delete" slot="item-icon"></iron-icon>Delete Event
+                </paper-icon-item>
+                <paper-icon-item class="menu-item" onclick="window.location.href = '#homeView'">
+                    <iron-icon icon="arrow-back" slot="item-icon"></iron-icon>Go Back
+                </paper-icon-item>
+            </span>
+        </template-view>
+
     </template>
 
     <script>

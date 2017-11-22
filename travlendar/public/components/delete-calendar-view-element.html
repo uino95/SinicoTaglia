@@ -30,29 +30,29 @@
         <firebase-document id="document" app-name="travlendar" path="/events/[[user.uid]]/[[selectedItems.$key]]">
         </firebase-document>
 
-        <!--Output Panel-->
-        <div class="outputPanel">
-            <iron-list items="[[events]]" selection-enabled selected-items="{{selectedItems}}">
+        <template-view>
+            <span slot="outputPanel">
+                <iron-list items="[[events]]" selection-enabled selected-items="{{selectedItems}}">
                 <template>
-                	<event-element title="[[item.title]]" class$="[[computedClass(selected)]]"></event-element>                  
+                    <event-element title="[[item.title]]" class$="[[computedClass(selected)]]"></event-element>                  
                 </template>
             </iron-list>
-        </div>
+            </span>
 
-        <!--Input Panel-->
-        <div class="inputPanel">
-            <!--Text Panel-->
-            <div class="textPanel">
-                Edit your calenda events here
-                <br> ciao grazie
-            </div>
-            <paper-menu>
-                <paper-item on-click="deleteEvent">Delete Event</paper-item>
-                <a href="#editCalendarView">
-                    <paper-item>Cancel</paper-item>
-                </a>
-            </paper-menu>
-        </div>
+            <span slot="textPanel">
+                Select an event and click delete
+            </span>
+
+            <span slot="inputPanel">
+                <paper-icon-item class="menu-item" on-tap="deleteEvent">
+                    <iron-icon icon="delete" slot="item-icon"></iron-icon>Delete Event
+                </paper-icon-item>
+                <paper-icon-item class="menu-item" onclick="window.location.href = '#editCalendarView'">
+                    <iron-icon icon="arrow-back" slot="item-icon"></iron-icon>Cancel
+                </paper-icon-item>
+            </span>
+        </template-view>
+        
     </template>
 
     <script>
@@ -69,17 +69,17 @@
             this.$.document.destroy();
             //TODO empty input text
             this.$.document.reset().then(function() {
-                window.location.href = '/#editCalendarView';
+                window.location.href = '#editCalendarView';
             });
         }
         computedClass(isSelected) {
-        	console.log("property isSelected is now : " + isSelected);
+            console.log("property isSelected is now : " + isSelected);
             var classes = 'item';
             if (isSelected) {
-              classes += ' selected';
+                classes += ' selected';
             }
             return classes;
-          }
+        }
     }
     customElements.define(DeleteCalendarViewElement.is, DeleteCalendarViewElement);
     </script>
