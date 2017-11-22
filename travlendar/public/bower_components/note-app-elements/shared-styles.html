@@ -9,55 +9,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../paper-styles/color.html">
+<link rel="import" href="../paper-styles/paper-styles.html">
 <link rel="import" href="../font-roboto/roboto.html">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,700">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 
-<dom-module id="note-app-shared-styles">
-  <template>
-    <style>
-      :host {
-        display: block;
-        background-color: #e8e8e8;
-        height: 100vh;
-        @apply --paper-font-common-base;
+<dom-module id="generic-shared-styles">
+    <template>
+        <style>
 
-        --paper-fab-background: var(--paper-teal-500);
-      }
+        
 
+        @media (min-width: 640px) {
+            na-note {
+                max-width: 320px;
+                margin: 0 0.5em 1em;
+            }
 
-      .notes {
-        position: relative;
-        box-sizing: border-box;
-        padding: 1em;
-        max-height: calc(100vh - 46px);
-        overflow: auto;
-      }
-
-      na-note {
-        margin-bottom: 1em;
-      }
-
-      paper-fab {
-        position: absolute;
-        bottom: 1em;
-        right: 1em;
-      }
-
-      @media (min-width: 640px) {
-        na-note {
-          max-width: 320px;
-          margin: 0 0.5em 1em;
+            .notes {
+                @apply --layout-horizontal;
+                @apply --layout-wrap;
+                justify-content: center;
+                align-content: space-around;
+            }
         }
-
-        .notes {
-          @apply --layout-horizontal;
-          @apply --layout-wrap;
-          justify-content: center;
-          align-content: space-around;
-        }
-      }
-    </style>
-  </template>
+        </style>
+    </template>
 </dom-module>

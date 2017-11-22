@@ -1,20 +1,15 @@
 <dom-module id="travlendar-styles">
     <template>
         <style>
-        .outputPanel {
-            height: 80%;
+        .menu-item {
+            cursor: pointer;
+            font-weight: bold;
+            --paper-item-min-height: 44px;
+            color: var(--dark-theme-text-color);
         }
 
-        .textPanel {
-            height: 20%;
-            width: 100%;
-        }
-
-        .inputPanel {
-            height: 40%;
-            width: 100%;
-            position: absolute;
-            bottom: 0;
+        .menu-item:hover {
+            background-color: var(--paper-blue-900);
         }
         </style>
     </template>

@@ -1,0 +1,69 @@
+<link rel="import" href="../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+<link rel="import" href="../bower_components/paper-item/paper-icon-item.html">
+<link rel="include" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="include" href="../bower_components/iron-icon/iron-icon.html">
+
+<dom-module id="template-view">
+    <template>
+        <style>
+         :host {
+            height: 100%;
+        }
+
+        section {
+            width: 100%;
+            height: 100%;
+            @apply --layout-vertical;
+            font-family: 'Roboto', 'Noto', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        section paper-dialog-scrollable {
+            @apply --layout-flex;
+            background-color: var(--paper-indigo-50);
+        }
+
+        .textPanel {
+            background-color: var(--paper-light-blue-50);
+            padding: 5px;
+        }
+
+        .inputPanel {
+            width: 100%;
+            background-color: var(--paper-blue-500);
+        }
+        </style>
+
+        <section>
+            <paper-dialog-scrollable>
+                <slot name="outputPanel"></slot>
+            </paper-dialog-scrollable>
+
+            <!--Input Panel-->
+            <div class="inputPanel">
+                <!--Text Panel-->
+                <div class="textPanel">
+                    <slot name="textPanel"></slot>
+                </div>
+                <div class="input-menu">
+                    <slot name="inputPanel"></slot>
+                </div>
+            </div>
+        </section>
+
+    </template>
+
+    <script>
+    class TemplateView extends Polymer.Element {
+        static get is() { return 'template-view'; }
+        static get properties() {}
+        constructor() {
+            super();
+        }
+        ready() {
+            super.ready();
+        }
+    }
+    customElements.define("template-view", TemplateView);
+    </script>
+</dom-module>
