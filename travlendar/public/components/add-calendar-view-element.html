@@ -2,51 +2,57 @@
 <link rel="import" href="travlendar-styles.html">
 <link rel="import" href="../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../bower_components/paper-input-place/paper-input-place.html" />
+<link rel="import" href="../bower_components/paper-time-input/paper-time-input.html" />
 
 <dom-module id="add-calendar-view-element">
     <template>
-        <style include="travlendar-styles"></style>
+        <style include="travlendar-styles">
+        #eventForm {
+            max-width: 400px;
+        }
+
+        .times {
+            padding-top: 5px;
+            @apply --layout-flex;
+            @apply --layout-horizontal;
+            -webkit-justify-content: space-between;
+            /* Safari */
+            justify-content: space-between;
+        }
+
+        .formInput {
+            padding: 10px;
+        }
+        </style>
         <firebase-document id="document" app-name="travlendar" path="/events/[[user.uid]]/" data="{{newEvent}}">
         </firebase-document>
+        <firebase-query id="query" app-name="travlendar" path="/events/[[user.uid]]" data="{{events}}">
+        </firebase-query>
         <template-view>
             <span slot="outputPanel">
-                <iron-form id="eventForm">
+                <iron-form id="eventForm" class="outputCenter">
                     <form method="get" action="/addEvent">
-                        <paper-input-place value="{{val}}" hide-error place="{{place}}" 
-                        api-key="[[mapsApiKey]]" label="Pick a place, any place">
+
+                        <paper-input class="formInput" label="Title" required auto-validate error-message="insert an event title" value="{{newEvent.title}}"></paper-input>
+
+                        <paper-input-place class="formInput" id="locationInput" required auto-validate pattern=".*[^ ].*"  value="{{val}}" hide-error place="{{place}}" api-key="[[mapsApiKey]]" label="Location">
                         </paper-input-place>
-                        <paper-input required bind-value="{{newEvent.title}}">
-                        Title:
-                        <input value="{{value::input}}">
-                        </paper-input>
-                        <paper-input-place value="{{val}}" hide-error place="{{place}}" 
-                        api-key="[[mapsApiKey]]" label="Pick a place, any place">
-                        </paper-input-place>
-                        <paper-input bind-value="{{newEvent.location}}">
-                            Location:
-                            <input value2="{{value2::input}}">
-                        </paper-input>
-                        <paper-input bind-value="{{newEvent.date}}">
-                            Date:
-                            <input value3="{{value3::input}}">
-                        </paper-input>
-                        <paper-input bind-value="{{newEvent.from}}">
-                            From:
-                            <input value4="{{value4::input}}">
-                        </paper-input>
-                        <paper-input bind-value="{{newEvent.to}}">
-                            To:<input value5="{{value5::input}}">
-                        </paper-input>
+
+                        <paper-input class="formInput" label="Date" type="date" required auto-validate error-message="insert a valid date" min="2017-01-01" value="{{eventDate}}"></paper-input>
+
+                        <div class="times">
+                            <paper-time-input class="formInput" label="Starting Time" required auto-validate hour="0" min="0" am-pm="PM" value="{{startTime}}"></paper-time-input>
+
+                            <paper-time-input class="formInput" label="End Time" required auto-validate hour="0" min="0" am-pm="PM" value="{{endTime}}"></paper-time-input>
+                        </div>
                     </form>
                 </iron-form>
             </span>
-
             <span slot="textPanel">
                 Choose data and press save
             </span>
-
             <span slot="inputPanel">
-                <paper-icon-item class="menu-item" on-tap="saveEvent">
+                <paper-icon-item class="menu-item" on-tap="checkEvent">
                     <iron-icon icon="add" slot="item-icon"></iron-icon>Save New Event
                 </paper-icon-item>
                 <paper-icon-item class="menu-item" onclick="window.location.href = '#editCalendarView'">
@@ -59,71 +65,119 @@
     class AddCalendarViewElement extends ViewElement {
         static get is() { return 'add-calendar-view-element'; }
         static get properties() {
-            return{
-                mapsApiKey:{
+            return {
+                mapsApiKey: {
                     type: String,
                     value: "AIzaSyAoZU1vQtj2p_QUMsE1J5kWURi0G7U8Txw",
                     readOnly: true
+                },
+                val: {
+                    type: Object,
+                    notify: true,
+                    observer: '_locationChanged'
+                },
+                startTime: {
+                    type: Object,
+                    notify: true,
+                    value: "0:0 PM",
+                    observer: '_startTimeChanged'
+                },
+                endTime: {
+                    type: Object,
+                    notify: true,
+                    value: "0:0 PM",
+                    observer: '_endTimeChanged'
+                },
+                eventDate: {
+                    type: Object,
+                    notify: true,
+                    observer: '_dateChanged'
                 }
             }
+        }
+        static get observers() {
+            return [
+                '_locationChanged(val)'
+            ]
+        }
+        _locationChanged(val) {
+            this.newEvent.location = val.search;
+        }
+        _startTimeChanged(time) {
+            var s = time.split(':');
+            var s2 = s[1].split(' ');
+            console.log(s[0] + " and " + s2[0] + " also " + s2[1]);
+            var n = parseInt(s[0]) * 60 + parseInt(s2[0]);
+            if (s2[1] == "PM") { n += 720; }
+            this.newEvent.from = n;
+        }
+        _endTimeChanged(time) {
+            var s = time.split(':');
+            var s2 = s[1].split(' ');
+            console.log(s[0] + " and " + s2[0] + " also " + s2[1]);
+            var n = parseInt(s[0]) * 60 + parseInt(s2[0]);
+            if (s2[1] == "PM") { n += 720; }
+            this.newEvent.to = n;
+        }
+        _dateChanged(date){
+            this.newEvent.date = Date.parse(date);
         }
         constructor() {
             super();
         }
         ready() {
             super.ready();
-        }
-        saveEvent() {
-            this.$.eventForm.validate();
-            this.checkEvent();
-            this.$.document.saveValue('/events/' + this.user.uid);
-            //TODO empty input text
-            this.$.document.reset().then(function() {
-                window.location.href = '#editCalendarView';
-            });
+            window.addEventListener('route-computed', () => this.saveEvent());
         }
         checkEvent() {
+            console.log(this.$.eventForm.validate() && this.newEvent.location != null);
+            alert("add new event");
+            var feasible = false;
             var newEvent = this.$.document.data;
             var events = this.$.query.data;
             var currentDay = new Date(parseInt(newEvent.date));
-            var currentEvents = [];
-            for (var i = 0; i < events.length; i++) { //filter for the current day of the event added
-                var d = new Date(parseInt(events[i].date));
-                if (d.getDate() == currentDay.getDate()) {
-                    currentEvents.push(events[i]);
+            var today = new Date();
+            if (currentDay.getDate() < today.getDate()) {
+                alert("day not exist");
+            } else {
+                var currentEvents = [];
+                for (var i = 0; i < events.length; i++) { //filter for the current day of the event added
+                    var d = new Date(parseInt(events[i].date));
+                    if (d.getDate() == currentDay.getDate()) {
+                        currentEvents.push(events[i]);
+                    }
                 }
-            }
-            currentEvents.push(newEvent);
-            currentEvents.sort(function(a, b) { return a.from - b.from }); //sort it.
-            var position = currentEvents.indexOf(newEvent);
-            if (currentEvents.length > 1) {
-                if (position == 0) { //inserted event has no predecessor
-                    if (parseInt(currentEvents[position].to) < parseInt(currentEvents[position + 1].from)) {
-                        this.computeDefaultRoute(currentEvents[position].location, currentEvents[position + 1].location)
+                currentEvents.push(newEvent);
+                currentEvents.sort(function(a, b) { return a.from - b.from }); //sort it.
+                var position = currentEvents.indexOf(newEvent);
+                var prev = currentEvents[position - 1]
+                var curr = currentEvents[position];
+                var next = currentEvents[position + 1];
+                if (currentEvents.length > 1) {
+                    if (position == 0) { //inserted event has no predecessor
+                        if (parseInt(curr.to) < parseInt(next.from)) {
+                            feasible = this.computeDefaultRoute(curr, next);
+                        } else {
+                            alert("events overlapping");
+                        }
                     } else {
-                        alert("events overlapping"); //TODO do not add if is unfeasible or overlapping
-                    }
-                } else {
-                    if (position == currentEvents.length - 1) { //inserted event has no successor
-                        if (parseInt(currentEvents[position - 1].to) < parseInt(currentEvents[position].from)) {
-                            this.computeDefaultRoute(currentEvents[position - 1], currentEvents[position])
-                        } else {
-                            alert("events overlapping");
-                        }
-                    } else { //inserted event is in the middle of two event
-                        if ((parseInt(currentEvents[position - 1].to) < parseInt(currentEvents[position].from)) && (parseInt(currentEvents[position].to) < parseInt(currentEvents[position + 1]))) {
-                            this.computeDefaultRoute(currentEvents[position].location, currentEvents[position + 1].location)
-                        } else {
-                            alert("events overlapping");
+                        if (position == currentEvents.length - 1) { //inserted event has no successor
+                            if (parseInt(prev.to) < parseInt(curr.from)) {
+                                feasible = this.computeDefaultRoute(prev, curr);
+                            } else {
+                                alert("events overlapping");
+                            }
+                        } else { //inserted event is in the middle of two event
+                            if ((parseInt(prev.to) < parseInt(curr.from)) && (parseInt(curr.to) < parseInt(next))) {
+                                feasible = this.computeDefaultRoute(prev, curr);
+                                feasible = this.computeDefaultRoute(curr, next);
+                            } else {
+                                alert("events overlapping");
+                            }
                         }
                     }
                 }
             }
-            for (var i = 0; i < currentEvents.length; i++) {
-                console.log(currentEvents[i].title + currentEvents[i].date);
-            }
-            //TODO check
-            //if is feasible
         }
         computeDefaultRoute(start, end) {
             var directionsService = new google.maps.DirectionsService();
@@ -131,27 +185,33 @@
                 origin: start.location,
                 destination: end.location,
                 travelMode: 'TRANSIT',
-                transitOptions: { //TODO check fro GMT date because probably add +1 automatically
+                transitOptions: { //TODO check for GMT date because probably add +1 automatically
                     departureTime: new Date(parseInt(start.date) + parseInt(start.from) * 60 * 1000)
                 }
             };
             directionsService.route(request, function(response, status) {
-                if (status == 'OK') { //TODO for each route and then for each legs
+                if (status == 'OK') { // we have always one route and one leg in this case
                     var duration = response.routes[0].legs[0].duration.value / 60;
                     if (start.to + duration < end.from) {
-                        alert("event feasible")
+                        alert("event feasible");
+                        window.dispatchEvent(new CustomEvent('route-computed'));
                     } else {
                         alert("event NOT feasible");
                     }
                 } else {
                     alert(status);
                 }
+            })
+        }
+        saveEvent() {
+            this.$.document.saveValue('/events/' + this.user.uid);
+            //TODO empty input text
+            this.$.document.reset().then(function() {
+                window.location.href = '#editCalendarView';
             });
         }
     }
     customElements.define(AddCalendarViewElement.is, AddCalendarViewElement);
     </script>
-
-    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoZU1vQtj2p_QUMsE1J5kWURi0G7U8Txw" async defer></script> -->
-
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoZU1vQtj2p_QUMsE1J5kWURi0G7U8Txw" async defer></script>
 </dom-module>

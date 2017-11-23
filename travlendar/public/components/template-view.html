@@ -1,6 +1,7 @@
 <link rel="import" href="../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
 <link rel="import" href="myicons.html">
 <link rel="import" href="../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../bower_components/neon-animation/web-animations.html">
 
 <dom-module id="template-view">
     <template>
@@ -20,6 +21,11 @@
         section paper-dialog-scrollable {
             @apply --layout-flex;
             background-color: var(--paper-indigo-50);
+            @apply --layout-flex;
+            @apply --layout-horizontal;
+            -webkit-justify-content: space-between;
+            /* Safari */
+            justify-content: space-between;
         }
 
         .textPanel {
