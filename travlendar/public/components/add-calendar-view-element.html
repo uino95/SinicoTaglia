@@ -3,7 +3,6 @@
 <link rel="import" href="../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../bower_components/paper-input-place/paper-input-place.html" />
 <link rel="import" href="../bower_components/paper-time-input/paper-time-input.html" />
-
 <dom-module id="add-calendar-view-element">
     <template>
         <style include="travlendar-styles">
@@ -28,7 +27,9 @@
         </firebase-document>
         <firebase-query id="query" app-name="travlendar" path="/events/[[user.uid]]" data="{{events}}">
         </firebase-query>
-        <firebase-query id="queryBreak" app-name="travlendar" path="/preferences/[[user.uid]]" data="{{pref}}">
+        <firebase-query id="queryBreak" app-name="travlendar" path="/preferences/[[user.uid]]" data="{{prefBreak}}">
+        </firebase-query>
+        <firebase-query id="queryTravel" app-name="travlendar" path="/preferences/[[user.uid]]" data="{{prefTravel}}">
         </firebase-query>
         <template-view>
             <span slot="outputPanel">
@@ -138,27 +139,41 @@
             super.ready();
             window.addEventListener('feasibility-time-checked', (e) => this.checkEvent(e.detail.feasible, e.detail.firstCall));
         }
-        filterAndSortEvents() {
-            //if (this.$.eventForm.validate() && this.newEvent.location != null) {
-            currentEvents = [];
-            var newEvent = this.$.document.data;
-            var events = this.$.query.data;
-            var currentDay = new Date(parseInt(newEvent.date));
-            var today = new Date();
-            if (currentDay.getDate() < today.getDate() && newEvent.from > newEvent.to) {
-                alert("data not inserted correct, please check data or time inserted");
-            } else {
-                for (var i = 0; i < events.length; i++) { //filter for the current day of the event added
-                    var d = new Date(parseInt(events[i].date));
-                    if (d.getDate() == currentDay.getDate()) {
-                        currentEvents.push(events[i]);
+        filterAndSortEvents() { //TODO eliminate unuseful case of no predecessor and no successor
+            if (this.$.eventForm.validate() && this.newEvent.location != null) {
+                currentEvents = [];
+                var newEvent = this.$.document.data;
+                var events = this.$.query.data;
+                var currentDay = new Date(parseInt(newEvent.date));
+                var today = new Date();
+                if (currentDay.getDate() < today.getDate() || newEvent.from > newEvent.to) {
+                    alert("data not inserted correct, please check data or time inserted");
+                } else {
+                    for (var i = 0; i < events.length; i++) { //filter for the current day of the event added
+                        var d = new Date(parseInt(events[i].date));
+                        if (d.getDate() == currentDay.getDate()) {
+                            currentEvents.push(events[i]);
+                        }
                     }
+                    currentEvents.push(newEvent);
+                    currentEvents.push({
+                        date: today,
+                        from: 0,
+                        to: 0,
+                        location: this.$.queryTravel.data[1].home,
+                        title: "fromHome"
+                    });
+                    currentEvents.push({
+                        date: today,
+                        from: 1440,
+                        to: 1440,
+                        location: this.$.queryTravel.data[1].home,
+                        title: "toHome"
+                    });
+                    currentEvents.sort(function(a, b) { return a.from - b.from }); //sort it.
+                    this.checkEvent(true, true);
                 }
-                currentEvents.push(newEvent);
-                currentEvents.sort(function(a, b) { return a.from - b.from }); //sort it.
-                this.checkEvent(true, true);
             }
-            //}
         }
         checkEvent(feasible, firstCall) {
             var position = currentEvents.indexOf(this.$.document.data);
@@ -241,7 +256,7 @@
                     this.saveEvent();
                 } else {
                     //check next or upper bound feasibility 
-                    if ((position != currentEvents.length - 1 && (nextFrom - currTo) > minTime && (upperBound - currTo ) > minTime) || position == currentEvents.length - 1 && (upperBound - currTo) > minTime) {
+                    if ((position != currentEvents.length - 1 && (nextFrom - currTo) > minTime && (upperBound - currTo) > minTime) || position == currentEvents.length - 1 && (upperBound - currTo) > minTime) {
                         this.saveEvent();
                     } else {
                         alert("event not feasible with the break time preferences");

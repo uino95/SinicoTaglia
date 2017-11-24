@@ -8,7 +8,7 @@
 
         <div class="proposals">
             <template is="dom-repeat" items="[[currentProposal]]">
-                <event-element hidden="[[item.isTravelProposal]]" title="[[item.title]]" location="[[item.location]]" from="[[item.from]]" to="[[item.to]]">
+                <event-element hidden="[[item.isTravelProposal]]" title="[[item.title]]" date="[[item.date]]" location="[[item.location]]" from="[[item.from]]" to="[[item.to]]">
                 </event-element>
                 <travel-piece-element hidden="[[!item.isTravelProposal]]" by="[[item.by]]" from="[[item.from]]" at="[[item.at]]"> </travel-piece-element>
             </template>

@@ -6,10 +6,12 @@
         <style include="travlendar-styles"></style>
         <firebase-query id="query" app-name="travlendar" path="/currentProposal/[[user.uid]]" data="{{proposal}}">
         </firebase-query>
-        <firebase-query id="queryBreak" app-name="travlendar" path="/preferences/[[user.uid]]/break" data="{{breakPref}}">
+        <firebase-query id="queryEvents" app-name="travlendar" path="/events/[[user.uid]]" data="{{events}}">
         </firebase-query>
-        <firebase-query id="queryTravel" app-name="travlendar" path="/preferences/[[user.uid]]/travel" data="{{travelPref}}">
+        <firebase-query id="queryPrefObject" app-name="travlendar" path="/preferences/[[user.uid]]" data="{{pref}}">
         </firebase-query>
+        <firebase-document id="document" app-name="travlendar" path="/currentProposal/[[user.uid]]/" data="{{prop}}">
+        </firebase-document>
         <template-view>
             <span slot="outputPanel">
                 <travel-proposal-element current-proposal="[[proposal]]"></travel-proposal-element>
@@ -18,7 +20,7 @@
                 Here is you're current day travel proposal computed for you
             </span>
             <span slot="inputPanel">
-                <paper-icon-item class="menu-item" onclick= "filterAndSortEvents">
+                <paper-icon-item class="menu-item" on-tap= "filterAndSortEvents">
                     <iron-icon icon="card-travel" slot="item-icon"></iron-icon>Compute Different Travel
                 </paper-icon-item>
                 <paper-icon-item class="menu-item" onclick="window.location.href = '#homeView'">
@@ -29,8 +31,9 @@
     </template>
     <script>
     var currentEvents = [];
-    var currentBreakPreferences = [];
-    var currentTravelPreference = [];
+    var travelPreferencesObject;
+    var numberOfApiCalls = 0;
+    var currentTravelProposal = [];
     class ComputeTravelViewElement extends ViewElement {
         static get is() { return 'compute-travel-view-element'; }
         static get properties() {}
@@ -39,66 +42,233 @@
         }
         ready() {
             super.ready();
+            window.addEventListener('api-return', (e) => this.computeTravelPiece(e.detail.firstCall, e.detail.lastCall));
+            window.addEventListener('finished', (e) => this.saveProposal());
         }
 
         filterAndSortEvents() {
-            //if (this.$.eventForm.validate() && this.newEvent.location != null) {
+            this.$.document.destroy();
             currentEvents = [];
-            var newEvent = this.$.document.data;
-            var events = this.$.query.data;
-            var currentDay = new Date(parseInt(newEvent.date));
+            var events = this.$.queryEvents.data;
             var today = new Date();
-            if (currentDay.getDate() < today.getDate() && newEvent.from > newEvent.to) {
-                alert("data not inserted correct, please check data or time inserted");
-            } else {
-                for (var i = 0; i < events.length; i++) { //filter for the current day of the event added
-                    var d = new Date(parseInt(events[i].date));
-                    if (d.getDate() == currentDay.getDate()) {
-                        currentEvents.push(events[i]);
+            for (var i = 0; i < events.length; i++) { //filter for the current day of the event added
+                var d = new Date(parseInt(events[i].date));
+                if (d.getDate() == today.getDate()) {
+                    var event = {
+                        date: events[i].date,
+                        from: events[i].from,
+                        to: events[i].to,
+                        location: events[i].location,
+                        title: events[i].title
                     }
+                    currentEvents.push(event);
                 }
-                currentEvents.push(newEvent);
-                currentEvents.sort(function(a, b) { return a.from - b.from }); //sort it.
+            }
+            currentEvents.sort(function(a, b) { return a.from - b.from }); //sort it.
+
+            if (currentEvents.length == 0) {
+                alert("no event today you are free");
+            } else {
                 this.queryDb();
             }
-            //}
         }
 
         queryDb() {
-            currentBreakPreferences = this.$.queryBreak.data;
-            currentTravelPreference = this.$.queryTravel.data;
-            this.computeTravelPiece();
+            travelPreferencesObject = this.$.queryPrefObject.data[1];
+            numberOfApiCalls = 0;
+            this.computeTravelPiece(true, false);
         }
 
         computeTravelPiece(firstCall, lastCall) {
-            var currentLocation;
-            if (firstCall) { //current location is home
-                //currentLocation = //home
+            var destination;
+            var start;
+            var end;
+            var modes = [];
+            if(travelPreferencesObject.allow_bus){
+                modes.push('BUS');
             }
-            else{
-                currentLocation = currentEvents[0].location;
-                if (lastCall){
-                    //destination = //home
+            if(travelPreferencesObject.allow_subway){
+                modes.push('SUBWAY');
+            }
+            if(travelPreferencesObject.allow_train){
+                modes.push('TRAIN');
+            }
+            if(travelPreferencesObject.allow_tram){
+                modes.push('TRAM');
+            }
+            var transitOptions = {
+                modes: modes
+            };
+            var avoidOptions = [travelPreferencesObject.avoidHighways, travelPreferencesObject.avoidTolls];
+            if (firstCall) { //current location is home
+                start = {
+                    date: currentEvents[0].date,
+                    location: travelPreferencesObject.home,
+                    from: 0,
+                    to: 0
+                }
+                end = currentEvents[0];
+            } else {
+                if (lastCall) {
+                    end = {
+                        date: currentEvents[0].date,
+                        location: travelPreferencesObject.home,
+                        from: 1440,
+                        to: 1440
+                    }
+                } else {
+                    end = currentEvents[1];
+                }
+                start = currentEvents[0];
+
+
+            }
+
+            //TODO: weather forecast api calls to eventually disable cycle and walking
+
+            if (travelPreferencesObject.reduce_carbon_footPrint) {
+                //compute in this order (walking, bike, public transport and drive)
+                switch (numberOfApiCalls) {
+                    case 0:
+                        if (!travelPreferencesObject.walking_disabled) {
+                            this.apiCall(start, end, 'WALKING', !(firstCall || lastCall), avoidOptions, transitOptions);
+                        } else {
+                            numberOfApiCalls++;
+                        }
+                        break;
+                    case 1:
+                        if (!travelPreferencesObject.bike_disabled && (travelPreferencesObject.own_bike || travelPreferencesObject.allow_bike_sharing)) {
+                            this.apiCall(start, end, 'WALKING', !(firstCall || lastCall), avoidOptions, transitOptions);
+                        } else {
+                            numberOfApiCalls++;
+                        }
+                        break;
+                    case 2:
+                        if (!travelPreferencesObject.public_transport_disabled) {
+                            this.apiCall(start, end, 'TRANSIT', !(firstCall || lastCall), avoidOptions, transitOptions);
+                        } else {
+                            numberOfApiCalls++;
+                        }
+                        break;
+                    case 3:
+                        if (!travelPreferencesObject.car_disabled && (travelPreferencesObject.own_car || travelPreferencesObject.allow_car_sharing)) {
+                            this.apiCall(start, end, 'DRIVING', !(firstCall || lastCall), avoidOptions, transitOptions);
+                        } else {
+                            numberOfApiCalls++;
+                        }
+                        break;
+
+                }
+            } else {
+                switch (numberOfApiCalls) {
+                    //compute in this order (drive, public transport, walkign, bike)
+                    case 0:
+                        if (!travelPreferencesObject.car_disabled && (travelPreferencesObject.own_car || travelPreferencesObject.allow_car_sharing)) {
+                            this.apiCall(start, end, 'DRIVING', !(firstCall || lastCall), avoidOptions, transitOptions);
+                        } else {
+                            numberOfApiCalls++;
+                        }
+                        break;
+                    case 1:
+                        if (!travelPreferencesObject.public_transport_disabled) {
+                            this.apiCall(start, end, 'TRANSIT', !(firstCall || lastCall), avoidOptions, transitOptions);
+                        } else {
+                            numberOfApiCalls++;
+                        }
+                        break;
+                    case 2:
+                        if (!travelPreferencesObject.bike_disabled && (travelPreferencesObject.own_bike || travelPreferencesObject.allow_bike_sharing)) {
+                            this.apiCall(start, end, 'WALKING', !(firstCall || lastCall), avoidOptions, transitOptions);
+                        } else {
+                            numberOfApiCalls++;
+                        }
+                        break;
+                    case 3:
+                        if (!travelPreferencesObject.walking_disabled) {
+                            this.apiCall(start, end, 'WALKING', !(firstCall || lastCall), avoidOptions, transitOptions);
+                        } else {
+                            numberOfApiCalls++;
+                        }
+                        break;      
                 }
             }
-
-            //weather forecast api calls to eventually disable cycle and walking
-            //check preferences diasable or not 
-            //calcularte the number of api calls to google maps and set it
-            if(currentTravelPreference.reduceCarboonFootPrint){
-                //switch case
-                //compute in this order (walking, bike, public transport and drive)
-                //add to the current proposal the [first/second/third] feasible solution. First or secodn .. because you can compute differents route.
+            if (numberOfApiCalls == 4){
+                alert("no feasible schedule find with this preferences");
             }
-            else{
-                //compute in this order (drive, public transport, walkign, bike)
-
+            if (currentEvents.length == 0) {
+                this.saveProposal();
             }
+        }
 
+        apiCall(_origin, _destination, _travelMode, check_feasibility, _avoidOptions, _transitOptions) {
+            var directionsService = new google.maps.DirectionsService();
+            var request = {
+                origin: _origin.location,
+                destination: _destination.location,
+                travelMode: _travelMode,
+                transitOptions: _transitOptions,
+                avoidHighways: _avoidOptions[0],
+                avoidTolls: _avoidOptions[1]
+            };
+            directionsService.route(request, function(response, status) {
+                numberOfApiCalls++;
+                if (status == 'OK') { // we have always one route and one leg in this case
+                    var duration = response.routes[0].legs[0].duration.value / 60;
+                    if (!check_feasibility || parseInt(_origin.to) + duration < parseInt(_destination.from)) {
+                        //event feasible construct a travel piece
+                        var atTemp;
+                        if (_travelMode == 'WALKING' || _travelMode == 'DRIVING') {
+                            atTemp = _destination.from - duration; //TODO if neative you have to start the day before 
+                        } else {
+                            if (_travelMode == 'BICYCLING') {
+                                atTemp = _destination.from - duration / 2;
+                            } else {
+                                atTemp = response.routes[0].legs[0].departureTime;
+                            }
+                        }
+                        var travelPiece = {
+                            by: _travelMode,
+                            from: _origin.location,
+                            at: atTemp,
+                            isTravelProposal: true
+                        }
+                        currentTravelProposal.push(travelPiece);
+                        if(_destination.location != travelPreferencesObject.home){ // do not add the event home
+                            currentTravelProposal.push(_destination);
+                        }
+                        //being feasible advance to the next event 
+                        numberOfApiCalls = 0; 
+                        if (_origin.location != travelPreferencesObject.home) { //do not remove if it's the first call
+                            currentEvents.splice(0, 1); //remove the first event of the array, because already computed.
+                        }
+                        console.log("travel Piece computed");
+                        if (currentEvents == 0) { // if i've finished saveValue
+                            window.dispatchEvent(new CustomEvent('finished'));
+                        } else { 
+                            window.dispatchEvent(new CustomEvent('api-return', { detail: { firstCall: false, lastCall: currentEvents.length == 1 } }));
+                        }
+                    } else {
+                        window.dispatchEvent(new CustomEvent('api-return', { detail: { firstCall: _origin.location == travelPreferencesObject.home, lastCall: currentEvents.length == 1 } }));
+                    }
 
+                } else {
+                    alert(status);
+                }
+            });
+        }
+
+        saveProposal() {
+            for (var i = 0; i < currentTravelProposal.length; i++) {
+                this.$.document.data = currentTravelProposal[i]
+                this.$.document.saveValue('/currentProposal/' + this.user.uid);
+                this.$.document.reset();
+                console.log("added event or travel piece");
+            }
+            currentTravelProposal = [];
         }
     }
 
     customElements.define(ComputeTravelViewElement.is, ComputeTravelViewElement);
     </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoZU1vQtj2p_QUMsE1J5kWURi0G7U8Txw" async defer></script>
 </dom-module>

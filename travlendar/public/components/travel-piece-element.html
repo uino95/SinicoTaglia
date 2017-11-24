@@ -5,7 +5,7 @@
         <paper-card>
             <div class="card-content"> By: [[by]] </div>
             <div class="card-content"> From: [[from]] </div>
-            <div class="card-content"> At: [[at]] </div>
+            <div class="card-content"> At: [[toHour(at)]] </div>
         </paper-card>
     </template>
     <script>
@@ -35,7 +35,20 @@
         }
         ready() {
             super.ready();
-            console.log('I m an travel-piece element');
+        }
+
+        toHour(m) {
+            var minutes = m % 60;
+            var hours = ((m - minutes) / 60);
+            var ampm = hours >= 12 ? 'pm' : 'am';
+            minutes = minutes - minutes % 1;
+            hours = hours % 12;
+            if (ampm == "pm") {
+                hours = hours ? hours : 12;
+            }
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            hours = hours < 10 ? '0' + hours : hours;
+            return hours + ":" + minutes + " " + ampm;
         }
     }
     customElements.define('travel-piece-element', travelPieceElement);
