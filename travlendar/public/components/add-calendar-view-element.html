@@ -7,7 +7,7 @@
     <template>
         <style include="travlendar-styles">
         #eventForm {
-            max-width: 400px;
+            max-width: 500px;
         }
 
         .times {
@@ -36,7 +36,7 @@
                 <iron-form id="eventForm" class="outputCenter">
                     <form method="get" action="/addEvent">
 
-                        <paper-input class="formInput" label="Title" required auto-validate error-message="insert an event title" value="{{newEvent.title}}"></paper-input>
+                        <paper-input class="formInput" label="Title" max-length="100" required auto-validate error-message="insert a correct title (max 100 chars)" value="{{newEvent.title}}"></paper-input>
 
                         <paper-input-place class="formInput" id="locationInput" required auto-validate pattern=".*[^ ].*"  value="{{val}}" hide-error place="{{place}}" api-key="[[mapsApiKey]]" label="Location">
                         </paper-input-place>
@@ -52,7 +52,7 @@
                 </iron-form>
             </span>
             <span slot="textPanel">
-                Choose data and press save
+                <span class="breadcrumbs">Home/Calendar/New</span> Choose the event details and then press save
             </span>
             <span slot="inputPanel">
                 <paper-icon-item class="menu-item" on-tap="filterAndSortEvents">
@@ -113,7 +113,6 @@
             if (time != null) {
                 var s = time.split(':');
                 var s2 = s[1].split(' ');
-                console.log(s[0] + " and " + s2[0] + " also " + s2[1]);
                 var n = parseInt(s[0]) * 60 + parseInt(s2[0]);
                 if (s2[1] == "PM") { n += 720; }
                 this.newEvent.from = n;
@@ -123,7 +122,6 @@
             if (time != null) {
                 var s = time.split(':');
                 var s2 = s[1].split(' ');
-                console.log(s[0] + " and " + s2[0] + " also " + s2[1]);
                 var n = parseInt(s[0]) * 60 + parseInt(s2[0]);
                 if (s2[1] == "PM") { n += 720; }
                 this.newEvent.to = n;
@@ -139,6 +137,7 @@
             super.ready();
             window.addEventListener('feasibility-time-checked', (e) => this.checkEvent(e.detail.feasible, e.detail.firstCall));
         }
+        
         filterAndSortEvents() { //TODO eliminate unuseful case of no predecessor and no successor
             if (this.$.eventForm.validate() && this.newEvent.location != null) {
                 currentEvents = [];

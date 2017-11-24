@@ -1,23 +1,25 @@
 <link rel="import" href="view-element.html">
 <link rel="import" href="travlendar-styles.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
 
 <dom-module id="edit-calendar-view-element">
     <template>
         <style include="travlendar-styles"></style>
 
-        <firebase-query id="query" app-name="travlendar" path="/events/[[user.uid]]" data="{{events}}">
+        <firebase-query id="query" app-name="travlendar" path="/events/[[user.uid]]" data="{{events}}" order-by-child="date">
         </firebase-query>
 
         <template-view>
-            <span slot="outputPanel">
-               <template is="dom-repeat" items="[[events]]">
-                <event-element title="[[item.title]]" location="[[item.location]]" date="[[item.date]]" from="[[item.from]]" to="[[item.to]]">
-                </event-element>
-            </template>
+            <span slot="outputPanel" class="outputCenter">
+                <iron-list items="[[events]]">
+                    <template>
+                        <event-element title="[[item.title]]" location="[[item.location]]" date="[[item.date]]" from="[[item.from]]" to="[[item.to]]">
+                    </template>
+                </iron-list>
             </span>
 
             <span slot="textPanel">
-                Here you can edit your Calendar
+                <span class="breadcrumbs">Home/Calendar</span> Here are all your events ordered by date.
             </span>
 
             <span slot="inputPanel">
