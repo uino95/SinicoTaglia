@@ -7,7 +7,7 @@
         </firebase-document>
         <firebase-query id="query" app-name="travlendar" path="/events/[[user.uid]]" data="{{events}}">
         </firebase-query>
-        <firebase-query id="queryBreak" app-name="travlendar" path="/preferences/[[user.uid]]/break" data="{{breakPref}}">
+        <firebase-query id="queryBreak" app-name="travlendar" path="/preferences/[[user.uid]]/break" data="{{pref}}">
         </firebase-query>
         <template-view>
             <span slot="outputPanel">
@@ -134,31 +134,36 @@
         }
 
         checkBreakPreferences() {
-            var lowerBound = parseInt(this.$.queryBreak.data.lowerBound);
-            var upperBound = parseInt(this.$.queryBreak.data.upperBound);
-            var minTime = parseInt(this.$.queryBreak.data.minTime);
+            var data = this.$.queryBreak.data;
+            var lowerBound = parseInt(this.$.queryBreak.data[0].$val);
+            var upperBound = parseInt(this.$.queryBreak.data[2].$val);
+            var minTime = parseInt(this.$.queryBreak.data[1].$val);
 
             var position = currentEvents.indexOf(this.$.document.data);
             var prev = currentEvents[position - 1]
             var curr = currentEvents[position];
             var next = currentEvents[position + 1];
-            var prevTo = parseInt(prev.to);
-            var prevFrom = parseInt(prev.from);
+            if (position != 0) {
+                var prevTo = parseInt(prev.to);
+                var prevFrom = parseInt(prev.from);
+            }
             var currTo = parseInt(curr.to);
             var currFrom = parseInt(curr.from);
-            var nextTo = parseInt(next.to);
-            var nextFrom = parseInt(next.from);
+            if (position != currentEvents.length - 1) {
+                var nextTo = parseInt(next.to);
+                var nextFrom = parseInt(next.from);
+            }
 
             if (currTo < lowerBound || currFrom > upperBound) {
                 //new event is not in break interval;
                 this.saveEvent();
             } else {
-                if (position != 0 && (currFrom - prevTo) > minTime && (currFrom - lowerBound) > minTime || position == 0 && (currFrom - lowerBound) > minTime) {
+                if ((position != 0 && (currFrom - prevTo) > minTime && (currFrom - lowerBound) > minTime) || (position == 0 && (currFrom - lowerBound) > minTime)) {
                     //check prev or lower bound feasibility
                     this.saveEvent();
                 } else {
                     //check next or upper bound feasibility 
-                    if (position != currentEvents.length && (nextFrom - currTo) > minTime && (upperBound - currTo || position == currentEvents.length && (upperBound - currTo) > minTime) > minTime) {
+                    if ((position != currentEvents.length - 1 && (nextFrom - currTo) > minTime && (upperBound - currTo ) > minTime) || position == currentEvents.length - 1 && (upperBound - currTo) > minTime) {
                         this.saveEvent();
                     } else {
                         alert("event not feasible with the break time preferences");

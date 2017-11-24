@@ -1,6 +1,5 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
-
 <dom-module id="event-element">
     <template>
         <paper-card heading=[[title]]>
@@ -24,17 +23,17 @@
                     value: 'undefined'
                 },
 
-                dayInString:{
+                dayInString: {
                     type: String,
                     computed: "dayToString(date)"
                 },
 
-                date:{
+                date: {
                     type: Number,
                     value: 100000
                 },
 
-                fromInString:{
+                fromInString: {
                     type: String,
                     computed: "toHour(from)"
                 },
@@ -44,7 +43,7 @@
                     value: 'undefined'
                 },
 
-                toInString:{
+                toInString: {
                     type: String,
                     computed: "toHour(to)"
                 },
@@ -64,17 +63,24 @@
             console.log('I m an event element');
         }
 
-        dayToString(day){
+        dayToString(day) {
             var d = new Date(parseInt(day));
             return d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear();
         }
 
-        toMinutes(hours){
-            return hours*60;
+        toMinutes(hours) {
+            return hours * 60;
         }
 
-        toHour(minutes){
-            return minutes/60;
+        toHour(m) {
+
+            var minutes = m % 60;
+            var hours = ((m - minutes) / 60);
+            var ampm = hours >= 12 ? 'pm' : 'am';
+            hours = hours % 12;
+            hours = hours ? hours : 12;
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            return hours + ":" + minutes + " " + ampm;
         }
 
     }
