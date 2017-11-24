@@ -1,8 +1,29 @@
 <link rel="import" href="view-element.html">
 <link rel="import" href="travlendar-styles.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../bower_components/paper-input-place/paper-input-place.html" />
+<link rel="import" href="../bower_components/paper-time-input/paper-time-input.html" />
+
 <dom-module id="add-calendar-view-element">
     <template>
-        <style include="travlendar-styles"></style>
+        <style include="travlendar-styles">
+        #eventForm {
+            max-width: 400px;
+        }
+
+        .times {
+            padding-top: 5px;
+            @apply --layout-flex;
+            @apply --layout-horizontal;
+            -webkit-justify-content: space-between;
+            /* Safari */
+            justify-content: space-between;
+        }
+
+        .formInput {
+            padding: 10px;
+        }
+        </style>
         <firebase-document id="document" app-name="travlendar" path="/events/[[user.uid]]/" data="{{newEvent}}">
         </firebase-document>
         <firebase-query id="query" app-name="travlendar" path="/events/[[user.uid]]" data="{{events}}">
@@ -11,25 +32,23 @@
         </firebase-query>
         <template-view>
             <span slot="outputPanel">
-                <iron-input bind-value="{{newEvent.title}}">
-                Title:
-                <input value="{{value::input}}">
-                </iron-input>
-                <iron-input bind-value="{{newEvent.location}}">
-                    Location:
-                    <input value2="{{value2::input}}">
-                </iron-input>
-                <iron-input bind-value="{{newEvent.date}}">
-                    Date:
-                    <input value3="{{value3::input}}">
-                </iron-input>
-                <iron-input bind-value="{{newEvent.from}}">
-                    From:
-                    <input value4="{{value4::input}}">
-                </iron-input>
-                <iron-input bind-value="{{newEvent.to}}">
-                    To:<input value5="{{value5::input}}">
-                </iron-input>
+                <iron-form id="eventForm" class="outputCenter">
+                    <form method="get" action="/addEvent">
+
+                        <paper-input class="formInput" label="Title" required auto-validate error-message="insert an event title" value="{{newEvent.title}}"></paper-input>
+
+                        <paper-input-place class="formInput" id="locationInput" required auto-validate pattern=".*[^ ].*"  value="{{val}}" hide-error place="{{place}}" api-key="[[mapsApiKey]]" label="Location">
+                        </paper-input-place>
+
+                        <paper-input class="formInput" label="Date" type="date" required auto-validate error-message="insert a valid date" min="2017-01-01" value="{{eventDate}}"></paper-input>
+
+                        <div class="times">
+                            <paper-time-input class="formInput" label="Starting Time" required auto-validate hour="0" min="0" am-pm="PM" value="{{startTime}}"></paper-time-input>
+
+                            <paper-time-input class="formInput" label="End Time" required auto-validate hour="0" min="0" am-pm="PM" value="{{endTime}}"></paper-time-input>
+                        </div>
+                    </form>
+                </iron-form>
             </span>
             <span slot="textPanel">
                 Choose data and press save
@@ -50,7 +69,68 @@
     targetNumberOfApiCalls = 0;
     class AddCalendarViewElement extends ViewElement {
         static get is() { return 'add-calendar-view-element'; }
-        static get properties() {}
+        static get properties() {
+            return {
+                mapsApiKey: {
+                    type: String,
+                    value: "AIzaSyAoZU1vQtj2p_QUMsE1J5kWURi0G7U8Txw",
+                    readOnly: true
+                },
+                val: {
+                    type: Object,
+                    notify: true,
+                    observer: '_locationChanged'
+                },
+                startTime: {
+                    type: Object,
+                    notify: true,
+                    value: "0:0 PM",
+                    observer: '_startTimeChanged'
+                },
+                endTime: {
+                    type: Object,
+                    notify: true,
+                    value: "0:0 PM",
+                    observer: '_endTimeChanged'
+                },
+                eventDate: {
+                    type: Object,
+                    notify: true,
+                    observer: '_dateChanged'
+                }
+            }
+        }
+        static get observers() {
+            return [
+                '_locationChanged(val)'
+            ]
+        }
+        _locationChanged(val) {
+            this.newEvent.location = val.search;
+        }
+        _startTimeChanged(time) {
+            if (time != null) {
+                var s = time.split(':');
+                var s2 = s[1].split(' ');
+                console.log(s[0] + " and " + s2[0] + " also " + s2[1]);
+                var n = parseInt(s[0]) * 60 + parseInt(s2[0]);
+                if (s2[1] == "PM") { n += 720; }
+                this.newEvent.from = n;
+            }
+        }
+        _endTimeChanged(time) {
+            if (time != null) {
+                var s = time.split(':');
+                var s2 = s[1].split(' ');
+                console.log(s[0] + " and " + s2[0] + " also " + s2[1]);
+                var n = parseInt(s[0]) * 60 + parseInt(s2[0]);
+                if (s2[1] == "PM") { n += 720; }
+                this.newEvent.to = n;
+            }
+        }
+        _dateChanged(date) {
+            this.newEvent.date = Date.parse(date);
+        }
         constructor() {
             super();
         }
@@ -58,7 +138,6 @@
             super.ready();
             window.addEventListener('feasibility-time-checked', (e) => this.checkEvent(e.detail.feasible, e.detail.firstCall));
         }
-
         filterAndSortEvents() {
             //if (this.$.eventForm.validate() && this.newEvent.location != null) {
             currentEvents = [];
@@ -81,7 +160,6 @@
             }
             //}
         }
-
         checkEvent(feasible, firstCall) {
             var position = currentEvents.indexOf(this.$.document.data);
             var prev = currentEvents[position - 1]
@@ -171,7 +249,6 @@
                 }
             }
         }
-
         checkTimeFeasibility(start, end) {
             var directionsService = new google.maps.DirectionsService();
             var request = {
@@ -193,12 +270,10 @@
                         alert("event NOT feasible");
                     }
                 } else {
-
                     alert(status);
                 }
             });
         }
-
         saveEvent() {
             this.$.document.saveValue('/events/' + this.user.uid);
             //TODO empty input text
