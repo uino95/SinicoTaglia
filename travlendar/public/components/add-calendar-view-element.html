@@ -60,26 +60,26 @@
         }
 
         filterAndSortEvents() {
-            if (this.$.eventForm.validate() && this.newEvent.location != null) {
-                currentEvents = [];
-                var newEvent = this.$.document.data;
-                var events = this.$.query.data;
-                var currentDay = new Date(parseInt(newEvent.date));
-                var today = new Date();
-                if (currentDay.getDate() < today.getDate()) {
-                    alert("day not exist");
-                } else {
-                    for (var i = 0; i < events.length; i++) { //filter for the current day of the event added
-                        var d = new Date(parseInt(events[i].date));
-                        if (d.getDate() == currentDay.getDate()) {
-                            currentEvents.push(events[i]);
-                        }
+            //if (this.$.eventForm.validate() && this.newEvent.location != null) {
+            currentEvents = [];
+            var newEvent = this.$.document.data;
+            var events = this.$.query.data;
+            var currentDay = new Date(parseInt(newEvent.date));
+            var today = new Date();
+            if (currentDay.getDate() < today.getDate() && newEvent.from > newEvent.to) {
+                alert("data not inserted correct, please check data or time inserted");
+            } else {
+                for (var i = 0; i < events.length; i++) { //filter for the current day of the event added
+                    var d = new Date(parseInt(events[i].date));
+                    if (d.getDate() == currentDay.getDate()) {
+                        currentEvents.push(events[i]);
                     }
-                    currentEvents.push(newEvent);
-                    currentEvents.sort(function(a, b) { return a.from - b.from }); //sort it.
-                    this.checkEvent(true, true);
                 }
+                currentEvents.push(newEvent);
+                currentEvents.sort(function(a, b) { return a.from - b.from }); //sort it.
+                this.checkEvent(true, true);
             }
+            //}
         }
 
         checkEvent(feasible, firstCall) {
@@ -119,7 +119,7 @@
                         }
                     }
                 } else { //if is the first event of the day only check for break preferences and then eventually add it 
-                    this.saveEvent();
+                    this.checkBreakPreferences();
                 }
             } else {
                 console.log("numberOfApiCalls = " + numberOfApiCalls + "targetNumberOfApiCalls = " + targetNumberOfApiCalls);
@@ -127,14 +127,44 @@
                     this.checkTimeFeasibility(curr, next);
                 } else { //i'm ready to check the feasibility 
                     if (feasible) {
-                        this.saveEvent();
+                        this.checkBreakPreferences();
                     }
                 }
             }
         }
 
         checkBreakPreferences() {
+            var lowerBound = parseInt(this.$.queryBreak.data.lowerBound);
+            var upperBound = parseInt(this.$.queryBreak.data.upperBound);
+            var minTime = parseInt(this.$.queryBreak.data.minTime);
 
+            var position = currentEvents.indexOf(this.$.document.data);
+            var prev = currentEvents[position - 1]
+            var curr = currentEvents[position];
+            var next = currentEvents[position + 1];
+            var prevTo = parseInt(prev.to);
+            var prevFrom = parseInt(prev.from);
+            var currTo = parseInt(curr.to);
+            var currFrom = parseInt(curr.from);
+            var nextTo = parseInt(next.to);
+            var nextFrom = parseInt(next.from);
+
+            if (currTo < lowerBound || currFrom > upperBound) {
+                //new event is not in break interval;
+                this.saveEvent();
+            } else {
+                if (position != 0 && (currFrom - prevTo) > minTime && (currFrom - lowerBound) > minTime || position == 0 && (currFrom - lowerBound) > minTime) {
+                    //check prev or lower bound feasibility
+                    this.saveEvent();
+                } else {
+                    //check next or upper bound feasibility 
+                    if (position != currentEvents.length && (nextFrom - currTo) > minTime && (upperBound - currTo || position == currentEvents.length && (upperBound - currTo) > minTime) > minTime) {
+                        this.saveEvent();
+                    } else {
+                        alert("event not feasible with the break time preferences");
+                    }
+                }
+            }
         }
 
         checkTimeFeasibility(start, end) {
