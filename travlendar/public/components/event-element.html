@@ -1,13 +1,56 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="myicons.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 
 <dom-module id="event-element">
     <template>
+        <style>
+        .cafe-header {
+            @apply --paper-font-headline;
+        }
+
+        .cafe-light {
+            color: var(--paper-grey-600);
+        }
+
+        .cafe-location {
+            float: right;
+            font-size: 15px;
+            vertical-align: middle;
+        }
+
+        .cafe-reserve {
+            color: var(--google-blue-500);
+        }
+
+        iron-icon.star {
+            --iron-icon-width: 16px;
+            --iron-icon-height: 16px;
+            color: var(--paper-amber-500);
+        }
+
+        iron-icon.star:last-of-type {
+            color: var(--paper-grey-500);
+        }
+        </style>
         <paper-card heading=[[title]]>
             <div class="card-content"> Location: [[location]] </div>
             <div class="card-content"> Day: [[dayInString]] </div>
             <div class="card-content"> From: [[fromInString]] - To: [[toInString]] </div>
         </paper-card>
+
+        <!-- <paper-card>
+            <div class="card-content">
+                <div class="cafe-header">[[title]]
+                </div>
+                <p>
+                    <iron-icon icon="directions"></iron-icon> From 5:30PM to 6:30PM</p>
+                <p class="cafe-light">
+                    <iron-icon icon="restaurants-menu"></iron-icon>
+                    <span>250ft</span></p>
+            </div>
+        </paper-card> -->
     </template>
     <script>
     class eventElement extends Polymer.Element {
@@ -18,43 +61,35 @@
                     type: String,
                     value: 'undefined'
                 },
-
                 location: {
                     type: String,
                     value: 'undefined'
                 },
-
-                dayInString:{
+                dayInString: {
                     type: String,
                     computed: "dayToString(date)"
                 },
-
-                date:{
+                date: {
                     type: Number,
                     value: 100000
                 },
-
-                fromInString:{
+                fromInString: {
                     type: String,
                     computed: "toHour(from)"
                 },
-
                 from: {
                     type: Number,
                     value: 'undefined'
                 },
-
-                toInString:{
+                toInString: {
                     type: String,
                     computed: "toHour(to)"
                 },
-
                 to: {
                     type: Number,
                     value: 'undefined'
                 }
             }
-
         }
         constructor() {
             super();
@@ -63,20 +98,16 @@
             super.ready();
             console.log('I m an event element');
         }
-
-        dayToString(day){
+        dayToString(day) {
             var d = new Date(parseInt(day));
             return d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear();
         }
-
-        toMinutes(hours){
-            return hours*60;
+        toMinutes(hours) {
+            return hours * 60;
         }
-
-        toHour(minutes){
-            return minutes/60;
+        toHour(minutes) {
+            return minutes / 60;
         }
-
     }
     customElements.define('event-element', eventElement);
     </script>
