@@ -1,36 +1,36 @@
 <link rel="import" href="view-element.html">
 <link rel="import" href="travlendar-styles.html">
 <link rel="import" href="travel-proposal-element.html">
-
 <dom-module id="compute-travel-view-element">
     <template>
         <style include="travlendar-styles"></style>
         <firebase-query id="query" app-name="travlendar" path="/currentProposal/[[user.uid]]" data="{{proposal}}">
         </firebase-query>
-
+        <firebase-query id="queryBreak" app-name="travlendar" path="/preferences/[[user.uid]]/break" data="{{breakPref}}">
+        </firebase-query>
+        <firebase-query id="queryTravel" app-name="travlendar" path="/preferences/[[user.uid]]/travel" data="{{travelPref}}">
+        </firebase-query>
         <template-view>
             <span slot="outputPanel">
                 <travel-proposal-element current-proposal="[[proposal]]"></travel-proposal-element>
-                proposal here
             </span>
-
             <span slot="textPanel">
                 Here is you're current day travel proposal computed for you
             </span>
-
             <span slot="inputPanel">
-                <paper-icon-item class="menu-item" onclick="window.location.href = '#computeTravelView'">
+                <paper-icon-item class="menu-item" onclick= "filterAndSortEvents">
                     <iron-icon icon="card-travel" slot="item-icon"></iron-icon>Compute Different Travel
                 </paper-icon-item>
                 <paper-icon-item class="menu-item" onclick="window.location.href = '#homeView'">
                     <iron-icon icon="arrow-back" slot="item-icon"></iron-icon>Go Back
                 </paper-icon-item>
             </span>
-
         </template-view>
     </template>
-
     <script>
+    var currentEvents = [];
+    var currentBreakPreferences = [];
+    var currentTravelPreference = [];
     class ComputeTravelViewElement extends ViewElement {
         static get is() { return 'compute-travel-view-element'; }
         static get properties() {}
@@ -40,7 +40,65 @@
         ready() {
             super.ready();
         }
+
+        filterAndSortEvents() {
+            //if (this.$.eventForm.validate() && this.newEvent.location != null) {
+            currentEvents = [];
+            var newEvent = this.$.document.data;
+            var events = this.$.query.data;
+            var currentDay = new Date(parseInt(newEvent.date));
+            var today = new Date();
+            if (currentDay.getDate() < today.getDate() && newEvent.from > newEvent.to) {
+                alert("data not inserted correct, please check data or time inserted");
+            } else {
+                for (var i = 0; i < events.length; i++) { //filter for the current day of the event added
+                    var d = new Date(parseInt(events[i].date));
+                    if (d.getDate() == currentDay.getDate()) {
+                        currentEvents.push(events[i]);
+                    }
+                }
+                currentEvents.push(newEvent);
+                currentEvents.sort(function(a, b) { return a.from - b.from }); //sort it.
+                this.queryDb();
+            }
+            //}
+        }
+
+        queryDb() {
+            currentBreakPreferences = this.$.queryBreak.data;
+            currentTravelPreference = this.$.queryTravel.data;
+            this.computeTravelPiece();
+        }
+
+        computeTravelPiece(firstCall, lastCall) {
+            var currentLocation;
+            if (firstCall) { //current location is home
+                //currentLocation = //home
+            }
+            else{
+                currentLocation = currentEvents[0].location;
+                if (lastCall){
+                    //destination = //home
+                }
+            }
+
+            //weather forecast api calls to eventually disable cycle and walking
+            //check preferences diasable or not 
+            //calcularte the number of api calls to google maps and set it
+            if(currentTravelPreference.reduceCarboonFootPrint){
+                //switch case
+                //compute in this order (walking, bike, public transport and drive)
+                //add to the current proposal the [first/second/third] feasible solution. First or secodn .. because you can compute differents route.
+            }
+            else{
+                //compute in this order (drive, public transport, walkign, bike)
+
+            }
+
+
+        }
     }
+
     customElements.define(ComputeTravelViewElement.is, ComputeTravelViewElement);
     </script>
 </dom-module>

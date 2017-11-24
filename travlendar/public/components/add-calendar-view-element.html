@@ -7,7 +7,7 @@
         </firebase-document>
         <firebase-query id="query" app-name="travlendar" path="/events/[[user.uid]]" data="{{events}}">
         </firebase-query>
-        <firebase-query id="queryBreak" app-name="travlendar" path="/preferences/[[user.uid]]/break" data="{{pref}}">
+        <firebase-query id="queryBreak" app-name="travlendar" path="/preferences/[[user.uid]]" data="{{pref}}">
         </firebase-query>
         <template-view>
             <span slot="outputPanel">
@@ -135,9 +135,9 @@
 
         checkBreakPreferences() {
             var data = this.$.queryBreak.data;
-            var lowerBound = parseInt(this.$.queryBreak.data[0].$val);
-            var upperBound = parseInt(this.$.queryBreak.data[2].$val);
-            var minTime = parseInt(this.$.queryBreak.data[1].$val);
+            var lowerBound = parseInt(this.$.queryBreak.data[0].lowerBound);
+            var upperBound = parseInt(this.$.queryBreak.data[0].upperBound);
+            var minTime = parseInt(this.$.queryBreak.data[0].minTime);
 
             var position = currentEvents.indexOf(this.$.document.data);
             var prev = currentEvents[position - 1]
@@ -187,7 +187,7 @@
                 console.log("After increment numberOfApiCalls = " + numberOfApiCalls + "targetNumberOfApiCalls = " + targetNumberOfApiCalls);
                 if (status == 'OK') { // we have always one route and one leg in this case
                     var duration = response.routes[0].legs[0].duration.value / 60;
-                    if (start.to + duration < end.from) {
+                    if (parseInt(start.to) + duration < parseInt(end.from)) {
                         window.dispatchEvent(new CustomEvent('feasibility-time-checked', { detail: { feasible: true, firstCall: false } }));
                     } else {
                         alert("event NOT feasible");
