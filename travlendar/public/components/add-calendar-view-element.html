@@ -8,7 +8,7 @@
     <template>
         <style include="travlendar-styles">
         #eventForm {
-            max-width: 400px;
+            max-width: 500px;
         }
 
         .times {
@@ -35,7 +35,7 @@
                 <iron-form id="eventForm" class="outputCenter">
                     <form method="get" action="/addEvent">
 
-                        <paper-input class="formInput" label="Title" required auto-validate error-message="insert an event title" value="{{newEvent.title}}"></paper-input>
+                        <paper-input class="formInput" label="Title" max-length="100" required auto-validate error-message="insert a correct title (max 100 chars)" value="{{newEvent.title}}"></paper-input>
 
                         <paper-input-place class="formInput" id="locationInput" required auto-validate pattern=".*[^ ].*"  value="{{val}}" hide-error place="{{place}}" api-key="[[mapsApiKey]]" label="Location">
                         </paper-input-place>
@@ -51,7 +51,7 @@
                 </iron-form>
             </span>
             <span slot="textPanel">
-                Choose data and press save
+                <span class="breadcrumbs">Home/Calendar/New</span> Choose the event details and then press save
             </span>
             <span slot="inputPanel">
                 <paper-icon-item class="menu-item" on-tap="filterAndSortEvents">
@@ -112,7 +112,6 @@
             if (time != null) {
                 var s = time.split(':');
                 var s2 = s[1].split(' ');
-                console.log(s[0] + " and " + s2[0] + " also " + s2[1]);
                 var n = parseInt(s[0]) * 60 + parseInt(s2[0]);
                 if (s2[1] == "PM") { n += 720; }
                 this.newEvent.from = n;
@@ -122,7 +121,6 @@
             if (time != null) {
                 var s = time.split(':');
                 var s2 = s[1].split(' ');
-                console.log(s[0] + " and " + s2[0] + " also " + s2[1]);
                 var n = parseInt(s[0]) * 60 + parseInt(s2[0]);
                 if (s2[1] == "PM") { n += 720; }
                 this.newEvent.to = n;
@@ -145,7 +143,7 @@
             var events = this.$.query.data;
             var currentDay = new Date(parseInt(newEvent.date));
             var today = new Date();
-            if (currentDay.getDate() < today.getDate() && newEvent.from > newEvent.to) {
+            if (currentDay.getDate() < today.getDate() || newEvent.from > newEvent.to) {
                 alert("data not inserted correct, please check data or time inserted");
             } else {
                 for (var i = 0; i < events.length; i++) { //filter for the current day of the event added
@@ -264,7 +262,7 @@
                 console.log("After increment numberOfApiCalls = " + numberOfApiCalls + "targetNumberOfApiCalls = " + targetNumberOfApiCalls);
                 if (status == 'OK') { // we have always one route and one leg in this case
                     var duration = response.routes[0].legs[0].duration.value / 60;
-                    if (start.to + duration < end.from) {
+                    if (parseInt(start.to) + duration < parseInt(end.from)) {
                         window.dispatchEvent(new CustomEvent('feasibility-time-checked', { detail: { feasible: true, firstCall: false } }));
                     } else {
                         alert("event NOT feasible");

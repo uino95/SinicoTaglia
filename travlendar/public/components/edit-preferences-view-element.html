@@ -1,9 +1,38 @@
 <link rel="import" href="view-element.html">
 <link rel="import" href="travlendar-styles.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
 
 <dom-module id="edit-preferences-view-element">
     <template>
-        <style include="travlendar-styles"></style>
+        <style include="travlendar-styles">
+        .content {
+            display: flex;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        paper-card {
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+            0 1px 5px 0 rgba(0, 0, 0, 0.12),
+            0 3px 1px -2px rgba(0, 0, 0, 0.2);
+            margin: 5px;
+            width: 100%;
+        }
+
+        .card-content {
+            word-wrap: break-word;
+        }
+
+        .header {
+            @apply --paper-font-headline;
+            font-weight: bold;
+            padding-bottom: 5px;
+        }
+
+        .card-row {
+            padding: 0.3em 0 0 1.8em;
+        }
+        </style>
 
         <firebase-query id="query" app-name="travlendar" path="/preferences/[[user.uid]]/break" data="{{breakPref}}">
         </firebase-query>
@@ -12,22 +41,34 @@
 
         <template-view>
             <span slot="outputPanel">
-                <h3>Break Time Prefs</h3>
-                <ul>
-                    <template is="dom-repeat" items="{{breakPref}}">
-                        <li>[[item.$key]]: [[item.$val]]</li>
-                    </template>
-                </ul>
-                <h3>Travel Prefs</h3>
-                <ul>
-                    <template is="dom-repeat" items="{{travelPref}}">
-                        <li>[[item.$key]]: [[item.$val]]</li>
-                    </template>
-                </ul>
+                <div class="content">
+                <paper-card>
+                    <div class="card-content">
+                        <div class="header"><iron-icon icon="myicons:restaurant-menu"></iron-icon> Break Time Preferences</div>
+                        <template is="dom-repeat" items="{{breakPref}}">
+                            <div class="card-row">
+                                [[item.$key]]: [[item.$val]]
+                            </div>
+                        </template>
+                    </div>
+                </paper-card>
+
+                <paper-card>
+                    <div class="card-content">
+                        <div class="header"><iron-icon icon="myicons:directions-bus"></iron-icon> Travel Preferences</div>
+                        <template is="dom-repeat" items="{{travelPref}}">
+                            <div class="card-row">
+                                [[item.$key]]: [[item.$val]]
+                            </div>
+                        </template>
+                    </div>
+                </paper-card>
+
+                </div>
             </span>
 
             <span slot="textPanel">
-                Here you can edit your Preferences
+                <span class="breadcrumbs">Home/Preferences</span> Here are all currently set preferences.
             </span>
 
             <span slot="inputPanel">
@@ -40,6 +81,7 @@
                 <paper-icon-item class="menu-item" onclick="window.location.href = '#homeView'">
                     <iron-icon icon="icons:arrow-back" slot="item-icon"></iron-icon>Go Back
                 </paper-icon-item>
+                </div>
             </span>
         </template-view>
     </template>

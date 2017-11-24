@@ -22,7 +22,7 @@
             display: block;
             background-color: var(--paper-indigo-50);
             @apply --paper-font-common-base;
-            --paper-fab-background: var(--paper-teal-500);
+            overflow-x: hidden;
         }
 
         #wrapper {
@@ -76,7 +76,6 @@
         onHeightChange: function() {
             var computedH = window.innerHeight - this.$.toolbar.clientHeight;
             this.$.wrapper.style.height = (computedH + 'px');
-            console.log("new size computed: " + computedH + ' -screen=' + window.innerHeight + ' -toolbar=' + this.$.toolbar.clientHeight);
         },
         ready: function() {
             this.onHeightChange();
