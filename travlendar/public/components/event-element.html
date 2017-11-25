@@ -4,7 +4,7 @@
 <dom-module id="event-element">
     <template>
         <style>
-        :host{
+         :host {
             display: flex;
         }
 
@@ -16,7 +16,7 @@
             width: 100%;
         }
 
-        .card-content{
+        .card-content {
             word-wrap: break-word;
         }
 
@@ -37,11 +37,10 @@
             padding-top: 0.6em;
         }
 
-        .highlight{
+        .highlight {
             background-color: var(--divider-color);
         }
         </style>
-
         <paper-card class$="[[_computeClass(select)]]">
             <div class="card-content">
                 <div class="header">[[title]]</div>
@@ -59,7 +58,6 @@
                 </div>
             </div>
         </paper-card>
-
     </template>
     <script>
     class EventElement extends Polymer.Element {
@@ -108,10 +106,10 @@
         }
         toHour(m) {
             var minutes = m % 60;
-            var hours = ((m - minutes) / 60) ;
+            var hours = ((m - minutes) / 60);
             var ampm = hours >= 12 ? 'pm' : 'am';
             hours = hours % 12;
-            if(ampm == "pm"){
+            if (ampm == "pm") {
                 hours = hours ? hours : 12;
             }
             minutes = minutes < 10 ? '0' + minutes : minutes;
@@ -119,17 +117,19 @@
             return hours + ":" + minutes + " " + ampm;
         }
         shortenLocation(location) {
-            var s = location.split(',');
-            var ret = location;
-            if (s.length > 1) {
-                ret = s[0] + ", " + s[1];
+            if (location != null) {
+                var s = location.split(',');
+                var ret = location;
+                if (s.length > 1) {
+                    ret = s[0] + ", " + s[1];
+                }
+                return ret;
             }
-            return ret;
         }
-        _computeClass(selected){
+        _computeClass(selected) {
             var ret = "";
             if (selected) ret = "highlight";
-            return ret; 
+            return ret;
         }
     }
     customElements.define('event-element', EventElement);
