@@ -33,9 +33,9 @@
                         <paper-input class="formInput" pattern="[0-9]*" min="0" max="300" label="Minimum Time (in minutes)" max-length="20" required auto-validate error-message="insert a correct minimum time in minutes (cannot be more than 5 hours = 300)" value="{{breakPref.minTime}}"></paper-input>
 
                         <div class="times">
-                            <paper-time-input class="formInput" label="Break Lower Bound" required auto-validate hour="0" min="05" am-pm="PM" value="{{lowerBound}}"></paper-time-input>
+                            <paper-time-input class="formInput" label="Break Lower Bound" required auto-validate hour="0" min="0" am-pm="PM" value="{{lowerBound}}"></paper-time-input>
 
-                            <paper-time-input class="formInput" label="Break Upper Bound" required auto-validate hour="10" min="0" am-pm="PM" value="{{upperBound}}"></paper-time-input>
+                            <paper-time-input class="formInput" label="Break Upper Bound" required auto-validate hour="0" min="0" am-pm="PM" value="{{upperBound}}"></paper-time-input>
                         </div>
                     </form>
                 </iron-form>
@@ -50,7 +50,7 @@
                     <iron-icon icon="myicons:done" slot="item-icon"></iron-icon>Save Preferences
                 </paper-icon-item>
                 <paper-icon-item class="menu-item" on-tap="goBack">
-                    <iron-icon icon="myicons:arrow-back" slot="item-icon"></iron-icon>Go Back
+                    <iron-icon icon="myicons:arrow-back" slot="item-icon"></iron-icon>Cancel
                 </paper-icon-item>
             </span>
         </template-view>
@@ -109,14 +109,14 @@
         savePref() {
             if (this.$.prefForm.validate() && this.breakPref.lowerBound < this.breakPref.upperBound) {
                 this.$.document.saveValue('/preferences/' + this.user.uid, 'break');
-                window.location.href = '#editPreferencesView'
+                window.location.href = '#editPreferencesView';
             } else {
                 alert("please insert valid data first");
             }
         }
         goBack() {
             this.$.document.reset();
-            window.location.href = '#editPreferencesView'
+            window.location.href = '#editPreferencesView';
         }
     }
     customElements.define(EditBreakTimePrefViewElement.is, EditBreakTimePrefViewElement);

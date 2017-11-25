@@ -8,12 +8,20 @@
 
         <div class="proposals">
             <template is="dom-repeat" items="[[currentProposal]]">
-                <event-element hidden="[[item.isTravelProposal]]" title="[[item.title]]" date="[[item.date]]" location="[[item.location]]" from="[[item.from]]" to="[[item.to]]">
+                <dom-if if="[[!item.isTravelProposal]]">
+                    <template>
+                        <event-element title="[[item.title]]" date="[[item.date]]" location="[[item.location]]" from="[[item.from]]" to="[[item.to]]">
+                    </template>
+                </dom-if>
+                <dom-if if="[[item.isTravelProposal]]">
+                    <template>
+                        <travel-piece-element by="[[item.by]]" from="[[item.from]]" at="[[item.at]]"> </travel-piece-element>
+                    </template>
+                </dom-if>
                 </event-element>
-                <travel-piece-element hidden="[[!item.isTravelProposal]]" by="[[item.by]]" from="[[item.from]]" at="[[item.at]]"> </travel-piece-element>
             </template>
         </div>
-        
+
     </template>
     <script>
     class TravelProposalElement extends Polymer.Element {
@@ -23,16 +31,14 @@
                 user: {
                     type: String
                 },
-
                 currentProposal: {
-                    type: String
+                    type: Object
                 }
             }
         }
         constructor() {
             super();
         }
-
         ready() {
             super.ready();
         }
