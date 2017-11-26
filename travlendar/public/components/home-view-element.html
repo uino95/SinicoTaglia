@@ -81,12 +81,17 @@
         isToday(millis) {
             var ret = false;
             var now = new Date(),
+                yesterdayMidnight = new Date(
+                    now.getFullYear(),
+                    now.getMonth(),
+                    now.getDate(),
+                    0, 0, 0),
                 todayMidnight = new Date(
                     now.getFullYear(),
                     now.getMonth(),
                     now.getDate() + 1,
                     0, 0, 0);
-            if (now.getTime() < millis && millis < todayMidnight.getTime()) {
+            if (yesterdayMidnight.getTime() < millis && millis < todayMidnight.getTime()) {
                 ret = true;
             }
             return ret;
