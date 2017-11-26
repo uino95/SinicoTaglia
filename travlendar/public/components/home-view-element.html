@@ -3,23 +3,30 @@
 
 <dom-module id="home-view-element">
     <template>
-        <style include="travlendar-styles"></style>
+        <style include="travlendar-styles">
+        .fixedWidth {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        </style>
+
+        <firebase-query id="query" app-name="travlendar" path="/events/[[user.uid]]" data="{{events}}" order-by-child="date">
+        </firebase-query>
+
         <template-view>
             <span slot="outputPanel">
-                <event-element id="event1" title="Meeting with mbare" location="polimi" from="9:30" to="10:30">
-                </event-element>
-                <travel-piece-element by="Car" from="via caduti in missione, 19" at="10:45"></travel-piece-element>
-                <event-element id="event2" title="Football match" location="Giuriati" from="11:00" to="12:00">
-                </event-element>
-                <event-element id="event2" title="Football match" location="Giuriati" from="11:00" to="12:00">
-                </event-element>
-                <event-element id="event2" title="Football match" location="Giuriati" from="11:00" to="12:00">
-                </event-element>
+                <div class="fixedWidth">
+                <template is="dom-repeat" items="[[events]]">
+                    <template is="dom-if" if="[[isToday(item.date)]]">
+                        <event-element title="[[item.title]]" location="[[item.location]]" date="[[item.date]]" from="[[item.from]]" to="[[item.to]]" select="[[selected]]">
+                        </event-element>
+                    </template>
+                </template>
+                </div>
             </span>
 
             <span slot="textPanel">
-                Welcome back <b>[[user.displayName]]</b>! 
-                <br>It’s [[currentDate]] and above you can find your next event of the day!
+                <span class="breadcrumbs">Home</span> Welcome back <i>[[user.displayName]]</i>! It’s [[currentDate]] and above you can find your events of the day!
             </span>
 
             <span slot="inputPanel">
@@ -70,6 +77,24 @@
             }
             var today = dd + '/' + mm + '/' + yyyy;
             return today;
+        }
+        isToday(millis) {
+            var ret = false;
+            var now = new Date(),
+                yesterdayMidnight = new Date(
+                    now.getFullYear(),
+                    now.getMonth(),
+                    now.getDate(),
+                    0, 0, 0),
+                todayMidnight = new Date(
+                    now.getFullYear(),
+                    now.getMonth(),
+                    now.getDate() + 1,
+                    0, 0, 0);
+            if (yesterdayMidnight.getTime() < millis && millis < todayMidnight.getTime()) {
+                ret = true;
+            }
+            return ret;
         }
     }
     customElements.define(HomeViewElement.is, HomeViewElement);

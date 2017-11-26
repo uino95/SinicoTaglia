@@ -2,10 +2,55 @@
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <dom-module id="travel-piece-element">
     <template>
+        <style>
+         :host {
+            display: flex;
+        }
+
+        paper-card {
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+            0 1px 5px 0 rgba(0, 0, 0, 0.12),
+            0 3px 1px -2px rgba(0, 0, 0, 0.2);
+            margin: 5px;
+            width: 100%;
+            background-color: var(--paper-amber-300);
+        }
+
+        .card-content {
+            word-wrap: break-word;
+        }
+
+        .header iron-icon {
+            padding-bottom: 0.1em;
+        }
+
+        .light-font {
+            color: var(--paper-grey-600);
+        }
+
+        .card-row {
+            padding-top: 0.2em;
+        }
+
+        .higher-padding {
+            padding-top: 0.6em;
+        }
+
+        </style>
+
         <paper-card>
-            <div class="card-content"> By: [[by]] </div>
-            <div class="card-content"> From: [[from]] </div>
-            <div class="card-content"> At: [[toHour(at)]] </div>
+            <div class="card-content">
+                <div class="header">
+                    <iron-icon icon="myicons:[[capitalizeFirstLetter(by)]]"></iron-icon>
+                    Go [[capitalizeFirstLetter(by)]]
+                </div>
+                <div class="card-row light-font">
+                    Leave at [[toHour(at)]]
+                </div>
+                <div class="card-row">
+                    <span id="locationText">From [[shortenLocation(from)]]</span>
+                </div>
+            </div>
         </paper-card>
     </template>
     <script>
@@ -15,17 +60,14 @@
             return {
                 by: {
                     type: String,
-                    notify: true,
                     value: 'undefined'
                 },
                 from: {
                     type: String,
-                    notify: true,
                     value: 'undefined'
                 },
                 at: {
-                    type: String,
-                    notify: true,
+                    type: Number,
                     value: 'undefined'
                 }
             }
@@ -36,7 +78,6 @@
         ready() {
             super.ready();
         }
-
         toHour(m) {
             var minutes = m % 60;
             var hours = ((m - minutes) / 60);
@@ -49,6 +90,20 @@
             minutes = minutes < 10 ? '0' + minutes : minutes;
             hours = hours < 10 ? '0' + hours : hours;
             return hours + ":" + minutes + " " + ampm;
+        }
+        shortenLocation(location) {
+            if (location != null && !this.hidden) {
+                var s = location.split(',');
+                var ret = location;
+                if (s.length > 1) {
+                    ret = s[0] + ", " + s[1];
+                }
+                return ret;
+            }
+        }
+        capitalizeFirstLetter(string) {
+            string = string.toLowerCase();
+            return string.charAt(0).toUpperCase() + string.slice(1);
         }
     }
     customElements.define('travel-piece-element', travelPieceElement);

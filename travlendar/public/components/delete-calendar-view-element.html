@@ -61,6 +61,7 @@
         deleteEvent() {
             if (this.selectedItems != null) {
                 this.$.document.destroy();
+                this.$.query.reset();
                 window.location.href = '#editCalendarView'
             } else {
                 alert("no event selected");

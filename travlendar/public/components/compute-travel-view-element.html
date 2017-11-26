@@ -17,7 +17,7 @@
                 <travel-proposal-element current-proposal="[[proposal]]"></travel-proposal-element>
             </span>
             <span slot="textPanel">
-                Here is you're current day travel proposal computed for you
+                <span class="breadcrumbs">Home/ComputeTravelProposal</span> Here is you're current day travel proposal computed for you. You can compute another one if you prefer.
             </span>
             <span slot="inputPanel">
                 <paper-icon-item class="menu-item" on-tap= "filterAndSortEvents">
@@ -272,5 +272,4 @@
 
     customElements.define(ComputeTravelViewElement.is, ComputeTravelViewElement);
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoZU1vQtj2p_QUMsE1J5kWURi0G7U8Txw" async defer></script>
 </dom-module>
