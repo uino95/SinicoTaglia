@@ -223,7 +223,9 @@
                             if (_travelMode == 'BICYCLING') {
                                 atTemp = _destination.from - duration / 2;
                             } else {
-                                atTemp = response.routes[0].legs[0].departureTime;
+                                var temp = response.routes[0].legs[0].departure_time.text;
+                                var tempArray = temp.split(":");
+                                atTemp = parseInt(tempArray[0]) * 60 + parseInt(tempArray[1]);
                             }
                         }
                         var travelPiece = {
