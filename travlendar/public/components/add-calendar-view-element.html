@@ -22,6 +22,14 @@
         .formInput {
             padding: 10px;
         }
+
+        input[type="date"] {
+            display: block;
+            /* iOS fix */
+            -webkit-appearance: textfield;
+            -moz-appearance: textfield;
+            min-height: 1.2em;
+        }
         </style>
         <firebase-document id="document" app-name="travlendar" path="/events/[[user.uid]]/" data="{{newEvent}}">
         </firebase-document>
@@ -137,7 +145,6 @@
             super.ready();
             window.addEventListener('feasibility-time-checked', (e) => this.checkEvent(e.detail.feasible, e.detail.firstCall));
         }
-        
         filterAndSortEvents() { //TODO eliminate unuseful case of no predecessor and no successor
             if (this.$.eventForm.validate() && this.newEvent.location != null) {
                 currentEvents = [];
@@ -224,13 +231,11 @@
                 }
             }
         }
-
         checkBreakPreferences() {
             var data = this.$.queryBreak.data;
             var lowerBound = parseInt(this.$.queryBreak.data[0].lowerBound);
             var upperBound = parseInt(this.$.queryBreak.data[0].upperBound);
             var minTime = parseInt(this.$.queryBreak.data[0].minTime);
-
             var position = currentEvents.indexOf(this.$.document.data);
             var prev = currentEvents[position - 1]
             var curr = currentEvents[position];
@@ -245,7 +250,6 @@
                 var nextTo = parseInt(next.to);
                 var nextFrom = parseInt(next.from);
             }
-
             if (currTo < lowerBound || currFrom > upperBound) {
                 //new event is not in break interval;
                 this.saveEvent();

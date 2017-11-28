@@ -36,12 +36,6 @@
         <firebase-auth id="auth" app-name="travlendar" provider="google" signed-in="{{signedIn}}" user="{{user}}">
         </firebase-auth>
 
-        <firebase-query id="query" app-name="travlendar" path="/notes/[[user.uid]]" data="{{notes}}">
-        </firebase-query>
-
-        <firebase-document id="document" app-name="travlendar" path="[[editableNoteId]]" data="{{editableNote}}">
-        </firebase-document>
-
         <app-indexeddb-mirror session="[[user.uid]]" key="notes" data="{{notes}}" persisted-data="{{persistedNotes}}">
         </app-indexeddb-mirror>
 
@@ -83,5 +77,4 @@
         listeners: { "iron-resize": "onHeightChange" }
     });
     </script>
-    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoZU1vQtj2p_QUMsE1J5kWURi0G7U8Txw" async defer></script> -->
 </dom-module>

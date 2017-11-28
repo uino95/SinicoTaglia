@@ -10,8 +10,15 @@
         }
         </style>
 
-        <firebase-query id="query" app-name="travlendar" path="/events/[[user.uid]]" data="{{events}}" order-by-child="date">
+        <firebase-query id="query" app-name="travlendar" path="/events/[[user.uid]]" data="{{liveEvents}}" order-by-child="date">
         </firebase-query>
+
+        <app-indexeddb-mirror
+            session="[[user.uid]]"
+            key="events"
+            data="{{liveEvents}}"
+            persisted-data="{{events}}">
+        </app-indexeddb-mirror>
 
         <template-view>
             <span slot="outputPanel">

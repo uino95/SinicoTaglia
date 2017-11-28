@@ -19,8 +19,11 @@
         <firebase-query id="query" app-name="travlendar" path="/events/[[user.uid]]" data="{{events}}" order-by-child="date">
         </firebase-query>
 
-        <firebase-document id="document" app-name="travlendar" path="/events/[[user.uid]]/[[selectedItems.$key]]">
+        <firebase-document id="document" app-name="travlendar" path="/events/[[user.uid]]" data="{{deletingEvents}}">
         </firebase-document>
+
+        <!-- <firebase-document id="document" app-name="travlendar" path="/events/[[user.uid]]/[[selectedItems.$key]]">
+        </firebase-document> -->
 
         <template-view>
             <span slot="outputPanel" class="outputCenter">
@@ -51,7 +54,16 @@
     <script>
     class DeleteCalendarViewElement extends ViewElement {
         static get is() { return 'delete-calendar-view-element'; }
-        static get properties() {}
+        static get properties() {
+            return {
+                events: {}
+            }
+        }
+        static get observers() {
+            return [
+                '_eventsChanged(events)'
+            ]
+        }
         constructor() {
             super();
         }
@@ -59,13 +71,32 @@
             super.ready();
         }
         deleteEvent() {
-            if (this.selectedItems != null) {
-                this.$.document.destroy();
-                this.$.query.reset();
-                window.location.href = '#editCalendarView'
-            } else {
-                alert("no event selected");
+            // if (this.selectedItems != null) {
+            //     this.$.document.destroy();
+            //     this.$.query.reset();
+            //     window.location.href = '#editCalendarView'
+            // } else {
+            //     alert("no event selected");
+            // }
+            delete this.$.document.data[this.selectedItems.$key];
+            for (var i = 0; i < this.events.length; i++) {
+                if (this.events[i].$key == this.selectedItems.$key) {
+                    delete this.events[i];
+                }
             }
+            console.log(this.events);
+            // this.$.document.saveValue('/events', this.user.uid);
+            // this.$.document.reset();
+            // console.log(this.events);
+        }
+        _eventsChanged(events) {
+            var arr = new Array;
+            var result = Object.keys(events).map(function(key) {
+                arr.push(events[key]);
+                arr[arr.length - 1].id = key;
+                return [events[key]];
+            });
+            return arr;
         }
     }
     customElements.define(DeleteCalendarViewElement.is, DeleteCalendarViewElement);
