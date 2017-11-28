@@ -138,7 +138,7 @@
             window.addEventListener('feasibility-time-checked', (e) => this.checkEvent(e.detail.feasible, e.detail.firstCall));
         }
 
-        filterAndSortEvents() { 
+        filterAndSortEvents() {
             if (this.$.eventForm.validate() && this.newEvent.location != null) {
                 currentEvents = [];
                 var newEvent = this.$.document.data;
