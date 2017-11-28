@@ -76,7 +76,7 @@
     var currentEvents = [];
     numberOfApiCalls = 0;
     targetNumberOfApiCalls = 0;
-    class AddCalendarViewElement extends ViewElement {
+    class AddCalendarViewElement extends Polymer.mixinBehaviors([Polymer.AppNetworkStatusBehavior], ViewElement) {
         static get is() { return 'add-calendar-view-element'; }
         static get properties() {
             return {
@@ -145,7 +145,12 @@
             super.ready();
             window.addEventListener('feasibility-time-checked', (e) => this.checkEvent(e.detail.feasible, e.detail.firstCall));
         }
-        filterAndSortEvents() { //TODO eliminate unuseful case of no predecessor and no successor
+        filterAndSortEvents() {
+            if (!this.online) { 
+                alert("You are offline. Read-only operations allowed!"); 
+                return; 
+            }
+
             if (this.$.eventForm.validate() && this.newEvent.location != null) {
                 currentEvents = [];
                 var newEvent = this.$.document.data;
@@ -161,6 +166,7 @@
                             currentEvents.push(events[i]);
                         }
                     }
+                    today = today.getTime() - today.getHours() * 3600 * 1000 - today.getMinutes() * 60 * 1000 - today.getSeconds() * 1000 - today.getMilliseconds() + 3600 * 1000; // today = current UCT Day at 00:00  in milliseconds
                     currentEvents.push(newEvent);
                     currentEvents.push({
                         date: today,
@@ -189,36 +195,12 @@
             if (firstCall) {
                 targetNumberOfApiCalls = 0; //reset values;
                 numberOfApiCalls = 0;
-                if (currentEvents.length > 1) {
-                    if (position == 0) { //inserted event has no predecessor
-                        if (parseInt(curr.to) < parseInt(next.from)) {
-                            targetNumberOfApiCalls = 1;
-                            this.checkTimeFeasibility(curr, next); //each call it will increment by one the numebersOfApiCall
-                        } else {
-                            feasible = false;
-                            alert("events overlapping");
-                        }
-                    } else {
-                        if (position == currentEvents.length - 1) { //inserted event has no successor
-                            if (parseInt(prev.to) < parseInt(curr.from)) {
-                                targetNumberOfApiCalls = 1;
-                                this.checkTimeFeasibility(prev, curr);
-                            } else {
-                                feasible = false;
-                                alert("events overlapping");
-                            }
-                        } else { //inserted event is in the middle of two event
-                            if ((parseInt(prev.to) < parseInt(curr.from)) && (parseInt(curr.to) < parseInt(next.from))) {
-                                targetNumberOfApiCalls = 2;
-                                this.checkTimeFeasibility(prev, curr);
-                            } else {
-                                feasible = false;
-                                alert("events overlapping");
-                            }
-                        }
-                    }
-                } else { //if is the first event of the day only check for break preferences and then eventually add it 
-                    this.checkBreakPreferences();
+                if ((parseInt(prev.to) < parseInt(curr.from)) && (parseInt(curr.to) < parseInt(next.from))) {
+                    targetNumberOfApiCalls = 2;
+                    this.checkTimeFeasibility(prev, curr);
+                } else {
+                    feasible = false;
+                    alert("events overlapping");
                 }
             } else {
                 console.log("numberOfApiCalls = " + numberOfApiCalls + "targetNumberOfApiCalls = " + targetNumberOfApiCalls);
@@ -240,26 +222,22 @@
             var prev = currentEvents[position - 1]
             var curr = currentEvents[position];
             var next = currentEvents[position + 1];
-            if (position != 0) {
-                var prevTo = parseInt(prev.to);
-                var prevFrom = parseInt(prev.from);
-            }
+            var prevTo = parseInt(prev.to);
+            var prevFrom = parseInt(prev.from);
             var currTo = parseInt(curr.to);
             var currFrom = parseInt(curr.from);
-            if (position != currentEvents.length - 1) {
-                var nextTo = parseInt(next.to);
-                var nextFrom = parseInt(next.from);
-            }
+            var nextTo = parseInt(next.to);
+            var nextFrom = parseInt(next.from);
             if (currTo < lowerBound || currFrom > upperBound) {
                 //new event is not in break interval;
                 this.saveEvent();
             } else {
-                if ((position != 0 && (currFrom - prevTo) > minTime && (currFrom - lowerBound) > minTime) || (position == 0 && (currFrom - lowerBound) > minTime)) {
+                if ((currFrom - prevTo) > minTime && (currFrom - lowerBound) > minTime) {
                     //check prev or lower bound feasibility
                     this.saveEvent();
                 } else {
                     //check next or upper bound feasibility 
-                    if ((position != currentEvents.length - 1 && (nextFrom - currTo) > minTime && (upperBound - currTo) > minTime) || position == currentEvents.length - 1 && (upperBound - currTo) > minTime) {
+                    if ((nextFrom - currTo) > minTime && (upperBound - currTo) > minTime) {
                         this.saveEvent();
                     } else {
                         alert("event not feasible with the break time preferences");
@@ -281,8 +259,9 @@
                 numberOfApiCalls++;
                 console.log("After increment numberOfApiCalls = " + numberOfApiCalls + "targetNumberOfApiCalls = " + targetNumberOfApiCalls);
                 if (status == 'OK') { // we have always one route and one leg in this case
-                    var duration = response.routes[0].legs[0].duration.value / 60;
-                    if (parseInt(start.to) + duration < parseInt(end.from)) {
+                    var arrivalTime = response.routes[0].legs[0].arrival_time.value;
+                    arrivalTime = arrivalTime.getHours() * 60 + arrivalTime.getMinutes();
+                    if (arrivalTime < parseInt(end.from)) {
                         window.dispatchEvent(new CustomEvent('feasibility-time-checked', { detail: { feasible: true, firstCall: false } }));
                     } else {
                         alert("event NOT feasible");

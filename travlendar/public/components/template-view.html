@@ -54,9 +54,8 @@
             <div class="inputPanel">
                 <!--Text Panel-->
                 <div class="textPanel">
-                    you are [[online]]
                     <slot name="textPanel"></slot>
-                    <span hidden$="[[!online]]"> You seems to be offline, but still any read only operation is allowed!</span>
+                    <span hidden$="[[online]]"> <br>Hey! You're offline, but still any read only operation is allowed!</span>
                 </div>
                 <div class="input-menu">
                     <slot name="inputPanel"></slot>
@@ -69,7 +68,9 @@
     <script>
     class TemplateView extends Polymer.mixinBehaviors([Polymer.AppNetworkStatusBehavior], Polymer.Element) {
         static get is() { return 'template-view'; }
-        static get properties() {}
+        static get properties() {
+            
+        }
         constructor() {
             super();
         }

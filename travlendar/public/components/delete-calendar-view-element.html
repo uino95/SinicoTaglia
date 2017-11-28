@@ -22,9 +22,6 @@
         <firebase-document id="document" app-name="travlendar" path="/events/[[user.uid]]" data="{{deletingEvents}}">
         </firebase-document>
 
-        <!-- <firebase-document id="document" app-name="travlendar" path="/events/[[user.uid]]/[[selectedItems.$key]]">
-        </firebase-document> -->
-
         <template-view>
             <span slot="outputPanel" class="outputCenter">
                 <iron-list items="[[events]]" selection-enabled selected-items="{{selectedItems}}">
@@ -56,7 +53,9 @@
         static get is() { return 'delete-calendar-view-element'; }
         static get properties() {
             return {
-                events: {}
+                deletingEvents: {
+                    type: Object
+                }
             }
         }
         static get observers() {
@@ -78,13 +77,21 @@
             // } else {
             //     alert("no event selected");
             // }
-            delete this.$.document.data[this.selectedItems.$key];
-            for (var i = 0; i < this.events.length; i++) {
-                if (this.events[i].$key == this.selectedItems.$key) {
-                    delete this.events[i];
-                }
-            }
+            // delete this.$.document.data[this.selectedItems.$key];
+            // for (var i = 0; i < this.events.length; i++) {
+            //     if (this.events[i].$key == this.selectedItems.$key) {
+            //         delete this.events[i];
+            //     }
+            // }
+            console.log(this.deletingEvents);
             console.log(this.events);
+            console.log(this.deletingEvents[this.selectedItems.$key]);
+
+            var temp = this.deletingEvents;
+            delete temp[this.selectedItems.$key];
+            console.log(temp);
+            this.deletingEvents = temp;
+            this.$.document.saveValue('/events/', this.user.uid);
             // this.$.document.saveValue('/events', this.user.uid);
             // this.$.document.reset();
             // console.log(this.events);
