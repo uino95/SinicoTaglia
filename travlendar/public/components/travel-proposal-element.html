@@ -5,6 +5,12 @@
 
 <dom-module id="travel-proposal-element">
     <template>
+        <style>
+            .proposals{
+                max-width: 600px;
+                margin:0 auto;
+            }
+        </style>
 
         <div class="proposals">
             <template is="dom-repeat" items="[[currentProposal]]">
