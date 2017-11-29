@@ -126,7 +126,7 @@
                 start = currentEvents[0];
             }
             var transitOptions = {
-                arrivalTime: new Date(end.date + end.from * 60 * 1000 - 3600 * 1000),
+                arrivalTime: new Date(parseInt(end.date) + parseInt(end.from) * 60 * 1000 - 3600 * 1000),
                 modes: modes
             };
 

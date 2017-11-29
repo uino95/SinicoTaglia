@@ -243,7 +243,7 @@
                 destination: end.location,
                 travelMode: 'TRANSIT',
                 transitOptions: { //TODO check for GMT date because probably add +1 automatically
-                    departureTime: new Date(parseInt(start.date) + parseInt(start.to) * 60 * 1000)
+                    arrivalTime: new Date(parseInt(start.date) + parseInt(end.from) * 60 * 1000 - 3600 * 1000)
                 }
             };
             directionsService.route(request, function(response, status) {
