@@ -22,6 +22,14 @@
         .formInput {
             padding: 10px;
         }
+
+        input[type="date"] {
+            display: block;
+            /* iOS fix */
+            -webkit-appearance: textfield;
+            -moz-appearance: textfield;
+            min-height: 1.2em;
+        }
         </style>
         <firebase-document id="document" app-name="travlendar" path="/events/[[user.uid]]/" data="{{newEvent}}">
         </firebase-document>
@@ -68,7 +76,7 @@
     var currentEvents = [];
     numberOfApiCalls = 0;
     targetNumberOfApiCalls = 0;
-    class AddCalendarViewElement extends ViewElement {
+    class AddCalendarViewElement extends Polymer.mixinBehaviors([Polymer.AppNetworkStatusBehavior], ViewElement) {
         static get is() { return 'add-calendar-view-element'; }
         static get properties() {
             return {
@@ -137,8 +145,12 @@
             super.ready();
             window.addEventListener('feasibility-time-checked', (e) => this.checkEvent(e.detail.feasible, e.detail.firstCall));
         }
-
         filterAndSortEvents() {
+            if (!this.online) { 
+                alert("You are offline. Read-only operations allowed!"); 
+                return; 
+            }
+
             if (this.$.eventForm.validate() && this.newEvent.location != null) {
                 currentEvents = [];
                 var newEvent = this.$.document.data;
@@ -201,13 +213,11 @@
                 }
             }
         }
-
         checkBreakPreferences() {
             var data = this.$.queryBreak.data;
             var lowerBound = parseInt(this.$.queryBreak.data[0].lowerBound);
             var upperBound = parseInt(this.$.queryBreak.data[0].upperBound);
             var minTime = parseInt(this.$.queryBreak.data[0].minTime);
-
             var position = currentEvents.indexOf(this.$.document.data);
             var prev = currentEvents[position - 1]
             var curr = currentEvents[position];
@@ -218,7 +228,6 @@
             var currFrom = parseInt(curr.from);
             var nextTo = parseInt(next.to);
             var nextFrom = parseInt(next.from);
-
             if (currTo < lowerBound || currFrom > upperBound) {
                 //new event is not in break interval;
                 this.saveEvent();
