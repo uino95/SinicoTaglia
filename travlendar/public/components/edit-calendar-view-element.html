@@ -11,9 +11,11 @@
 
         <template-view>
             <span slot="outputPanel" class="outputCenter">
-                <iron-list items="[[events]]">
+                <iron-list items="[[events]]" mutable-data>
                     <template>
-                        <event-element title="[[item.title]]" location="[[item.location]]" date="[[item.date]]" from="[[item.from]]" to="[[item.to]]">
+                        <div>
+                            <event-element title="[[item.title]]" location="[[item.location]]" date="[[item.date]]" from="[[item.from]]" to="[[item.to]]"></event-element>
+                        </div>
                     </template>
                 </iron-list>
             </span>

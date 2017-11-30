@@ -6,27 +6,24 @@
 <dom-module id="delete-calendar-view-element">
     <template>
         <style include="travlendar-styles">
-        .item {
+        event-element {
             cursor: pointer;
-        }
-
-        .item:focus,
-        .item.selected {
-            outline: 0;
         }
         </style>
 
         <firebase-query id="query" app-name="travlendar" path="/events/[[user.uid]]" data="{{events}}" order-by-child="date">
         </firebase-query>
 
-        <firebase-document id="document" app-name="travlendar" path="/events/[[user.uid]]" data="{{deletingEvents}}">
+        <firebase-document id="document" app-name="travlendar" path="/events/[[user.uid]]/[[selectedItems.$key]]">
         </firebase-document>
 
         <template-view>
             <span slot="outputPanel" class="outputCenter">
-                <iron-list items="[[events]]" selection-enabled selected-items="{{selectedItems}}">
+                <iron-list id="eventsList" items="[[events]]" mutable-data selection-enabled selected-items="{{selectedItems}}">
                     <template>
-                        <event-element title="[[item.title]]" location="[[item.location]]" date="[[item.date]]" from="[[item.from]]" to="[[item.to]]" select="[[selected]]" class="item">
+                        <div>
+                            <event-element title="[[item.title]]" location="[[item.location]]" date="[[item.date]]" from="[[item.from]]" to="[[item.to]]" select="[[selected]]" class="item"></event-element>
+                        </div>
                     </template>
                 </iron-list>
             </span>
@@ -51,18 +48,7 @@
     <script>
     class DeleteCalendarViewElement extends ViewElement {
         static get is() { return 'delete-calendar-view-element'; }
-        static get properties() {
-            return {
-                deletingEvents: {
-                    type: Object
-                }
-            }
-        }
-        static get observers() {
-            return [
-                '_eventsChanged(events)'
-            ]
-        }
+        static get properties() {}
         constructor() {
             super();
         }
@@ -70,41 +56,46 @@
             super.ready();
         }
         deleteEvent() {
-            // if (this.selectedItems != null) {
-            //     this.$.document.destroy();
-            //     this.$.query.reset();
-            //     window.location.href = '#editCalendarView'
-            // } else {
-            //     alert("no event selected");
-            // }
+            console.log(this.$.query.data);
+            console.log(this.events);
+            if (this.selectedItems != null) {
+                this.$.document.destroy();
+                this.$.document.reset();
+                this.$.query.reset();
+                this.$.eventsList.notifyResize();
+                //location.reload();
+                //window.location.href = '#editCalendarView'
+            } else {
+                alert("no event selected");
+            }
             // delete this.$.document.data[this.selectedItems.$key];
             // for (var i = 0; i < this.events.length; i++) {
             //     if (this.events[i].$key == this.selectedItems.$key) {
             //         delete this.events[i];
             //     }
             // }
-            console.log(this.deletingEvents);
-            console.log(this.events);
-            console.log(this.deletingEvents[this.selectedItems.$key]);
 
-            var temp = this.deletingEvents;
-            delete temp[this.selectedItems.$key];
-            console.log(temp);
-            this.deletingEvents = temp;
-            this.$.document.saveValue('/events/', this.user.uid);
+            //console.log(this.$.document.data);
+            // if (this.selectedItems != null) {
+            //     this.$.document.destroy();
+            //     this.$.document.reset().then(function() {
+            //         window.location.href = '#editCalendarView';
+            //     });
+            // }
+            // delete this.deletingEvents[this.selectedItems.$key]; // console.log(this.events); // console.log(this.events);
             // this.$.document.saveValue('/events', this.user.uid);
             // this.$.document.reset();
             // console.log(this.events);
         }
-        _eventsChanged(events) {
-            var arr = new Array;
-            var result = Object.keys(events).map(function(key) {
-                arr.push(events[key]);
-                arr[arr.length - 1].id = key;
-                return [events[key]];
-            });
-            return arr;
-        }
+        // _eventsChanged(events) {
+        //     var arr = new Array;
+        //     var result = Object.keys(events).map(function(key) {
+        //         arr.push(events[key]);
+        //         arr[arr.length - 1].id = key;
+        //         return [events[key]];
+        //     });
+        //     return arr;
+        // }
     }
     customElements.define(DeleteCalendarViewElement.is, DeleteCalendarViewElement);
     </script>
