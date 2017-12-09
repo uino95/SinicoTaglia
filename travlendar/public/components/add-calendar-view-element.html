@@ -44,6 +44,8 @@
                         
                         <paper-date-input class="formInput" label="Date" type="date" required auto-validate error-message="insert a valid date" min="2017-01-01" value="{{eventDate}}"></paper-date-input>
 
+                        <paper-input class="formInput" label="Date" type="date" required auto-validate error-message="insert a valid date" min="2017-01-01" value="{{eventDate}}"></paper-input>
+
                         <div class="times">
                             <paper-time-input class="formInput" label="Starting Time" required auto-validate hour="0" min="0" am-pm="PM" value="{{startTime}}"></paper-time-input>
 
@@ -154,7 +156,7 @@
                 var currentDay = new Date(parseInt(newEvent.date));
                 var today = new Date();
                 var test = false; // true if testing it
-                if (!test && (currentDay.getTime() < today.getTime() || newEvent.from > newEvent.to)) {
+                if (!test && (currentDay.getTime() > today.getTime() || newEvent.from > newEvent.to)) {
                     alert("data inserted are not correct, please check date or time inserted");
                 } else {
                     for (var i = 0; i < events.length; i++) { //filter for the current day of the event added
