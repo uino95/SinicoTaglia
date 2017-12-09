@@ -1,0 +1,45 @@
+{
+  "entrypoint": "index.html",
+  "shell": "travlendar-app.html",
+  "fragments": [
+    "components/edit-calendar-view-element.html",
+    "components/show-travel-view-element.html"
+  ],
+  "sources": [
+    "index.html",
+    "travlendar-app.html",
+    "components/*",
+    "bower.json",
+    "workbox-sw.prod.v2.1.1.js",
+    "workbox-sw.prod.v2.1.1.js.map",
+    "sw.js",
+    "index.html",
+    "travlendar-app.html",
+    "components/edit-calendar-view-element.html",
+    "components/show-travel-view-element.html"
+  ],
+  "extraDependencies": [
+    "bower_components/webcomponentsjs/*.js",
+    "manifest.json"
+  ],
+  "builds": [
+    {
+      "bundle": false,
+      "js": {
+        "compile": false,
+        "minify": true
+      },
+      "css": {
+        "minify": true
+      },
+      "html": {
+        "minify": true
+      }
+    }
+  ],
+  "lint": {
+    "rules": [
+      "polymer-2-hybrid"
+    ]
+  }
+}

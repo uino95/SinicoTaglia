@@ -1,0 +1,124 @@
+<link rel="import" href="view-element.html">
+<link rel="import" href="travlendar-styles.html">
+
+<dom-module id="edit-breaktimepref-view-element">
+    <template>
+        <style include="travlendar-styles">
+        #prefForm {
+            max-width: 500px;
+        }
+
+        .times {
+            padding-top: 5px;
+            @apply --layout-flex;
+            @apply --layout-horizontal;
+            -webkit-justify-content: space-between;
+            /* Safari */
+            justify-content: space-between;
+        }
+
+        .formInput {
+            padding: 10px;
+        }
+        </style>
+
+        <firebase-document id="document" app-name="travlendar" path="/preferences/[[user.uid]]/break" data="{{breakPref}}">
+        </firebase-document>
+
+        <template-view>
+            <span slot="outputPanel">
+                <iron-form id="prefForm" class="outputCenter">
+                    <form method="get" action="/ediPref">
+
+                        <paper-input class="formInput" pattern="[0-9]*" min="0" max="300" label="Minimum Time (in minutes)" max-length="20" required auto-validate error-message="insert a correct minimum time in minutes (cannot be more than 5 hours = 300)" value="{{breakPref.minTime}}"></paper-input>
+
+                        <div class="times">
+                            <paper-time-input class="formInput" label="Break Lower Bound" required auto-validate hour="0" min="0" am-pm="PM" value="{{lowerBound}}"></paper-time-input>
+
+                            <paper-time-input class="formInput" label="Break Upper Bound" required auto-validate hour="0" min="0" am-pm="PM" value="{{upperBound}}"></paper-time-input>
+                        </div>
+                    </form>
+                </iron-form>
+            </span>
+
+            <span slot="textPanel">
+                <span class="breadcrumbs">Home/Preferences/BreakTime</span> Here you can edit your Break Time Preferences.
+            </span>
+
+            <span slot="inputPanel">
+                <paper-icon-item class="menu-item" on-tap="savePref">
+                    <iron-icon icon="myicons:done" slot="item-icon"></iron-icon>Save Preferences
+                </paper-icon-item>
+                <paper-icon-item class="menu-item" on-tap="goBack">
+                    <iron-icon icon="myicons:arrow-back" slot="item-icon"></iron-icon>Cancel
+                </paper-icon-item>
+            </span>
+        </template-view>
+    </template>
+
+    <script>
+    class EditBreakTimePrefViewElement extends ViewElement {
+        static get is() { return 'edit-breaktimepref-view-element'; }
+        static get properties() {
+            return {
+                minTime: {
+                    type: Object,
+                    observer: '_minTimeChanged'
+                },
+                lowerBound: {
+                    type: Object,
+                    observer: '_lowerBoundChanged'
+                },
+                upperBound: {
+                    type: Object,
+                    observer: '_upperBoundChanged'
+                }
+            }
+        }
+        static get observers() {
+            return [
+                '_minTimeChanged(minTime)',
+                '_lowerBoundChanged(lowerBound)',
+                '_upperBoundChanged(upperBound)'
+            ]
+        }
+        constructor() {
+            super();
+        }
+        ready() {
+            super.ready();
+        }
+        _lowerBoundChanged(val) {
+            if (val != null) {
+                var s = val.split(':');
+                var s2 = s[1].split(' ');
+                var n = parseInt(s[0]) * 60 + parseInt(s2[0]);
+                if (s2[1] == "PM") { n += 720; }
+                this.breakPref.lowerBound = n;
+            }
+        }
+        _upperBoundChanged(val) {
+            if (val != null) {
+                var s = val.split(':');
+                var s2 = s[1].split(' ');
+                var n = parseInt(s[0]) * 60 + parseInt(s2[0]);
+                if (s2[1] == "PM") { n += 720; }
+                this.breakPref.upperBound = n;
+            }
+        }
+        savePref() {
+            if (this.$.prefForm.validate() && this.breakPref.lowerBound < this.breakPref.upperBound) {
+                this.$.document.saveValue('/preferences/' + this.user.uid, 'break');
+                window.location.href = '#editPreferencesView';
+            } else {
+                alert("please insert valid data first");
+            }
+        }
+        goBack() {
+            this.$.document.reset();
+            window.location.href = '#editPreferencesView';
+        }
+    }
+    customElements.define(EditBreakTimePrefViewElement.is, EditBreakTimePrefViewElement);
+    </script>
+</dom-module>

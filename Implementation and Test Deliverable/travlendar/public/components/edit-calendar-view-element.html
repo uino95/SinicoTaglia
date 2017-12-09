@@ -1,0 +1,55 @@
+<link rel="import" href="view-element.html">
+<link rel="import" href="travlendar-styles.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
+
+<dom-module id="edit-calendar-view-element">
+    <template>
+        <style include="travlendar-styles"></style>
+
+        <firebase-query id="query" app-name="travlendar" path="/events/[[user.uid]]" data="{{events}}" order-by-child="date">
+        </firebase-query>
+
+        <template-view>
+            <span slot="outputPanel" class="outputCenter">
+                <iron-list items="[[events]]" mutable-data>
+                    <template>
+                        <div>
+                            <event-element title="[[item.title]]" location="[[item.location]]" date="[[item.date]]" from="[[item.from]]" to="[[item.to]]"></event-element>
+                        </div>
+                    </template>
+                </iron-list>
+            </span>
+
+            <span slot="textPanel">
+                <span class="breadcrumbs">Home/Calendar</span> Here are all your events ordered by date.
+            </span>
+
+            <span slot="inputPanel">
+                <paper-icon-item class="menu-item" onclick="window.location.href = '#editCalendarView/addCalendarView'">
+                    <iron-icon icon="add" slot="item-icon"></iron-icon>Add Event
+                </paper-icon-item>
+                <paper-icon-item class="menu-item" onclick="window.location.href = '#editCalendarView/deleteCalendarView'">
+                    <iron-icon icon="delete" slot="item-icon"></iron-icon>Delete Event
+                </paper-icon-item>
+                <paper-icon-item class="menu-item" onclick="window.location.href = '#homeView'">
+                    <iron-icon icon="arrow-back" slot="item-icon"></iron-icon>Go Back
+                </paper-icon-item>
+            </span>
+        </template-view>
+
+    </template>
+
+    <script>
+    class EditCalendarViewElement extends ViewElement {
+        static get is() { return 'edit-calendar-view-element'; }
+        static get properties() { return {}}
+        constructor() {
+            super();
+        }
+        ready() {
+            super.ready();
+        }
+    }
+    customElements.define(EditCalendarViewElement.is, EditCalendarViewElement);
+    </script>
+</dom-module>
