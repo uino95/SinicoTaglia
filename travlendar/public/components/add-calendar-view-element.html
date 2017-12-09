@@ -1,5 +1,6 @@
 <link rel="import" href="view-element.html">
 <link rel="import" href="travlendar-styles.html">
+<link rel="import" href="paper-date-input.html">
 <link rel="import" href="../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../bower_components/paper-input-place/paper-input-place.html" />
 <link rel="import" href="../bower_components/paper-time-input/paper-time-input.html" />
@@ -40,8 +41,11 @@
 
                         <paper-input-place class="formInput" id="locationInput" required auto-validate pattern=".*[^ ].*"  value="{{val}}" hide-error place="{{place}}" api-key="[[mapsApiKey]]" label="Location">
                         </paper-input-place>
+                        
+                        <paper-date-input class="formInput" label="Date" type="date" required auto-validate error-message="insert a valid date" min="2017-01-01" value="{{eventDate}}"></paper-date-input>
 
                         <paper-input class="formInput" label="Date" type="date" required auto-validate error-message="insert a valid date" min="2017-01-01" value="{{eventDate}}"></paper-input>
+
                         <div class="times">
                             <paper-time-input class="formInput" label="Starting Time" required auto-validate hour="0" min="0" am-pm="PM" value="{{startTime}}"></paper-time-input>
 
