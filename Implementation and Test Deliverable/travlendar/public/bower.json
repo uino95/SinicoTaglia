@@ -34,7 +34,9 @@
     "iron-resizable-behavior": "PolymerElements/iron-resizable-behavior#^2.0.1",
     "iron-form": "PolymerElements/iron-form#^2.0.1",
     "paper-input-place": "^1.9.5",
-    "paper-time-input": "ryanburns23/paper-time-input#^2.0.4"
+    "paper-time-input": "ryanburns23/paper-time-input#^2.0.4",
+    "iron-lazy-pages": "TimvdLippe/iron-lazy-pages#^2.1.1",
+    "lazy-imports": "Polymer/lazy-imports#^2.0.0"
   },
   "resolutions": {
     "iron-flex-layout": "1 - 2",

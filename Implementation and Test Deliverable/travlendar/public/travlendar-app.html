@@ -3,19 +3,22 @@
 <link rel="import" href="bower_components/polymerfire/polymerfire.html">
 <link rel="import" href="bower_components/app-route/app-location.html">
 <link rel="import" href="bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="bower_components/lazy-imports/lazy-imports-behavior.html">
 <link rel="import" href="bower_components/iron-resizable-behavior/iron-resizable-behavior.html">
-<!--Views Import-->
-<link rel="import" href="components/home-view-element.html">
-<link rel="import" href="components/show-travel-view-element.html">
-<link rel="import" href="components/compute-travel-view-element.html">
-<link rel="import" href="components/edit-calendar-view-element.html">
-<link rel="import" href="components/add-calendar-view-element.html">
-<link rel="import" href="components/delete-calendar-view-element.html">
-<link rel="import" href="components/edit-preferences-view-element.html">
-<link rel="import" href="components/edit-breaktimepref-view-element.html">
-<link rel="import" href="components/edit-travelpref-view-element.html">
+
 
 <dom-module id="travlendar-app">
+    <!--Views Lazy Import-->
+    <link rel="lazy-import" group="lazy" href="components/home-view-element.html">
+    <link rel="lazy-import" group="lazy" href="components/show-travel-view-element.html">
+    <link rel="lazy-import" group="lazy" href="components/compute-travel-view-element.html">
+    <link rel="lazy-import" group="lazy" href="components/edit-calendar-view-element.html">
+    <link rel="lazy-import" group="lazy" href="components/add-calendar-view-element.html">
+    <link rel="lazy-import" group="lazy" href="components/delete-calendar-view-element.html">
+    <link rel="lazy-import" group="lazy" href="components/edit-preferences-view-element.html">
+    <link rel="lazy-import" group="lazy" href="components/edit-breaktimepref-view-element.html">
+    <link rel="lazy-import" group="lazy" href="components/edit-travelpref-view-element.html">
+
     <template>
         <style>
         html {
@@ -64,7 +67,8 @@
     Polymer.setPassiveTouchGestures(true);
     Polymer({
         is: 'travlendar-app',
-        behaviors: [Polymer.NoteAppBehavior, Polymer.IronResizableBehavior],
+        behaviors: [Polymer.NoteAppBehavior, Polymer.IronResizableBehavior, Polymer.LazyImportsBehavior],
+        listeners: { "iron-resize": "onHeightChange" },
         signIn: function() {
             this.$.auth.signInWithPopup();
         },
@@ -74,13 +78,11 @@
         },
         ready: function() {
             this.onHeightChange();
-
-            const resolvedPageUrl = this.resolveUrl('components/show-travel-view-element.html');
-            const resolvedPageUrl2 = this.resolveUrl('components/edit-calendar-view-element.html');
-            Polymer.importHref(resolvedPageUrl, null, null, true);
-            Polymer.importHref(resolvedPageUrl2, null, null, true);
-        },
-        listeners: { "iron-resize": "onHeightChange" }
+            //lazy load the pages
+            this.importLazyGroup('lazy').then(function(results) {
+                console.log(results);
+            }.bind(this));
+        }
     });
     </script>
 </dom-module>

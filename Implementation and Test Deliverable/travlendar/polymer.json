@@ -2,21 +2,14 @@
     "entrypoint": "index.html",
     "shell": "travlendar-app.html",
     "root": "public",
-    "fragments": [
-        "components/edit-calendar-view-element.html",
-        "components/show-travel-view-element.html"
-    ],
+    "fragments": [],
     "sources": [
-        "index.html",
-        "travlendar-app.html",
-        "components/*",
-        "bower.json",
-        "workbox-sw.prod.v2.1.1.js",
-        "workbox-sw.prod.v2.1.1.js.map",
-        "sw.js"
+        "components/*"
     ],
     "extraDependencies": [
-        "manifest.json"
+        "manifest.json",
+        "bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror-worker.js",
+        "bower_components/app-storage/app-indexeddb-mirror/common-worker-scope.js"
     ],
     "lint":
     {

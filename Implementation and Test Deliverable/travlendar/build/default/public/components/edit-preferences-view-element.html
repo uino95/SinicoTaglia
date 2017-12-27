@@ -1,3 +1,141 @@
-<html><head><link rel="import" href="view-element.html"><link rel="import" href="travlendar-styles.html"><link rel="import" href="../bower_components/paper-card/paper-card.html"></head><body><dom-module id="edit-preferences-view-element"><template><style include="travlendar-styles">.content{display:flex;flex-direction:column;max-width:600px;margin:0 auto;}paper-card{box-shadow:0 2px 2px 0 rgba(0, 0, 0, 0.14),
+<link rel="import" href="view-element.html">
+<link rel="import" href="travlendar-styles.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+
+<dom-module id="edit-preferences-view-element">
+    <template>
+        <style include="travlendar-styles">
+        .content {
+            display: flex;
+            flex-direction: column;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        paper-card {
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
             0 1px 5px 0 rgba(0, 0, 0, 0.12),
-            0 3px 1px -2px rgba(0, 0, 0, 0.2);margin:5px;width:100%;}.card-content{word-wrap:break-word;}.header{@apply --paper-font-headline;font-weight:bold;padding-bottom:5px;}.card-row{padding:0.3em 0 0 1.8em;}.light-font{color:var(--paper-grey-600);}</style><firebase-document id="document" app-name="travlendar" path="/preferences/[[user.uid]]/break" data="{{breakPref}}"></firebase-document><firebase-document id="document2" app-name="travlendar" path="/preferences/[[user.uid]]/travel" data="{{travelPref}}"></firebase-document><template-view><span slot="outputPanel" class="outputCenter"><div class="content"><paper-card><div class="card-content"><div class="header"><iron-icon icon="myicons:restaurant-menu"></iron-icon>Break Time Preferences</div><div class="card-row">Minimum Time: <span class="light-font">[[breakPref.minTime]]</span></div><div class="card-row">Lower Bound: <span class="light-font">[[toHour(breakPref.lowerBound)]]</span></div><div class="card-row">Upper Bound: <span class="light-font">[[toHour(breakPref.upperBound)]]</span></div></div></paper-card><paper-card><div class="card-content"><div class="header"><iron-icon icon="myicons:directions-bus"></iron-icon>Travel Preferences</div><div class="card-row">Home Location: <span class="light-font">[[shortenLocation(travelPref.home)]]</span></div><div class="card-row">Own Car: <span class="light-font">[[travelPref.own_car]]</span></div><div class="card-row">Allow Using Car: <span class="light-font">[[!travelPref.car_disabled]]</span></div><div class="card-row">Allow Car Sharing: <span class="light-font">[[travelPref.allow_car_sharing]]</span></div><div class="card-row">Own Bike: <span class="light-font">[[travelPref.own_bike]]</span></div><div class="card-row">Allow Using Bike: <span class="light-font">[[!travelPref.bike_disabled]]</span></div><div class="card-row">Allow Bike Sharing: <span class="light-font">[[travelPref.allow_bike_sharing]]</span></div><div class="card-row">Allow Public Transport: <span class="light-font">[[travelPref.public_transport_disabled]]</span></div><div class="card-row">Allow Walkin: <span class="light-font">[[!travelPref.disable_walking]]</span></div><div class="card-row">Reduce Carbon Footprint: <span class="light-font">[[travelPref.reduce_carbon_footprint]]</span></div></div></paper-card></div></span><span slot="textPanel"><span class="breadcrumbs">Home/Preferences</span> Here are all currently set preferences. </span><span slot="inputPanel"><paper-icon-item class="menu-item" onclick="window.location.href = '#editPreferencesView/editBreakTimePrefView'"><iron-icon icon="myicons:restaurant-menu" slot="item-icon"></iron-icon>Edit Break Time Preference</paper-icon-item><paper-icon-item class="menu-item" onclick="window.location.href = '#editPreferencesView/editTravelPrefView'"><iron-icon icon="myicons:directions-bus" slot="item-icon"></iron-icon>Edit Travel Preference</paper-icon-item><paper-icon-item class="menu-item" onclick="window.location.href = '#homeView'"><iron-icon icon="icons:arrow-back" slot="item-icon"></iron-icon>Go Back</paper-icon-item></span></template-view></template><script>class EditPreferencesViewElement extends ViewElement{static get is(){return'edit-preferences-view-element'}static get properties(){}constructor(){super()}ready(){super.ready()}clickMe(){console.log(this.breakPref),console.log(this.breakPref.break)}toHour(a){var b=a%60,c=(a-b)/60,d=12<=c?'pm':'am';return c%=12,c=c?c:12,b=10>b?'0'+b:b,c+':'+b+' '+d}shortenLocation(a){if(null!=a){var b=a.split(','),c=a;return 1<b.length&&(c=b[0]+', '+b[1]),c}return'no location set yet'}}customElements.define(EditPreferencesViewElement.is,EditPreferencesViewElement);</script></dom-module></body></html>
+            0 3px 1px -2px rgba(0, 0, 0, 0.2);
+            margin: 5px;
+            width: 100%;
+        }
+
+        .card-content {
+            word-wrap: break-word;
+        }
+
+        .header {
+            @apply --paper-font-headline;
+            font-weight: bold;
+            padding-bottom: 5px;
+        }
+
+        .card-row {
+            padding: 0.3em 0 0 1.8em;
+        }
+
+        .light-font {
+            color: var(--paper-grey-600);
+        }
+        </style>
+
+        <firebase-document id="document" app-name="travlendar" path="/preferences/[[user.uid]]/break" data="{{breakPref}}">
+        </firebase-document>
+        <firebase-document id="document2" app-name="travlendar" path="/preferences/[[user.uid]]/travel" data="{{travelPref}}">
+        </firebase-document>
+
+        <template-view>
+            <span slot="outputPanel" class="outputCenter">
+                <div class="content">
+                    <paper-card>
+                        <div class="card-content">
+                            <div class="header"><iron-icon icon="myicons:restaurant-menu"></iron-icon> Break Time Preferences</div>
+                            <div class="card-row">
+                                Minimum Time: <span class="light-font">[[breakPref.minTime]]</span>
+            </div>
+            <div class="card-row">
+                Lower Bound: <span class="light-font">[[toHour(breakPref.lowerBound)]]</span>
+            </div>
+            <div class="card-row">
+                Upper Bound: <span class="light-font">[[toHour(breakPref.upperBound)]]</span>
+            </div>
+            </div>
+            </paper-card>
+
+            <paper-card>
+                <div class="card-content">
+                    <div class="header">
+                        <iron-icon icon="myicons:directions-bus"></iron-icon> Travel Preferences</div>
+
+                    <div class="card-row">Home Location: <span class="light-font">[[shortenLocation(travelPref.home)]]</span></div>
+                    <div class="card-row">Own Car: <span class="light-font">[[travelPref.own_car]]</span></div>
+                    <div class="card-row"> Allow Using Car: <span class="light-font">[[!travelPref.car_disabled]]</span></div>
+                    <div class="card-row">Allow Car Sharing: <span class="light-font">[[travelPref.allow_car_sharing]]</span></div>
+                    <div class="card-row">Own Bike: <span class="light-font">[[travelPref.own_bike]]</span></div>
+                    <div class="card-row"> Allow Using Bike: <span class="light-font">[[!travelPref.bike_disabled]]</span></div>
+                    <div class="card-row">Allow Bike Sharing: <span class="light-font">[[travelPref.allow_bike_sharing]]</span></div>
+                    <div class="card-row">Allow Public Transport: <span class="light-font">[[travelPref.public_transport_disabled]]</span></div>
+                    <div class="card-row"> Allow Walkin: <span class="light-font">[[!travelPref.disable_walking]]</span></div>
+                    <div class="card-row">Reduce Carbon Footprint: <span class="light-font">[[travelPref.reduce_carbon_footprint]]</span></div>
+                </div>
+            </paper-card>
+            </div>
+            </span>
+
+            <span slot="textPanel">
+                <span class="breadcrumbs">Home/Preferences</span> Here are all currently set preferences.
+            </span>
+
+            <span slot="inputPanel">
+                <paper-icon-item class="menu-item" onclick="window.location.href = '#editPreferencesView/editBreakTimePrefView'">
+                    <iron-icon icon="myicons:restaurant-menu" slot="item-icon"></iron-icon>Edit Break Time Preference
+                </paper-icon-item>
+                <paper-icon-item class="menu-item" onclick="window.location.href = '#editPreferencesView/editTravelPrefView'">
+                    <iron-icon icon="myicons:directions-bus" slot="item-icon"></iron-icon>Edit Travel Preference
+                </paper-icon-item>
+                <paper-icon-item class="menu-item" onclick="window.location.href = '#homeView'">
+                    <iron-icon icon="icons:arrow-back" slot="item-icon"></iron-icon>Go Back
+                </paper-icon-item>
+                
+            </span>
+        </template-view>
+    </template>
+
+    <script>
+    class EditPreferencesViewElement extends ViewElement {
+        static get is() { return 'edit-preferences-view-element'; }
+        static get properties() {}
+        constructor() {
+            super();
+        }
+        ready() {
+            super.ready();
+        }
+        clickMe() {
+            console.log(this.breakPref);
+            console.log(this.breakPref.break);
+        }
+        toHour(m) {
+            var minutes = m % 60;
+            var hours = ((m - minutes) / 60);
+            var ampm = hours >= 12 ? 'pm' : 'am';
+            hours = hours % 12;
+            hours = hours ? hours : 12;
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            return hours + ":" + minutes + " " + ampm;
+        }
+        shortenLocation(location) {
+            if (location != null) {
+                var s = location.split(',');
+                var ret = location;
+                if (s.length > 1) {
+                    ret = s[0] + ", " + s[1];
+                }
+                return ret;
+            }
+            return "no location set yet";
+        }
+    }
+    customElements.define(EditPreferencesViewElement.is, EditPreferencesViewElement);
+    </script>
+</dom-module>
