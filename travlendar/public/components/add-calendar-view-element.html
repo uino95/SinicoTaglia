@@ -156,12 +156,12 @@
                 var currentDay = new Date(parseInt(newEvent.date));
                 var today = new Date();
                 var test = false; // true if testing it
-                if (!test && (currentDay.getTime() > today.getTime() || newEvent.from > newEvent.to)) {
-                    alert("data inserted are not correct, please check date or time inserted");
+                if (!test && (currentDay.getTime() + newEvent.from * 60000 < today.getTime() || newEvent.from > newEvent.to)) {
+                    alert("inserted incorrect data, please check date or time inserted");
                 } else {
                     for (var i = 0; i < events.length; i++) { //filter for the current day of the event added
                         var d = new Date(parseInt(events[i].date));
-                        if (d.getDate() == currentDay.getDate()) {
+                        if (d.getDate() == currentDay.getDate() && d.getMonth() == currentDay.getMonth() && d.getFullYear() == currentDay.getFullYear()) {
                             currentEvents.push(events[i]);
                         }
                     }
@@ -186,6 +186,7 @@
                 }
             }
         }
+
         checkEvent(feasible, firstCall) {
             var position = currentEvents.indexOf(this.$.document.data);
             var prev = currentEvents[position - 1]
@@ -202,7 +203,7 @@
                     alert("events overlapping");
                 }
             } else { //TODO check also with driving options inserting a swithc case like in compute travel and you have also to modify the brak time preferences
-                if (numberOfApiCalls < targetNumberOfApiCalls) { //i've inserted an event between other two events and so i have to do another apiCall to check the feasibility 
+                if (numberOfApiCalls < targetNumberOfApiCalls) { 
                     this.checkTimeFeasibility(curr, next);
                 } else { //i'm ready to check the feasibility 
                     if (feasible) {

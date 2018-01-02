@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+    <title>add-calendar-view-element test</title>
+    <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../bower_components/web-component-tester/browser.js"></script>
+    <link rel="import" href="add-calendar-view-element.html">
+</head>
+
+<body>
+    <test-fixture id="EventsOverlapping">
+        <template>
+            <add-calendar-view-element></add-calendar-view-element>
+        </template>
+    </test-fixture>
+    <test-fixture id="EventsNotReachable">
+        <template>
+            <add-calendar-view-element></add-calendar-view-element>
+        </template>
+    </test-fixture>
+    <test-fixture id="EventsNotFeasibleWithBreakPreferences">
+        <template>
+            <add-calendar-view-element></add-calendar-view-element>
+        </template>
+    </test-fixture>
+    <test-fixture id="EventsReachable">
+        <template>
+            <add-calendar-view-element></add-calendar-view-element>
+        </template>
+    </test-fixture>
+    <script>
+    suite('add-calendar-view-element', () => {
+
+        var element1;
+        var element2;
+        var element3;
+        var element4
+        var date = new Date();
+        date.setHours(0);
+        date.setMinutes(0);
+        date.setSeconds(0);
+        date.setMilliseconds(0);
+        var currentDay = date.getTime();
+        setup(function() {
+            element1 = fixture("EventsOverlapping");
+            element2 = fixture("EventsNotReachable");
+            element3 = fixture("EventsNotFeasibleWithBreakPreferences");
+            element4 = fixture("EventsReachable");
+        })
+
+        test('insert event which overlaps stop the procedure', function(done) {
+            var events = [{
+                date: '22/11/2018',
+                from: 600,
+                to: 720,
+                location: 'piubega',
+                title: 'event already present 1'
+            }, {
+                date: '22/11/2018',
+                from: 700,
+                to: 800,
+                location: 'piubega',
+                title: 'event to insert'
+            }, {
+                date: '22/11/2018',
+                from: 880,
+                to: 920,
+                location: 'piubega',
+                title: 'event already present 2'
+            }]
+            element1.currentEvents = events;
+            element1.addEventListener('done', (e) => { 
+                assert.equal(e.detail.feasibility, false);
+                done();
+            });
+            element1.checkEvent(true, true);
+        });
+
+        test('insert event which is not reachable on time stop the procedure', function(done) {
+            var events = [{
+                date: currentDay,
+                from: 600,
+                to: 720,
+                location: 'piazza leonardo, milano',
+                title: 'event already present'
+            }, {
+                date: currentDay,
+                from: 730,
+                to: 800,
+                location: 'bovisa, milano',
+                title: 'event to insert'
+            }, {
+                date: currentDay,
+                from: 880,
+                to: 920,
+                location: 'piazza leonardo, milano',
+                title: 'event already present 2'
+            }]
+            element2.currentEvents = events;
+            element2.addEventListener('done1', (e) => { 
+                assert.equal(e.detail.feasibility, false); 
+                done();
+            });
+            element2.checkEvent(true, true);
+        });
+
+        test('insert events which do not respect the break time preferences stop the procedure', function(done) {
+            var events = [{
+                date: currentDay,
+                from: 600,
+                to: 720,
+                location: 'piazza leonardo, milano',
+                title: 'event already present'
+            }, {
+                date: currentDay,
+                from: 765,
+                to: 800,
+                location: 'via vipacco, milano',
+                title: 'event to insert'
+            }, {
+                date: currentDay,
+                from: 880,
+                to: 920,
+                location: 'piazza leonardo, milano',
+                title: 'event already present 2'
+            }]
+            element3.currentEvents = events;
+            element3.queryBreak.lowerBound = 720;
+            element3.queryBreak.upperBound = 780;
+            element3.queryBreak.minTime = 30;
+            element3.duration = 30;
+            element3.addEventListener('saved', (e) => {
+                assert.equal(e.detail.feasibility, false);
+                done();
+            });
+            element3.checkEvent(true, true);
+        });
+
+        test('feasible events are saved correctly', function(done) {
+            var events = [{
+                date: currentDay,
+                from: 600,
+                to: 720,
+                location: 'piazza leonardo, milano',
+                title: 'event already present'
+            }, {
+                date: currentDay,
+                from: 785,
+                to: 800,
+                location: 'via vipacco, milano',
+                title: 'event to insert'
+            }, {
+                date: currentDay,
+                from: 880,
+                to: 920,
+                location: 'piazza leonardo, milano',
+                title: 'event already present 2'
+            }]
+            element4.currentEvents = events;
+            element4.queryBreak.lowerBound = 720;
+            element4.queryBreak.upperBound = 780;
+            element4.queryBreak.minTime = 30;
+            element4.duration = 30;
+            element4.addEventListener('saved', (e) => {
+                assert.equal(e.detail.feasibility, true);
+                done();
+            });
+            element4.checkEvent(true, true);
+        });
+    });
+    </script>
+</body>
+
+</html>
