@@ -53,7 +53,7 @@ wait for the inspection to finish and the result will pop up into a new Chrome t
 * Open command line tool in the folder where you have cloned the repository
 * Change directory to the following path
 ```
-cd Implementation\ and\ Test\ Deliverable/travlendar/public/
+cd Implementation\ and\ Test\ Deliverable/travlendar/
 ```
 * Type 
 ```
