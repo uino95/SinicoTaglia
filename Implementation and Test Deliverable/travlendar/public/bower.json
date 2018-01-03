@@ -42,5 +42,8 @@
     "iron-flex-layout": "1 - 2",
     "polymer": "^2.0.0",
     "iron-resizable-behavior": "^2.0.1"
+  },
+  "devDependencies": {
+    "web-component-tester": "^6.4.1"
   }
 }

@@ -1,0 +1,211 @@
+<link rel="import" href="../view-element.html">
+<dom-module id="add-calendar-view-element">
+    <script>
+    var currentEvents = [];
+    var numberOfApiCalls = 0;
+    var targetNumberOfApiCalls = 0;
+    var prevToCurrDuration;
+    var currToNextDuration;
+    class AddCalendarViewElement extends Polymer.mixinBehaviors([Polymer.AppNetworkStatusBehavior], ViewElement) {
+        static get is() { return 'add-calendar-view-element'; }
+        static get properties() {
+            return {
+
+                currentEvents: {
+                    type: Array,
+                    value: []
+                },
+
+                queryBreak: {
+                    type: Object,
+                    value: {
+                        lowerBound: 0,
+                        upperBound: 0,
+                        minTime: 0
+                    }
+                },
+
+                duration: {
+                    type: Number,
+                    value: 30
+                }
+            }
+        }
+
+        constructor() {
+            super();
+        }
+        ready() {
+            super.ready();
+            window.addEventListener('feasibility-time-checked', (e) => this.checkEvent(e.detail.feasible, e.detail.firstCall));
+            window.addEventListener('duration-time-computed', () => this.checkBreakPreferences());
+            window.addEventListener('event-not-feasible', (e) => this.done(e.detail.feasibility));
+        }
+        filterAndSortEvents() {
+            if (!this.online) {
+                alert("You are offline. Read-only operations allowed!");
+                return;
+            }
+
+            if (this.$.eventForm.validate() && this.newEvent.location != null) {
+                currentEvents = [];
+                var newEvent = this.$.document.data;
+                var events = this.$.query.data;
+                var currentDay = new Date(parseInt(newEvent.date));
+                var today = new Date();
+                var test = false; // true if testing it
+                if (!test && (currentDay.getTime() + newEvent.from * 60000 < today.getTime() || newEvent.from > newEvent.to)) {
+                    alert("inserted incorrect data, please check date or time inserted");
+                } else {
+                    for (var i = 0; i < events.length; i++) { //filter for the current day of the event added
+                        var d = new Date(parseInt(events[i].date));
+                        if (d.getDate() == currentDay.getDate()) {
+                            currentEvents.push(events[i]);
+                        }
+                    }
+                    today = today.getTime() - today.getHours() * 3600 * 1000 - today.getMinutes() * 60 * 1000 - today.getSeconds() * 1000 - today.getMilliseconds() + 3600 * 1000; // today = current UCT Day at 00:00  in milliseconds
+                    currentEvents.push(newEvent);
+                    currentEvents.push({
+                        date: today,
+                        from: 0,
+                        to: 0,
+                        location: this.$.queryTravel.data[1].home,
+                        title: "fromHome"
+                    });
+                    currentEvents.push({
+                        date: today,
+                        from: 1440,
+                        to: 1440,
+                        location: this.$.queryTravel.data[1].home,
+                        title: "toHome"
+                    });
+                    currentEvents.sort(function(a, b) { return a.from - b.from }); //sort it.
+                    this.checkEvent(true, true);
+                }
+            }
+        }
+
+        checkEvent(feasible, firstCall) {
+            var prev = this.currentEvents[0];
+            var curr = this.currentEvents[1];
+            var next = this.currentEvents[2];
+            if (firstCall) {
+                targetNumberOfApiCalls = 0; //reset values;
+                numberOfApiCalls = 0;
+                if ((parseInt(prev.to) < parseInt(curr.from)) && (parseInt(curr.to) < parseInt(next.from))) {
+                    targetNumberOfApiCalls = 2;
+                    this.checkTimeFeasibility(prev, curr);
+                } else {
+                    feasible = false;
+                    this.fire('done', { feasibility: feasible });
+                    //alert("events overlapping");
+                }
+            } else { //TODO check also with driving options inserting a swithc case like in compute travel and you have also to modify the brak time preferences
+                if (numberOfApiCalls < targetNumberOfApiCalls) {
+                    this.checkTimeFeasibility(curr, next);
+                } else { //i'm ready to check the feasibility of preferences 
+                    if (feasible) {
+                        console.log("we are now trying to check break time preferences");
+                        this.done(feasible);
+                        numberOfApiCalls = 0;
+                        this.checkBreakPreferences();
+                    }
+                }
+            }
+        }
+
+        checkBreakPreferences() {
+            var prev = this.currentEvents[0];
+            var curr = this.currentEvents[1];
+            var next = this.currentEvents[2];
+            console.log(numberOfApiCalls);
+            switch (numberOfApiCalls) {
+                case 0:
+                    this.computeDuration(prev, curr);
+                    break;
+
+                case 1:
+                    this.computeDuration(next, curr);
+                    break;
+
+                case 2:
+
+                    var lowerBound = parseInt(this.queryBreak.lowerBound);
+                    var upperBound = parseInt(this.queryBreak.upperBound);
+                    var minTime = parseInt(this.queryBreak.minTime);
+                    var prevTo = parseInt(prev.to);
+                    var prevFrom = parseInt(prev.from);
+                    var currTo = parseInt(curr.to);
+                    var currFrom = parseInt(curr.from);
+                    var nextTo = parseInt(next.to);
+                    var nextFrom = parseInt(next.from);
+                    if (currTo + currToNextDuration < lowerBound || currFrom - prevToCurrDuration > upperBound) {
+                        //new event is not in break interval;
+                        this.saveEvent(true);
+                    } else {
+                        if ((currFrom - (prevTo + prevToCurrDuration)) > minTime && (currFrom - lowerBound) > minTime) {
+                            //check prev or lower bound feasibility
+                            this.saveEvent(true);
+                        } else {
+                            //check next or upper bound feasibility 
+                            if ((nextFrom - (currTo + currToNextDuration)) > minTime && (upperBound - currTo) > minTime) {
+                                this.saveEvent(true);
+                            } else {
+                                this.saveEvent(false);
+                                //alert("event not feasible with the break time preferences");
+                            }
+                        }
+                    }
+                    break;
+
+            }
+        }
+        checkTimeFeasibility(start, end) {
+            numberOfApiCalls++;
+            var request = {
+                origin: start.location,
+                destination: end.location,
+                travelMode: 'TRANSIT',
+                transitOptions: {
+                    departureTime: new Date(parseInt(start.date) + parseInt(start.to) * 60 * 1000 - 3600 * 1000)
+                }
+            };
+            if (parseInt(start.to) + this.duration < parseInt(end.from)) {
+                this.checkEvent(true, false); //event feasible   
+            } else {
+                //alert("event not feasible");
+                this.done(false);
+            }
+        }
+
+        computeDuration(start, end) {
+            numberOfApiCalls++;
+            var request = {
+                origin: start.location,
+                destination: end.location,
+                travelMode: 'TRANSIT',
+                transitOptions: {
+                    departureTime: new Date(parseInt(start.date) + parseInt(start.to) * 60 * 1000 - 3600 * 1000)
+                }
+            };
+
+            // we have always one route and one leg in this case
+            if (numberOfApiCalls == 1) {
+                prevToCurrDuration = this.duration;
+            } else {
+                currToNextDuration = this.duration.value;
+            }
+            this.checkBreakPreferences();
+
+        }
+        saveEvent(saved) {
+            this.fire('saved', { feasibility: saved });
+        }
+
+        done(feasible) {
+            this.fire('done1', { feasibility: feasible });
+        }
+    }
+    customElements.define(AddCalendarViewElement.is, AddCalendarViewElement);
+    </script>
+</dom-module>

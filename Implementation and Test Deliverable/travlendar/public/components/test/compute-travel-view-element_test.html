@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+    <title>compute-travel-view-element test</title>
+    <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../bower_components/web-component-tester/browser.js"></script>
+    <link rel="import" href="compute-travel-view-element.html">
+</head>
+
+<body>
+    <test-fixture id="Walking">
+        <template>
+            <compute-travel-view-element></compute-travel-view-element>
+        </template>
+    </test-fixture>
+    <test-fixture id="Bicycling">
+        <template>
+            <compute-travel-view-element></compute-travel-view-element>
+        </template>
+    </test-fixture>
+    <test-fixture id="Transit">
+        <template>
+            <compute-travel-view-element></compute-travel-view-element>
+        </template>
+    </test-fixture>
+    <test-fixture id="Driving">
+        <template>
+            <compute-travel-view-element></compute-travel-view-element>
+        </template>
+    </test-fixture>
+    <script>
+    suite('compute-travel-view-element', () => {
+
+        var element1;
+        var element2;
+        var element3;
+        var element4
+        var date = new Date();
+        date.setHours(0);
+        date.setMinutes(0);
+        date.setSeconds(0);
+        date.setMilliseconds(0);
+        var currentDay = date.getTime();
+        /*var preferences {
+                        allow_bus: false,
+                        allow_subway: false,
+                        allow_train: false,
+                        allow_tram: false,
+                        allow_bike_sharing: false,
+                        allow_car_sharing: false,
+                        avoidHighways: false,
+                        avoidTolls: false,
+                        home: 'milano',
+                        own_bike: false,
+                        own_car: false,
+                        reduce_carbon_footprint: false,
+                        public_transport_disabled: false,
+                        disable_walking: false,
+                        bike_disabled: false,
+                        car_disabled: false
+                    }*/
+        setup(function() {
+            element1 = fixture("Walking");
+            element2 = fixture("Bicycling");
+            element3 = fixture("Transit");
+            element4 = fixture("Driving");
+        })
+
+        test('walking preferences works', function(done) {
+            var event = {
+                date: currentDay,
+                from: 600,
+                to: 720,
+                location: 'piazza leonardo, milano',
+                title: 'event'
+            }
+            element1.currentEvents[0] = event;
+            element1.travelPreferences.home = 'piola, milano';
+            element1.travelPreferences.reduce_carbon_footprint = true;
+            element1.addEventListener('done', (e) => { 
+                for (var i = 0; i < element1.prop.length; i++) {
+                    if(element1.prop[i].isTravelProposal){
+                        console.log(element1.prop[i].by);
+                        assert.equal(element1.prop[i].by, 'WALKING');
+                    }   
+                }
+                done();
+            });
+            element1.queryDb();
+        });
+
+        test('Bicycling preferences works', function(done) {
+            var event = {
+                date: currentDay,
+                from: 600,
+                to: 720,
+                location: 'piazza leonardo, milano',
+                title: 'event'
+            }
+            element2.currentEvents[0] = event;
+            element2.travelPreferences.home = 'piola, milano';
+            element2.travelPreferences.reduce_carbon_footprint = true;
+            element2.travelPreferences.disable_walking = true;
+            element2.travelPreferences.own_bike = true;
+            element2.addEventListener('done', (e) => { 
+                for (var i = 0; i < element2.prop.length; i++) {
+                    if(element2.prop[i].isTravelProposal){
+                        console.log(element2.prop[i].by);
+                        assert.equal(element2.prop[i].by, 'BICYCLING');
+                    }   
+                }
+                done();
+            });
+            element2.queryDb();
+        });
+
+        test('Transit preferences works', function(done) {
+             var event = {
+                date: currentDay,
+                from: 600,
+                to: 720,
+                location: 'piazza leonardo, milano',
+                title: 'event'
+            }
+            element3.currentEvents[0] = event;
+            element3.travelPreferences.home = 'piola, milano';
+            element3.travelPreferences.reduce_carbon_footprint = true;
+            element3.travelPreferences.disable_walking = true;
+            element3.travelPreferences.bike_disabled = true;
+            element3.addEventListener('done', (e) => { 
+                for (var i = 0; i < element3.prop.length; i++) {
+                    if(element3.prop[i].isTravelProposal){
+                        console.log(element3.prop[i].by);
+                        assert.equal(element3.prop[i].by, 'TRANSIT');
+                    }   
+                }
+                done();
+            });
+            element3.queryDb();
+        });
+
+        test('Driving preferences works', function(done) {
+             var event = {
+                date: currentDay,
+                from: 600,
+                to: 720,
+                location: 'piazza leonardo, milano',
+                title: 'event'
+            }
+            element4.currentEvents[0] = event;
+            element4.travelPreferences.home = 'piola, milano';
+            element4.travelPreferences.reduce_carbon_footprint = true;
+            element4.travelPreferences.disable_walking = true;
+            element4.travelPreferences.bike_disabled = true;
+            element4.travelPreferences.public_transport_disabled = true;
+            element4.travelPreferences.own_car = true;
+            element4.addEventListener('done', (e) => { 
+                for (var i = 0; i < element4.prop.length; i++) {
+                    if(element4.prop[i].isTravelProposal){
+                        console.log(element4.prop[i].by);
+                        assert.equal(element4.prop[i].by, 'DRIVING');
+                    }   
+                }
+                done();
+            });
+            element4.queryDb();
+        });
+
+        test('Priority algorithm works', function(done) {
+             var event1 = {
+                date: currentDay,
+                from: 600,
+                to: 720,
+                location: 'piazza leonardo, milano',
+                title: 'event'
+            }
+            var event2 = {
+                date: currentDay,
+                from: 738,
+                to: 800,
+                location: 'via vipacco, milano',
+                title: 'event'
+            }
+            element4.currentEvents[0] = event1;
+            element4.currentEvents[1] = event2;
+            element4.travelPreferences.home = 'piola, milano';
+            element4.travelPreferences.reduce_carbon_footprint = true;
+            element4.travelPreferences.disable_walking = false;
+            element4.travelPreferences.bike_disabled = false;
+            element4.travelPreferences.public_transport_disabled = false;
+            element4.travelPreferences.own_car = true;
+            element4.travelPreferences.own_bike = true;
+            element4.addEventListener('done', (e) => { 
+                for (var i = 0; i < element4.prop.length; i++) {
+                    if(element4.prop[i].isTravelProposal){
+                        console.log(element4.prop[i].by);
+                    }   
+                }
+                assert.equal(element4.prop[0].by, 'WALKING');
+                assert.equal(element4.prop[2].by, 'TRANSIT');
+                assert.equal(element4.prop[4].by, 'WALKING');
+                done();
+            });
+            element4.queryDb();
+        });
+    });
+    </script>
+</body>
+
+</html>
