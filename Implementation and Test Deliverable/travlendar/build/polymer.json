@@ -1,14 +1,31 @@
 {
   "entrypoint": "index.html",
   "shell": "travlendar-app.html",
-  "fragments": [],
+  "fragments": [
+    "components/home-view-element.html",
+    "components/compute-travel-view-element.html",
+    "components/edit-calendar-view-element.html",
+    "components/add-calendar-view-element.html",
+    "components/delete-calendar-view-element.html",
+    "components/edit-preferences-view-element.html",
+    "components/edit-breaktimepref-view-element.html",
+    "components/edit-travelpref-view-element.html",
+    "components/show-travel-view-element.html"
+  ],
   "sources": [
     "components/*",
-    "index.html",
-    "travlendar-app.html",
     "bower_components/note-app-elements/images/*",
     "index.html",
-    "travlendar-app.html"
+    "travlendar-app.html",
+    "components/home-view-element.html",
+    "components/compute-travel-view-element.html",
+    "components/edit-calendar-view-element.html",
+    "components/add-calendar-view-element.html",
+    "components/delete-calendar-view-element.html",
+    "components/edit-preferences-view-element.html",
+    "components/edit-breaktimepref-view-element.html",
+    "components/edit-travelpref-view-element.html",
+    "components/show-travel-view-element.html"
   ],
   "extraDependencies": [
     "bower_components/webcomponentsjs/*.js",
@@ -19,7 +36,7 @@
   ],
   "builds": [
     {
-      "name": "es6-unbundled",
+      "name": "es6",
       "browserCapabilities": [
         "es2015"
       ],
@@ -35,8 +52,8 @@
       },
       "bundle": true,
       "addServiceWorker": true,
-      "sw-precache-config": "sw-precache-config.js",
-      "addPushManifest": true
+      "addPushManifest": true,
+      "preset": "es6-bundled"
     }
   ],
   "lint": {

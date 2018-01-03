@@ -8,7 +8,7 @@
   "scripts": {
     "test": "test",
     "build": "polymer build es6",
-    "browser-sync": "browser-sync start --server --files 'public/*.html, public/components/*.html'",
+    "browser-sync": "browser-sync start --server --files './*.html, ./components/*.html'",
     "deploy": "firebase deploy --except functions"
   },
   "repository": {

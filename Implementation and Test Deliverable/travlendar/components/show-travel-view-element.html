@@ -5,8 +5,15 @@
 <dom-module id="show-travel-view-element">
     <template>
         <style include="travlendar-styles"></style>
-        <firebase-query id="query" app-name="travlendar" path="/currentProposal/[[user.uid]]" data="{{proposal}}">
+        <firebase-query id="query" app-name="travlendar" path="/currentProposal/[[user.uid]]" data="{{liveProposal}}">
         </firebase-query>
+
+        <app-indexeddb-mirror
+            session="[[user.uid]]"
+            key="show-proposal"
+            data="{{liveProposal}}"
+            persisted-data="{{proposal}}">
+        </app-indexeddb-mirror>
 
         <template-view>
             <span slot="outputPanel">

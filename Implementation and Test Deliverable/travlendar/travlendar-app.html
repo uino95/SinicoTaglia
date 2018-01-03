@@ -85,7 +85,10 @@
                 this.removeAttribute('unresolved');
                 //lazy load the pages
                 this.importLazyGroup('lazy').then(function(results) {
-                    console.log(results);
+                    // Load pre-caching Service Worker
+                    if ('serviceWorker' in navigator) {
+                        navigator.serviceWorker.register('service-worker.js');
+                    }
                 }.bind(this));
             });
         }

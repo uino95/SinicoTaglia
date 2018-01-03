@@ -1,46 +1,50 @@
 {
-  "entrypoint": "index.html",
-  "shell": "travlendar-app.html",
-  "root": "public",
-  "fragments": [
-  ],
-  "sources": [
-    "components/*",
-    "index.html",
-    "travlendar-app.html",
-    "bower_components/note-app-elements/images/*"
-  ],
-  "extraDependencies": [
-    "bower_components/webcomponentsjs/*.js",
-    "manifest.json",
-    "bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror-worker.js",
-    "bower_components/app-storage/app-indexeddb-mirror/common-worker-scope.js"
-  ],
-  "builds": [
+    "entrypoint": "index.html",
+    "shell": "travlendar-app.html",
+    "fragments": [
+        "components/home-view-element.html",
+        "components/compute-travel-view-element.html",
+        "components/edit-calendar-view-element.html",
+        "components/add-calendar-view-element.html",
+        "components/delete-calendar-view-element.html",
+        "components/edit-preferences-view-element.html",
+        "components/edit-breaktimepref-view-element.html",
+        "components/edit-travelpref-view-element.html",
+        "components/show-travel-view-element.html"
+    ],
+    "sources": [
+        "components/*",
+        "bower_components/note-app-elements/images/*"
+    ],
+    "extraDependencies": [
+        "bower_components/webcomponentsjs/*.js",
+        "manifest.json",
+        "bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror-worker.js",
+        "bower_components/app-storage/app-indexeddb-mirror/common-worker-scope.js"
+    ],
+    "builds": [
     {
-      "name": "es6",
-      "browserCapabilities": [
-        "es2015"
-      ],
-      "js": {
-        "minify": true,
-        "compile": false
-      },
-      "css": {
-        "minify": true
-      },
-      "html": {
-        "minify": true
-      },
-      "bundle": true,
-      "addServiceWorker": true,
-      "sw-precache-config": "sw-precache-config.js",
-      "addPushManifest": true
+        "name": "es6",
+        "js":
+        {
+            "minify": true,
+            "compile": false
+        },
+        "css":
+        {
+            "minify": true
+        },
+        "html":
+        {
+            "minify": true
+        },
+        "bundle": true,
+        "preset": "es6-bundled"
+    }],
+    "lint":
+    {
+        "rules": [
+            "polymer-2-hybrid"
+        ]
     }
-  ],
-  "lint": {
-    "rules": [
-      "polymer-2-hybrid"
-    ]
-  }
 }

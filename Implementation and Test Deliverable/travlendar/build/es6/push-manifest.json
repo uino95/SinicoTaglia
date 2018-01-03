@@ -1,12 +1,12 @@
 {
   "travlendar-app.html": {},
   "components/home-view-element.html": {},
-  "components/show-travel-view-element.html": {},
   "components/compute-travel-view-element.html": {},
   "components/edit-calendar-view-element.html": {},
   "components/add-calendar-view-element.html": {},
   "components/delete-calendar-view-element.html": {},
   "components/edit-preferences-view-element.html": {},
   "components/edit-breaktimepref-view-element.html": {},
-  "components/edit-travelpref-view-element.html": {}
+  "components/edit-travelpref-view-element.html": {},
+  "components/show-travel-view-element.html": {}
 }

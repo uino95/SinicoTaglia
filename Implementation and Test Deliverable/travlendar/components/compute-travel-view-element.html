@@ -4,7 +4,7 @@
 <dom-module id="compute-travel-view-element">
     <template>
         <style include="travlendar-styles"></style>
-        <firebase-query id="query" app-name="travlendar" path="/currentProposal/[[user.uid]]" data="{{proposal}}">
+        <firebase-query id="query" app-name="travlendar" path="/currentProposal/[[user.uid]]" data="{{liveProposal}}">
         </firebase-query>
         <firebase-query id="queryEvents" app-name="travlendar" path="/events/[[user.uid]]" data="{{events}}">
         </firebase-query>
@@ -12,6 +12,14 @@
         </firebase-query>
         <firebase-document id="document" app-name="travlendar" path="/currentProposal/[[user.uid]]" data="{{prop}}">
         </firebase-document>
+
+        <app-indexeddb-mirror
+            session="[[user.uid]]"
+            key="compute-proposal"
+            data="{{liveProposal}}"
+            persisted-data="{{proposal}}">
+        </app-indexeddb-mirror>
+
         <template-view>
             <span slot="outputPanel">
                 <travel-proposal-element current-proposal="[[proposal]]"></travel-proposal-element>
