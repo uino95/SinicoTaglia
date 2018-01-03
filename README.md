@@ -50,8 +50,8 @@ wait for the inspection to finish and the result will pop up into a new Chrome t
 
 ##### Unit testing of the main components
 * Clone this repository
-* open command line tool in the folder where you have cloned the repository
-* change directory to the following path
+* Open command line tool in the folder where you have cloned the repository
+* Change directory to the following path
 ```
 cd Implementation\ and\ Test\ Deliverable/travlendar/public/
 ```
