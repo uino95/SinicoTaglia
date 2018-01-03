@@ -51,7 +51,7 @@
             element4 = fixture("EventsReachable");
         })
 
-        test('insert event which overlaps stop the procedure', function(done) {
+        test('the insertion of an event which overlaps stops the procedure', function(done) {
             var events = [{
                 date: '22/11/2018',
                 from: 600,
@@ -79,7 +79,7 @@
             element1.checkEvent(true, true);
         });
 
-        test('insert event which is not reachable on time stop the procedure', function(done) {
+        test('the insertion of an event which is not reachable on time stops the procedure', function(done) {
             var events = [{
                 date: currentDay,
                 from: 600,
@@ -107,7 +107,7 @@
             element2.checkEvent(true, true);
         });
 
-        test('insert event which does not respect the break time preferences stop the procedure', function(done) {
+        test('the insertion of an event which does not respect the break time preferences stops the procedure', function(done) {
             var events = [{
                 date: currentDay,
                 from: 600,
