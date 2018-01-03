@@ -44,7 +44,7 @@ Go to the [pagespeed website](https://developers.google.com/speed/pagespeed/insi
 If you have troubles or you just prefer the command line tool do the following:
 ```
     npm install -g lighthouse
-    lighthouse travlendar-plus.firebaseapp.com --view
+    lighthouse https://travlendar-plus.firebaseapp.com --view
 ```
 wait for the inspection to finish and the result will pop up into a new Chrome tab
 
