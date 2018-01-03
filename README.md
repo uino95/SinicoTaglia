@@ -7,6 +7,8 @@ Repository for the Software Engneering 2 project (academic year 2017/2018).
 These instructions will get you a copy of the Travlendar+ application project up and running on your local machine for code inspection and testing purposes.
 If you just want a running version of the application we have a deployed [demo](https://travlendar-plus.firebaseapp.com/).
 
+The first time you log in you have to set your travel and break time preferences, in order to do so click on the edit preferences button, here you can modify both the break time preferences and the travel preferences clicking the correspondent button. 
+
 ### Prerequisites for testing
 
 What things you need to install the software and how to install them
