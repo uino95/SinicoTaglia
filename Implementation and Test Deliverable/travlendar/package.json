@@ -7,15 +7,15 @@
   "devDependencies": {},
   "scripts": {
     "test": "test",
-    "build": "polymer build --add-service-worker",
-    "browser-sync": "browser-sync start --server --files 'public/*.html, public/components/*.html'"
+    "build": "polymer build es6",
+    "browser-sync": "browser-sync start --server --files 'public/*.html, public/components/*.html'",
+    "deploy": "firebase deploy --except functions"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/uino95/SinicoTaglia.git"
   },
   "author": "AndreaTaglia MatteoSinico",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/uino95/SinicoTaglia/issues"
   },

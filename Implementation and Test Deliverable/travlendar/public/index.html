@@ -20,15 +20,21 @@
         @apply --paper-font-common-base;
         margin: 0;
     }
+
+    [unresolved] p {
+        font-size: 30px;
+        padding: 20px;
+    }
     </style>
 
     <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
     <script>
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('service-worker.js');
+        window.addEventListener('load', function() {
+            navigator.serviceWorker.register('service-worker.js');
+        });
     }
     </script>
-    <link rel="import" href="bower_components/polymerfire/firebase-app.html">
     <link rel="import" href="travlendar-app.html">
 
     <!--Javascript fallback content-->
@@ -38,10 +44,9 @@
 </head>
 
 <body>
-    <firebase-app name="travlendar" api-key="AIzaSyAGE8FPaxm-C1Qzu40SAEpp0_CZrKknp5o" auth-domain="travlendar-plus.firebaseapp.com" database-url="https://travlendar-plus.firebaseio.com">
-    </firebase-app>
-
-    <travlendar-app></travlendar-app>
+    <travlendar-app unresolved>
+        <p>Travlendar+ is loading your content. Please wait...</p>
+    </travlendar-app>
 </body>
 
 </html>

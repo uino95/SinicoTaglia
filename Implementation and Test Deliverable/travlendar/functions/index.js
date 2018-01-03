@@ -18,11 +18,11 @@ exports.initUserPrefs = functions.auth.user().onCreate(event => {
             bike_disabled: false,
             car_disabled: false,
             disable_walking: false,
-            home: "Milan, Italy",
             own_bike: true,
             own_car: true,
             public_transport_disabled: false,
-            reduce_carbon_footprint: false
+            reduce_carbon_footprint: false,
+            home: "Milan, Italy"
         }).then(() => console.log('User default preferences written to database'));
     });
 });

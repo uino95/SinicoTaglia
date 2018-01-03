@@ -39,7 +39,7 @@
                 <iron-form id="prefForm" class="outputCenter">
                     <form method="get" action="/ediPref">
 
-                        <paper-input-place class="formInput" id="locationInput" required auto-validate pattern=".*[^ ].*"  value="{{val}}" hide-error place="{{place}}" api-key="[[mapsApiKey]]" label="Home Location">
+                        <paper-input-place class="formInput" id="locationInput" required auto-validate pattern=".*[^ ].*"  value="{{val}}" hide-error place="{{place}}" api-key="[[mapsApiKey]]" label="Change Home Location">
                         </paper-input-place>
 
                         <div class="times">
@@ -68,15 +68,12 @@
             </span>
 
             <span slot="textPanel">
-                <span class="breadcrumbs">Home/Preferences/Travel</span> Here you can edit your Travel Preferences.
+                <span class="breadcrumbs">Home/Preferences/Travel</span> All the preferences you edit here are saved in real time.
             </span>
 
             <span slot="inputPanel">
-                <paper-icon-item class="menu-item" on-tap="savePref">
-                    <iron-icon icon="myicons:done" slot="item-icon"></iron-icon>Save Preferences
-                </paper-icon-item>
                 <paper-icon-item class="menu-item" on-tap="goBack">
-                    <iron-icon icon="myicons:arrow-back" slot="item-icon"></iron-icon>Cancel
+                    <iron-icon icon="myicons:arrow-back" slot="item-icon"></iron-icon>Go Back
                 </paper-icon-item>
             </span>
         </template-view>
@@ -110,20 +107,11 @@
                 '_locationChanged(val)'
             ]
         }
-
         _locationChanged(val) {
-            this.travelPref.home = val.search;
-        }
-        savePref() {
-            if (this.$.prefForm.validate()) {
-                this.$.document.saveValue('/preferences/' + this.user.uid, 'travel');
-                window.location.href = '#editPreferencesView';
-            } else {
-                alert("please insert valid data first");
-            }
+            this.$.document.data.home = val.search;
         }
         goBack() {
-            this.$.document.reset();
+            this.$.document.saveValue('/preferences/' + this.user.uid, 'travel');
             window.location.href = '#editPreferencesView';
         }
     }

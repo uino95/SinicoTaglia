@@ -1,16 +1,17 @@
 {
   "entrypoint": "index.html",
   "shell": "travlendar-app.html",
-  "root": "public",
-  "fragments": [
-  ],
+  "fragments": [],
   "sources": [
     "components/*",
     "index.html",
     "travlendar-app.html",
-    "bower_components/note-app-elements/images/*"
+    "bower_components/note-app-elements/images/*",
+    "index.html",
+    "travlendar-app.html"
   ],
   "extraDependencies": [
+    "bower_components/webcomponentsjs/*.js",
     "bower_components/webcomponentsjs/*.js",
     "manifest.json",
     "bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror-worker.js",
@@ -18,7 +19,7 @@
   ],
   "builds": [
     {
-      "name": "es6",
+      "name": "es6-unbundled",
       "browserCapabilities": [
         "es2015"
       ],

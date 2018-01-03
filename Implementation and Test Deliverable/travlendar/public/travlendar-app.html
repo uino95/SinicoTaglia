@@ -1,11 +1,11 @@
 <link rel="import" href="bower_components/note-app-elements/na-elements.html">
+<link rel="import" href="bower_components/polymerfire/firebase-app.html">
 <link rel="import" href="bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
 <link rel="import" href="bower_components/polymerfire/polymerfire.html">
 <link rel="import" href="bower_components/app-route/app-location.html">
 <link rel="import" href="bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="bower_components/lazy-imports/lazy-imports-behavior.html">
 <link rel="import" href="bower_components/iron-resizable-behavior/iron-resizable-behavior.html">
-
 
 <dom-module id="travlendar-app">
     <!--Views Lazy Import-->
@@ -32,6 +32,9 @@
             margin: 0;
         }
         </style>
+
+        <firebase-app name="travlendar" api-key="AIzaSyAGE8FPaxm-C1Qzu40SAEpp0_CZrKknp5o" auth-domain="travlendar-plus.firebaseapp.com" database-url="https://travlendar-plus.firebaseio.com">
+        </firebase-app>
 
         <na-login on-sign-in="signIn" signed-in="[[signedIn]]" disabled="[[!online]]">
         </na-login>
@@ -78,10 +81,13 @@
         },
         ready: function() {
             this.onHeightChange();
-            //lazy load the pages
-            this.importLazyGroup('lazy').then(function(results) {
-                console.log(results);
-            }.bind(this));
+            Polymer.RenderStatus.afterNextRender(this, () => {
+                this.removeAttribute('unresolved');
+                //lazy load the pages
+                this.importLazyGroup('lazy').then(function(results) {
+                    console.log(results);
+                }.bind(this));
+            });
         }
     });
     </script>

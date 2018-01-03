@@ -29,7 +29,6 @@
             <span slot="outputPanel">
                 <iron-form id="prefForm" class="outputCenter">
                     <form method="get" action="/ediPref">
-
                         <paper-input class="formInput" pattern="[0-9]*" min="0" max="300" label="Minimum Time (in minutes)" max-length="20" required auto-validate error-message="insert a correct minimum time in minutes (cannot be more than 5 hours = 300)" value="{{breakPref.minTime}}"></paper-input>
 
                         <div class="times">
