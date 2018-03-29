@@ -2,6 +2,10 @@
 
 Repository for the Software Engneering 2 project (academic year 2017/2018).
 
+## About
+
+Travlendar+ is an application which will automatize the process of scheduling the user’s meeting during the day. Every day we spend a lot of time thinking and planning how to reach a location at a certain time, Travlendar+ allows users to save all this time.
+
 ## Getting Started
 
 These instructions will get you a copy of the Travlendar+ application project up and running on your local machine for code inspection and testing purposes.
